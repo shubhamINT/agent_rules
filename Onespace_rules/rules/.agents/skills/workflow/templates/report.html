@@ -1,0 +1,140 @@
+<!doctype html>
+<!--
+  OneSpace agent report template.
+  Self-contained: inline CSS only. Do NOT add external scripts, fonts, or CDNs.
+  Replace every {{placeholder}}. Delete sections that do not apply to the task type.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{Report title}} — {{slug}}</title>
+<style>
+  :root {
+    --bg: #fafaf9; --fg: #1c1917; --muted: #57534e; --card: #ffffff; --line: #e7e5e4;
+    --accent: #4f46e5; --code: #f5f5f4;
+    --crit: #991b1b; --high: #dc2626; --med: #d97706; --low: #2563eb; --info: #64748b; --ok: #059669;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0c0a09; --fg: #e7e5e4; --muted: #a8a29e; --card: #1c1917; --line: #292524;
+      --accent: #818cf8; --code: #292524;
+      --crit: #f87171; --high: #fb7185; --med: #fbbf24; --low: #60a5fa; --info: #94a3b8; --ok: #34d399;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+         font: 15px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 1100px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 1.8rem; margin: 0 0 4px; }
+  h2 { font-size: 1.25rem; margin: 40px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+  h3 { font-size: 1.05rem; margin: 24px 0 8px; }
+  .meta { color: var(--muted); font-size: .9rem; }
+  .meta a { color: var(--accent); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px 20px; margin: 12px 0; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin: 16px 0; }
+  .tile { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; }
+  .tile b { display: block; font-size: 1.6rem; }
+  .tile.crit b { color: var(--crit); } .tile.high b { color: var(--high); } .tile.med b { color: var(--med); }
+  .tile.low b { color: var(--low); } .tile.info b { color: var(--info); }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
+  code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .85rem; }
+  code { background: var(--code); padding: 1px 5px; border-radius: 4px; }
+  pre { background: var(--code); padding: 12px; border-radius: 8px; overflow-x: auto; }
+  .sev { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: .75rem; font-weight: 700; color: #fff; }
+  .sev.crit { background: var(--crit); } .sev.high { background: var(--high); } .sev.med { background: var(--med); }
+  .sev.low { background: var(--low); } .sev.info { background: var(--info); }
+  .status-open { color: var(--high); } .status-fixed { color: var(--ok); } .status-fp { color: var(--muted); }
+  details { margin: 8px 0; } summary { cursor: pointer; font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>{{Report title}}</h1>
+    <p class="meta">
+      {{type}} · {{YYYY-MM-DD}} · slug <code>{{slug}}</code><br>
+      Trace:
+      <a href="../plans/{{slug}}/scope.md">scope</a> ·
+      <a href="../research/{{slug}}.md">research</a> ·
+      <a href="../plans/{{slug}}/plan.md">plan</a> ·
+      <a href="../plans/{{slug}}/progress.md">progress</a>
+    </p>
+  </header>
+
+  <section id="summary">
+    <h2>1. Summary</h2>
+    <div class="card"><p>{{What was asked, what was done, headline result.}}</p></div>
+    <!-- audit / security only -->
+    <div class="tiles">
+      <div class="tile crit"><b>{{0}}</b>Critical</div>
+      <div class="tile high"><b>{{0}}</b>High</div>
+      <div class="tile med"><b>{{0}}</b>Medium</div>
+      <div class="tile low"><b>{{0}}</b>Low</div>
+      <div class="tile info"><b>{{0}}</b>Info</div>
+    </div>
+  </section>
+
+  <section id="scope">
+    <h2>2. Scope</h2>
+    <div class="card">
+      <p><b>In:</b> {{…}}<br><b>Out:</b> {{…}}<br><b>Depth:</b> {{…}}<br><b>Constraints:</b> {{…}}</p>
+    </div>
+  </section>
+
+  <section id="method">
+    <h2>3. Method</h2>
+    <div class="card"><p><b>Tools:</b> {{…}}<br><b>Standards:</b> {{…}}</p></div>
+  </section>
+
+  <section id="findings">
+    <h2>4. Findings</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Severity</th><th>Category</th><th>Standard</th><th>Location</th><th>Summary</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><a href="#F-001">F-001</a></td>
+            <td><span class="sev high">High</span></td>
+            <td>{{Injection}}</td>
+            <td>{{A05:2025 · CWE-89}}</td>
+            <td><code>{{src/x.py:42}}</code></td>
+            <td>{{one line}}</td>
+            <td class="status-open">open</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <article class="card" id="F-001">
+      <h3>F-001 — {{title}}</h3>
+      <p><span class="sev high">High</span> · {{A05:2025}} · {{CWE-89}} · {{ASVS V1.2.4}} · <code>{{src/x.py:42}}</code></p>
+      <p><b>Evidence</b></p>
+      <pre>{{minimal code excerpt, HTML-escaped}}</pre>
+      <p><b>Impact:</b> {{…}}</p>
+      <p><b>Recommendation:</b> {{…}}</p>
+    </article>
+    <!-- refactor: replace with a changes table (change, named refactoring, files, reason) and before/after metrics -->
+    <!-- feature: replace with what was built, interface, tests added -->
+  </section>
+
+  <section id="verification">
+    <h2>5. Verification</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Check</th><th>Command</th><th>Before</th><th>After</th></tr></thead>
+        <tbody><tr><td>{{Tests}}</td><td><code>{{uv run pytest}}</code></td><td>{{…}}</td><td>{{…}}</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="next">
+    <h2>6. Out-of-scope observations and next tasks</h2>
+    <div class="card"><ul><li>{{…}}</li></ul></div>
+  </section>
+</main>
+</body>
+</html>
