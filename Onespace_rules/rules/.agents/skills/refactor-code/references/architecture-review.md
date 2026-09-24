@@ -48,7 +48,8 @@ category decides how the deepened module gets tested.
 
 Format as chosen in scope (HTML default). Save to
 `agent-tracking/reports/<slug>.html|md`. HTML follows `HTML-REPORT.md` in this
-directory.
+directory, built on the shared template and patterns in
+`workflow/references/VISUAL-REPORT.md`.
 
 Per candidate:
 

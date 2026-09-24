@@ -171,24 +171,39 @@ Set INDEX status `in-progress`.
 
 ## Phase 7 — Report
 
-Produce `reports/<slug>.html` or `reports/<slug>.md` in the format the user
-chose, from `templates/report.html` or `templates/report.md`. Every report has:
+Produce `agent-tracking/reports/<slug>.html` or
+`agent-tracking/reports/<slug>.md` in the format the user chose. Always write
+it there, never to the OS temp directory, the repo root, or only to chat, so
+the report sits next to its scope, plan, and progress. Build it from
+`templates/report.html` or `templates/report.md`. Every report has:
 
 1. **Summary** — what was asked, what was done, headline result
 2. **Scope** — in / out, depth, constraints (link `scope.md`)
 3. **Method** — tools run, checklists applied, standards referenced
-4. **Findings** or **Changes** — per type:
+4. **Current → Target** — diagrams of what exists and what changed
+   (refactor, feature, structure, test; not audit/security, which change nothing)
+5. **Findings** or **Changes** — per type:
    - audit/security: findings table (ID, severity, category, standard ref,
      `file:line`, evidence, impact, recommendation, status)
    - refactor: before/after metrics, each change with the named refactoring
    - feature: what was built, interface, tests added
-5. **Verification** — commands run and results (before vs after)
-6. **Out-of-scope observations** and **recommended next tasks**
-7. **Trace** — links to scope, research, plan, progress
+6. **Verification** — commands run and results (before vs after)
+7. **Out-of-scope observations** and **recommended next tasks**
+8. **Trace** — links to scope, research, plan, progress
 
-The HTML report is a single self-contained file: inline CSS only, no external
-scripts, fonts, or CDNs. Audit findings are sensitive and reports get opened
-offline and attached to tickets.
+Reports are visual first. Follow `references/VISUAL-REPORT.md` for the
+diagram patterns, the colour legend, and the visuals each report type must
+include. The reviewer should grasp the change from the diagrams alone.
+
+Script policy for HTML reports:
+
+- **Refactor, feature, structure, test:** inline CSS plus the one Mermaid
+  import already in the template. Nothing else external. These reports must
+  hold no secrets, credentials, or security findings.
+- **Audit and security:** a single self-contained file. Delete the Mermaid
+  block; inline CSS, plain boxes and tables only, no external scripts, fonts, or CDNs.
+  Audit findings are sensitive and reports get opened offline and attached to
+  tickets.
 
 Finish by setting INDEX status `done` with the report link, and give the user a
 short chat summary plus the report path.

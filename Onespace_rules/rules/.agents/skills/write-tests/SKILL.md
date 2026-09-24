@@ -85,3 +85,10 @@ coverage floor. Skips carry a reason and a ticket.
 3. Write the test; run the subtree while iterating.
 4. Run the full suite with coverage; read the uncovered lines you touched.
 5. Headers on new files; docs updated if behaviour or config changed.
+
+## Report
+
+When tests are the task (not a step inside another task), use the `workflow`
+report template and `workflow/references/VISUAL-REPORT.md`: a metrics table for
+coverage and test count before/after, and a list of the behaviours now pinned
+(one line each, named like the tests).

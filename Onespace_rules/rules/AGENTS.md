@@ -68,6 +68,9 @@ Follow `.agents/skills/workflow/SKILL.md`. In short:
 2. **Scope with the user.** Ask until it is unambiguous: which paths, how deep,
    what is out of scope, constraints, success criteria, and the report format
    (**HTML by default, or Markdown**). Log questions and answers in `scope.md`.
+   Reports are visual: a Current → Target diagram for every change
+   (`workflow/references/VISUAL-REPORT.md`). Audit and security reports load no
+   external scripts.
 3. **Research**, then **plan**: write `plan.md`, show it, and wait for explicit
    approval.
 4. **Execute the approved plan only.** Log each step in `progress.md`. New scope

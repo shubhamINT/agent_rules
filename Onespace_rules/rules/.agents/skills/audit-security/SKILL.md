@@ -150,7 +150,11 @@ Rate by impact × likelihood in *this* deployment. Explain the rating in one lin
 
 ## Phase 7 — Report
 
-`workflow` report template; HTML default. Each finding:
+`workflow` report template; HTML default. Visuals per
+`workflow/references/VISUAL-REPORT.md`: severity tiles and severity bar, and a
+source → sink row of plain boxes for each High or Critical finding.
+**No Mermaid or any external script** — delete the template's script block.
+Each finding:
 
 ```
 S-003 | High | Broken Object Level Authorization

@@ -28,6 +28,7 @@ rules/
     ├── coding-standards/         # clean code, full Google style guides + section index, module design, bug radar, AI self-review, tooling
     ├── busl-licence-compliance/  # BUSL-1.1 LICENSE/NOTICE/headers + header script
     ├── workflow/                 # record → scope → plan → approve → execute → report
+    │   ├── references/           # VISUAL-REPORT.md — diagram patterns, legend, Current → Target, script policy
     │   └── templates/            # INDEX, scope, research, plan, progress, report (.md + .html)
     │  tasks
     ├── build-feature/            # building new behaviour

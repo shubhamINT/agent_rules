@@ -25,7 +25,40 @@
 - Tools: 
 - Checklists / standards: 
 
-## 4. Findings
+## 4. Current → Target
+
+<!-- refactor / feature / structure / test: required. audit / security: delete this section. -->
+<!-- Patterns and colours: ../references/VISUAL-REPORT.md -->
+
+### Current
+
+```mermaid
+flowchart LR
+  H[OrderRouter] --> S[OrderService]
+  H -. leak .-> DB[(raw SQL in route)]
+  classDef leak stroke:#dc2626,stroke-width:2px,color:#dc2626
+  class DB leak
+```
+
+### Target
+
+```mermaid
+flowchart LR
+  H[OrderRouter] --> S[OrderService] --> R[OrderRepository]
+  classDef added fill:#d1fae5,stroke:#059669,color:#064e3b
+  class R added
+```
+
+**Problem:** <one sentence>
+**Change:** <one sentence>
+
+<!-- structure: replace the diagrams with two tree blocks, prefix lines + added, ~ moved, - removed -->
+
+| Metric | Before | After | Δ |
+|--------|--------|-------|---|
+|        |        |       |   |
+
+## 5. Findings
 
 <!-- audit / security -->
 | ID | Severity | Category | Standard | Location | Evidence | Impact | Recommendation | Status |
@@ -51,11 +84,11 @@
 - **Impact:** 
 - **Recommendation:** 
 
-## 5. Verification
+## 6. Verification
 
 | Check | Before | After |
 |-------|--------|-------|
 
-## 6. Out-of-scope observations and next tasks
+## 7. Out-of-scope observations and next tasks
 
 - 

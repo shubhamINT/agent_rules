@@ -109,7 +109,11 @@ readability · **Info** observation. Bugs that are exploitable belong in
 
 ## Phase 7 — Report
 
-`workflow` report template in the agreed format (HTML default). Include:
+`workflow` report template in the agreed format (HTML default). Visuals per
+`workflow/references/VISUAL-REPORT.md`: severity tiles and severity bar, one
+card per finding, structure conformance as a tree with violating paths red.
+**No Mermaid or any external script** — delete the template's script block;
+use the template's plain boxes and tables. Include:
 
 - summary with counts by severity and the top 3 things to fix first
 - findings table + details (format above), grouped by file or by theme

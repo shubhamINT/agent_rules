@@ -83,6 +83,13 @@ Always ask; never decide alone. Present what you found and a recommendation:
 For a large existing repo, also ask whether to migrate everything or only code
 touched by current and future tasks (incremental, usually the right answer).
 
+When the recommendation moves code (anything except "follow what exists"),
+show it as a structure proposal before asking: a `workflow` report of type
+`structure`, saved to `agent-tracking/reports/<slug>.html`, per `workflow/references/VISUAL-REPORT.md`, with a Current → Target
+tree diff (added paths green, moved amber, removed grey) and a
+dependency-direction graph with rule violations red. The user decides on the
+picture, not on a paragraph.
+
 ## Step 4 — Record the decision in `AGENTS.md`
 
 Write (or update) a `## Project structure` section at the end of the repo root

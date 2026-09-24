@@ -86,7 +86,10 @@ Steps in `plan.md` are ordered so each ends green. Get approval.
 
 ## Phase 7 — Report
 
-`workflow` report template. Feature-specific content: what was built
+`workflow` report template and `workflow/references/VISUAL-REPORT.md`.
+Required visuals: a Current → Target component graph with the added parts
+green, and a sequence diagram of the new request path end to end.
+Feature-specific content: what was built
 (mapped to acceptance criteria), the interface (routes / functions / events),
 files added and changed, tests added (mapped to criteria), config and data
 changes, verification results before/after, known limits and follow-ups.

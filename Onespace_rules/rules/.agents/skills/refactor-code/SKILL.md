@@ -103,7 +103,13 @@ changes unless approved, expected before/after metrics.
 
 ## Phase 7 — Report
 
-Use `workflow` report template. Refactor-specific content:
+Use `workflow` report template and `workflow/references/VISUAL-REPORT.md`.
+Refactor-specific content:
+
+- **Current → Target diagram**: module or call graph before and after, moved
+  and extracted parts amber, removed parts grey, leaks red. Add a layer list,
+  interface-vs-implementation table, or call-graph collapse when it makes the gain clearer.
+- **Metrics table** (Before · After · Δ) for the numbers below
 
 - **Changes table**: change · named refactoring · files · reason (smell addressed)
 - **Metrics before/after**: tests (count, pass), coverage, lint/type errors,
