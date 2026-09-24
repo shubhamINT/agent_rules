@@ -126,8 +126,9 @@ agent-tracking/
 
 ## Updating the pack
 
-- Edit skills here and bump `version` in `.claude-plugin/plugin.json`. Plugin
-  and `npx skills` users pull the change with their update command; manual
+- Edit skills here and push to `master`. Every push is a new plugin version
+  (`plugin.json` has no `version` field on purpose). Plugin users with
+  auto-update get it automatically; `npx skills` users pull the change with their update command; manual
   installs re-copy `.agents/skills/`. When updating a
   repo's `AGENTS.md`, keep its `## Project structure` section — it is repo-specific.
 - `onespace-be-busl-licence-compliance` and `onespace-be-add-health-endpoint` are owned by the platform
