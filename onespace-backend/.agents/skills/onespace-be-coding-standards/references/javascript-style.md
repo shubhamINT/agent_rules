@@ -25,7 +25,7 @@ deliberately differs; `n/a` means Google-internal or Closure-only.
 - Class privacy uses `#private` or module-local scope, not `@private` or
   trailing underscores.
 - Every new file starts with the BUSL licence header
-  (`busl-licence-compliance`).
+  (`onespace-be-busl-licence-compliance`).
 - Enforcement: Prettier, ESLint 9 and `tsc` replace Closure Compiler,
   clang-format and the Closure linter (see `tooling.md`).
 
@@ -44,7 +44,7 @@ deliberately differs; `n/a` means Google-internal or Closure-only.
 | 2.3.2 | Special escape sequences | rule | Use `\n`, `\t`, `\'` etc. rather than numeric escapes; never legacy octal escapes (`no-octal-escape`). |
 | 2.3.3 | Non-ASCII characters | rule | Use the actual character or a `\u` escape, whichever reads better; comment non-printable escapes. |
 | 3 | Source file structure | override | Order: licence header, optional `@fileoverview`, `import` statements, implementation. One blank line between sections. |
-| 3.1 | License or copyright information, if present | override | Required: BUSL licence header first in every new file (`busl-licence-compliance`). |
+| 3.1 | License or copyright information, if present | override | Required: BUSL licence header first in every new file (`onespace-be-busl-licence-compliance`). |
 | 3.2 | @fileoverview JSDoc, if present | rule | Optional `@fileoverview` JSDoc goes directly after the licence header; format per §7.5. |
 | 3.3 | goog.module statement | override | Not used. Every file is an ES module; the file path is its identity. |
 | 3.3.1 | Hierarchy | override | No `goog.module` namespaces; directory structure follows the recorded project structure. |

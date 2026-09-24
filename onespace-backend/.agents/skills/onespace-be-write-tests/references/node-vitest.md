@@ -1,7 +1,7 @@
 # Node Testing
 
 Every module under `src/` has a test that fails when its logic breaks. That is
-the whole standard. This is the Node twin of `write-tests`.
+the whole standard. This is the Node twin of `onespace-be-write-tests`.
 
 > **A great developer seeks simplicity. An idiot developer seeks complexity.**
 
@@ -16,7 +16,7 @@ the whole standard. This is the Node twin of `write-tests`.
    same comment**.
 3. **No test touches the network, a live database, or a real LLM.**
 4. **The runner is `npx vitest`** (via `npm test`). No ad-hoc scripts.
-5. **Every test file carries the BUSL-1.1 header** (see `busl-licence-compliance`).
+5. **Every test file carries the BUSL-1.1 header** (see `onespace-be-busl-licence-compliance`).
 
 ## Layout: `tests/` mirrors `src/`
 

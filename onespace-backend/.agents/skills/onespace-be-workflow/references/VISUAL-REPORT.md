@@ -47,7 +47,7 @@ Two hard rules when filling the template:
 | feature | allowed | Same |
 | structure | allowed | Same |
 | test | allowed | Same |
-| audit-code, audit-security | **forbidden** | Findings are sensitive, opened offline, attached to tickets. Inline CSS, plain boxes and tables only |
+| onespace-be-audit-code, onespace-be-audit-security | **forbidden** | Findings are sensitive, opened offline, attached to tickets. Inline CSS, plain boxes and tables only |
 
 A report that loads Mermaid must contain **no secrets, credentials, internal
 hostnames, or security findings**. If a refactor or feature task turns up a
@@ -202,12 +202,12 @@ it passes through, where it lands. Name the missing control in red text
 | Type | Required visuals | Optional |
 |------|------------------|----------|
 | refactor | Current → Target module or call graph; metrics table (tests, coverage, complexity, lint/type errors, lines +/−) | cross-section, mass table, call-graph collapse |
-| architecture review | per candidate: Current → Target diagram (see `refactor-code/references/HTML-REPORT.md`) | any pattern |
+| architecture review | per candidate: Current → Target diagram (see `onespace-be-refactor-code/references/HTML-REPORT.md`) | any pattern |
 | feature | Current → Target component graph with added parts green; sequence diagram of the new request path | metrics table for coverage |
 | structure | Current → Target tree diff; dependency-direction graph with rule violations red | table "where does X go" |
 | test | metrics table for coverage and test count before/after; list of behaviours now pinned | — |
-| audit-code | severity tiles + severity bar; per-finding cards; structure conformance as a tree with violations red | metrics table for current lint/type/complexity |
-| audit-security | severity tiles + severity bar; per-finding cards; source → sink sketch for High and Critical | — |
+| onespace-be-audit-code | severity tiles + severity bar; per-finding cards; structure conformance as a tree with violations red | metrics table for current lint/type/complexity |
+| onespace-be-audit-security | severity tiles + severity bar; per-finding cards; source → sink sketch for High and Critical | — |
 
 ## Markdown fallback
 
@@ -223,7 +223,7 @@ Mermaid, because Markdown renders locally with no network fetch.
 - Follow "Standard look" above. When in doubt, remove decoration, never content.
 - Diagrams carry the weight. Problem and change are one sentence each. If a
   diagram needs a paragraph to be understood, redraw the diagram.
-- Use the module-design vocabulary (`coding-standards/references/module-design.md`):
+- Use the module-design vocabulary (`onespace-be-coding-standards/references/module-design.md`):
   module, interface, implementation, depth, seam, adapter, leverage, locality.
 - The page must work at 375px width with no horizontal page scroll; wide
   diagrams and tables scroll inside their own container.

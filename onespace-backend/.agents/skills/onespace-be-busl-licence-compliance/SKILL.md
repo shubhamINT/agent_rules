@@ -1,5 +1,5 @@
 ---
-name: busl-licence-compliance
+name: onespace-be-busl-licence-compliance
 description: >
   Enforces OneSpace BUSL-1.1 licence compliance. Use when creating a new
   repository or service, creating any new source file, adding or upgrading a
@@ -53,17 +53,19 @@ All templates live in `templates/headers.md` (Python, TS/JS, YAML, Dockerfile,
 shell, SQL, JSON manifests). Read that file for the exact text.
 
 **Do not paste headers by hand across a repo.** Run the bundled script — it is
-idempotent, shebang-aware, and covers every file type:
+idempotent, shebang-aware, and covers every file type. Run it from the repo
+root. `<skill-dir>` is the folder that holds this `SKILL.md`: `.claude/skills/…`,
+`.agents/skills/…`, or the plugin cache, depending on how the skill was installed.
 
 ```bash
 # preview
-python scripts/add_license_headers.py --root . --dry-run
+python <skill-dir>/scripts/add_license_headers.py --root . --dry-run
 
 # apply
-python scripts/add_license_headers.py --root .
+python <skill-dir>/scripts/add_license_headers.py --root .
 
 # CI gate: exit 1 if any file lacks a header
-python scripts/add_license_headers.py --root . --check
+python <skill-dir>/scripts/add_license_headers.py --root . --check
 ```
 
 Useful flags: `--exclude 'src/generated/*'` (repeatable) to skip generated trees.
@@ -216,7 +218,7 @@ documentation bug.
 - [ ] `THIRD_PARTY_LICENSES.md` generated and committed
 - [ ] manifest declares `license: BUSL-1.1`
 - [ ] `README.md` has the licence section
-- [ ] `python scripts/add_license_headers.py --root . --check` exits 0
+- [ ] `python <skill-dir>/scripts/add_license_headers.py --root . --check` exits 0
 
 **New source file**
 
@@ -246,10 +248,10 @@ deployment agreement language are managed by the tech lead and legal team.
 
 ## Installation
 
-This skill ships in the OneSpace rules pack (`.agents/skills/`) and is
+This skill ships in the OneSpace backend rules pack (`onespace-backend/`) and is
 installed with it — see the pack `README.md`. It is self-contained: templates,
 scripts and references travel with it.
 
 First time in a repository: run
-`python .agents/skills/busl-licence-compliance/scripts/add_license_headers.py --root . --dry-run`,
+`python <skill-dir>/scripts/add_license_headers.py --root . --dry-run`,
 then apply, then work through the new-repository checklist above.

@@ -146,5 +146,7 @@ the repo already uses it; do not mix both.
 
 The same commands as pre-commit, plus tests with coverage, Semgrep, and the
 dependency audit. The BUSL header check
-(`python .agents/skills/busl-licence-compliance/scripts/add_license_headers.py --root . --check`)
-runs as its own step.
+(`python scripts/add_license_headers.py --root . --check`) runs as its own step.
+CI cannot see agent skill folders, so copy `scripts/add_license_headers.py` from
+the `onespace-be-busl-licence-compliance` skill into the repo's `scripts/` and
+commit it.

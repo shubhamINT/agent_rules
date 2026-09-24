@@ -1,5 +1,5 @@
 ---
-name: audit-security
+name: onespace-be-audit-security
 description: >
   Security audit of Python (FastAPI) and Node.js (TypeScript) backend code
   against OWASP Top 10:2025, OWASP API Security Top 10:2023, OWASP ASVS 5.0,
@@ -9,7 +9,7 @@ description: >
   review, vulnerability scan, pentest-style code review, "is this secure",
   "check for vulnerabilities", "OWASP check", secrets scan, or a review of code
   touching auth, input handling, file uploads, external calls or LLM calls —
-  after scope is agreed via workflow. Produces a traceable findings report;
+  after scope is agreed via onespace-be-workflow. Produces a traceable findings report;
   fixes only when remediation is explicitly in scope.
 ---
 
@@ -23,7 +23,7 @@ packages that do not exist. So an audit is systematic: tools first to catch the
 cheap things, then a human-style review against published standards, every
 finding traceable to a standard ID and a `file:line`.
 
-Prerequisite: `workflow` phases 1–3 (scope agreed, including ASVS level —
+Prerequisite: `onespace-be-workflow` phases 1–3 (scope agreed, including ASVS level —
 L2 default — and whether the service calls an LLM). This skill supplies phases
 4–7.
 
@@ -119,8 +119,8 @@ Then walk this checklist. Each item maps to the standards in `references/standar
 **Supply chain** (A03:2025, API9)
 - Dependency audit clean of High/Critical or each one triaged.
 - Lockfile committed; versions pinned; no packages from unexpected registries.
-- Every dependency actually exists and is the intended package (typosquats, hallucinated names — see `audit-code/references/ai-generated-code.md`).
-- Licence check per `busl-licence-compliance` (GPL/AGPL is a blocker).
+- Every dependency actually exists and is the intended package (typosquats, hallucinated names — see `onespace-be-audit-code/references/ai-generated-code.md`).
+- Licence check per `onespace-be-busl-licence-compliance` (GPL/AGPL is a blocker).
 
 **Logging and error handling** (A09, A10:2025, ASVS V16)
 - Security events logged (auth failures, access denials, admin actions) with request id — without secrets or PII.
@@ -150,8 +150,8 @@ Rate by impact × likelihood in *this* deployment. Explain the rating in one lin
 
 ## Phase 7 — Report
 
-`workflow` report template; HTML default. Visuals per
-`workflow/references/VISUAL-REPORT.md`: severity tiles and severity bar, and a
+`onespace-be-workflow` report template; HTML default. Visuals per
+`onespace-be-workflow/references/VISUAL-REPORT.md`: severity tiles and severity bar, and a
 source → sink row of plain boxes for each High or Critical finding.
 **No Mermaid or any external script** — delete the template's script block.
 Each finding:

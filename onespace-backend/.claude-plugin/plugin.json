@@ -1,0 +1,7 @@
+{
+  "name": "onespace-backend",
+  "version": "1.0.0",
+  "description": "OneSpace backend engineering rules and skills (Python + Node.js).",
+  "author": { "name": "Shubham Halder" },
+  "skills": "./.agents/skills/"
+}

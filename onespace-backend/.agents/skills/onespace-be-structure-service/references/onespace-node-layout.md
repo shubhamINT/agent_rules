@@ -137,4 +137,4 @@ Minimal `tsconfig.json` compiler options: `"strict": true`,
 `"outDir": "dist"`. `package.json`: `"type": "module"`,
 `"engines": { "node": ">=24" }`, `"license": "BUSL-1.1"`.
 
-Then run the `busl-licence-compliance` new-repository checklist before the first commit.
+Then run the `onespace-be-busl-licence-compliance` new-repository checklist before the first commit.

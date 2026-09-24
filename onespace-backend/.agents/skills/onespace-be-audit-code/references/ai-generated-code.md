@@ -6,9 +6,9 @@ review. The failures are not random; they cluster in the eight categories below.
 Review against each category with a **concrete verification action**, not by
 eye. "Looks right" is the failure mode.
 
-Used by `audit-code` (review of any code), `refactor-code` (smell inventory),
-and as the self-review in `coding-standards` before handing back your own code.
-General quality is in `coding-standards`; vulnerabilities in `audit-security`.
+Used by `onespace-be-audit-code` (review of any code), `onespace-be-refactor-code` (smell inventory),
+and as the self-review in `onespace-be-coding-standards` before handing back your own code.
+General quality is in `onespace-be-coding-standards`; vulnerabilities in `onespace-be-audit-security`.
 
 ## The eight checks
 
@@ -43,7 +43,7 @@ for each class. Missing → finding.
 Abstraction layers, factories, strategy classes, config flags, retries, caches,
 and defensive checks nobody asked for. They add surface to test and maintain.
 
-Verify: apply the deletion test (`coding-standards/references/module-design.md`) to each abstraction. One
+Verify: apply the deletion test (`onespace-be-coding-standards/references/module-design.md`) to each abstraction. One
 implementation behind an interface, a parameter only ever passed one value, a
 wrapper that only forwards — recommend inlining. Compare the size of the change
 to the size of the requirement.
@@ -64,7 +64,7 @@ GPL-licensed code.
 Verify: unusually specific, polished, or oddly-commented blocks (distinctive
 variable names, embedded copyright lines, a different style from the rest) —
 search a distinctive line on the web / GitHub code search. Any match with an
-incompatible licence is a blocker per `busl-licence-compliance`. New files must
+incompatible licence is a blocker per `onespace-be-busl-licence-compliance`. New files must
 carry the BUSL header.
 
 ### 6. Outdated practices

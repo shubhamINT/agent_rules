@@ -20,48 +20,80 @@ It covers three main jobs: **building features**, **refactoring bad code**, and
 ## Contents
 
 ```
-rules/
-├── README.md                     # this file
-├── AGENTS.md                     # always-on rules, task routing, per-repo "Project structure" section
+onespace-backend/
+├── .claude-plugin/plugin.json                  # Claude Code plugin manifest
+├── README.md                                   # this file
+├── AGENTS.md                                   # always-on rules, task routing, per-repo "Project structure" section
 └── .agents/skills/
     │  always on
-    ├── coding-standards/         # clean code, full Google style guides + section index, module design, bug radar, AI self-review, tooling
-    ├── busl-licence-compliance/  # BUSL-1.1 LICENSE/NOTICE/headers + header script
-    ├── workflow/                 # record → scope → plan → approve → execute → report
-    │   ├── references/           # VISUAL-REPORT.md — diagram patterns, legend, Current → Target, script policy
-    │   └── templates/            # INDEX, scope, research, plan, progress, report (.md + .html)
+    ├── onespace-be-coding-standards/           # clean code, full Google style guides + section index, module design, bug radar, AI self-review, tooling
+    ├── onespace-be-busl-licence-compliance/    # BUSL-1.1 LICENSE/NOTICE/headers + header script
+    ├── onespace-be-workflow/                   # record → scope → plan → approve → execute → report
+    │   ├── references/                         # VISUAL-REPORT.md — diagram patterns, legend, Current → Target, script policy
+    │   └── templates/                          # INDEX, scope, research, plan, progress, report (.md + .html)
     │  tasks
-    ├── build-feature/            # building new behaviour
-    ├── refactor-code/            # behaviour-preserving refactors + architecture review
-    ├── audit-code/               # bugs, bad code, weak tests, AI-generated-code failure patterns
-    ├── audit-security/           # OWASP / ASVS / CWE audit, scanners, per-language checks
-    ├── write-tests/              # pytest + vitest, offline mocks, 80% floor
-    ├── structure-service/        # detect / choose / record / apply project structure
-    └── add-health-endpoint/      # GET /health contract, per-stack references
+    ├── onespace-be-build-feature/              # building new behaviour
+    ├── onespace-be-refactor-code/              # behaviour-preserving refactors + architecture review
+    ├── onespace-be-audit-code/                 # bugs, bad code, weak tests, AI-generated-code failure patterns
+    ├── onespace-be-audit-security/             # OWASP / ASVS / CWE audit, scanners, per-language checks
+    ├── onespace-be-write-tests/                # pytest + vitest, offline mocks, 80% floor
+    ├── onespace-be-structure-service/          # detect / choose / record / apply project structure
+    └── onespace-be-add-health-endpoint/        # GET /health contract, per-stack references
 ```
 
 Each skill is a folder with a `SKILL.md` and, where needed, `references/`
 (detail loaded on demand), `templates/`, or `scripts/`. Everything a skill needs
-is inside `rules/` — nothing points outside it.
+is inside `onespace-backend/` — nothing points outside it.
 
 ## Install into a service repository
 
-1. Copy the pack into the repo root:
+Pick one of the three ways to get the skills. Then add `AGENTS.md` (step 2).
+
+1. **Install the skills.**
+
+   - **Claude Code plugin** (Claude only, updates through the plugin manager):
+
+     ```
+     /plugin marketplace add shubhamINT/agent_rules
+     /plugin install onespace-backend@int-agent-rules
+     ```
+
+     Update with `/plugin marketplace update int-agent-rules`, or turn on
+     auto-update for the marketplace in `/plugin`. Skills appear as
+     `onespace-backend:onespace-be-<skill>`.
+
+   - **`npx skills`** (Claude, Codex, Cursor and other agents; pick skills,
+     agent and scope):
+
+     ```bash
+     npx skills add shubhamINT/agent_rules --list        # show the skills
+     npx skills add shubhamINT/agent_rules               # interactive picker
+     npx skills add shubhamINT/agent_rules --skill onespace-be-audit-code -a claude-code
+     npx skills update                                   # pull the latest version
+     ```
+
+   - **Manual copy**:
+
+     ```bash
+     mkdir -p <repo>/.agents
+     cp -r onespace-backend/.agents/skills <repo>/.agents/
+     ```
+
+2. **Add `AGENTS.md`** to the repo root. Neither the plugin nor `npx skills`
+   installs it:
 
    ```bash
-   cp rules/AGENTS.md <repo>/AGENTS.md
-   mkdir -p <repo>/.agents
-   cp -r rules/.agents/skills <repo>/.agents/
+   curl -o AGENTS.md https://raw.githubusercontent.com/shubhamINT/agent_rules/master/onespace-backend/AGENTS.md
    ```
 
    If the repo already has an `AGENTS.md`, merge: keep repo-specific notes at
    the top, then paste this pack's sections below them.
 
-2. Commit both. `agent-tracking/` is created by the agent on first use and is
+3. Commit both. `agent-tracking/` is created by the agent on first use and is
    committed too — it is the audit trail.
 
-3. First task in the repo: the agent fills the `## Project structure` section at
-   the end of `AGENTS.md` (via `structure-service`) after confirming the
+4. First task in the repo: the agent fills the `## Project structure` section at
+   the end of `AGENTS.md` (via `onespace-be-structure-service`) after confirming the
    structure with you. Review and keep it — every later task follows it.
 
 ## How a task flows
@@ -94,18 +126,20 @@ agent-tracking/
 
 ## Updating the pack
 
-- Edit skills here, then re-copy `.agents/skills/` into repos. When updating a
+- Edit skills here and bump `version` in `.claude-plugin/plugin.json`. Plugin
+  and `npx skills` users pull the change with their update command; manual
+  installs re-copy `.agents/skills/`. When updating a
   repo's `AGENTS.md`, keep its `## Project structure` section — it is repo-specific.
-- `busl-licence-compliance` and `add-health-endpoint` are owned by the platform
+- `onespace-be-busl-licence-compliance` and `onespace-be-add-health-endpoint` are owned by the platform
   team; keep them in sync with the owners.
 - Standards editions move (OWASP Top 10, CWE Top 25 yearly). Update
-  `audit-security/references/standards.md` when a new edition lands.
+  `onespace-be-audit-security/references/standards.md` when a new edition lands.
 - Licence header text is owned by the tech lead — never reword it here.
 
 ## Sources
 
 - Robert C. Martin, *Clean Code*; Martin Fowler, *Refactoring* (2nd ed.) and https://refactoring.com/catalog/
-- Google style guides (bundled under `coding-standards/references/google/`, CC-BY 3.0): https://google.github.io/styleguide/ · Google code review: https://google.github.io/eng-practices/
+- Google style guides (bundled under `onespace-be-coding-standards/references/google/`, CC-BY 3.0): https://google.github.io/styleguide/ · Google code review: https://google.github.io/eng-practices/
 - Node.js Best Practices: https://github.com/goldbergyoni/nodebestpractices
 - OWASP Top 10:2025 https://top10.owasp.org/2025 · API Top 10:2023 https://api-security.owasp.org/ · ASVS 5.0 https://github.com/OWASP/ASVS · LLM Top 10 https://genai.owasp.org/llm-top-10/
 - CWE Top 25 (2025): https://cwe.mitre.org/top25/

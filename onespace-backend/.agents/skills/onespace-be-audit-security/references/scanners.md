@@ -57,7 +57,7 @@ package, no repository, single maintainer with no history, install scripts.
 
 ## Licences
 
-`busl-licence-compliance` Step 5: regenerate `THIRD_PARTY_LICENSES.md` and grep
+`onespace-be-busl-licence-compliance` Step 5: regenerate `THIRD_PARTY_LICENSES.md` and grep
 for GPL / AGPL.
 
 ## Triage rules

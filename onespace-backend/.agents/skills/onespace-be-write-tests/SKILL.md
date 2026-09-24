@@ -1,5 +1,5 @@
 ---
-name: write-tests
+name: onespace-be-write-tests
 description: >
   How to write, fix, and structure tests for OneSpace Python (pytest) and
   Node.js / TypeScript (vitest) backend services: tests mirror the source tree,
@@ -36,9 +36,9 @@ rules below hold for both.
    service it calls; to test a service, mock its transport. Mocking the function
    under test proves nothing.
 5. **Tests mirror the source tree** (following the repo's recorded structure —
-   see `structure-service`), one behaviour per test, names that state the
+   see `onespace-be-structure-service`), one behaviour per test, names that state the
    invariant (`returns 404 for another owner's order`).
-6. **Licence header on every new test file** (`busl-licence-compliance`).
+6. **Licence header on every new test file** (`onespace-be-busl-licence-compliance`).
 
 ## What to assert — the service contract
 
@@ -57,7 +57,7 @@ Parametrise when one invariant holds across a set (every status, every type).
 
 ## Characterization tests (before a refactor)
 
-When `refactor-code` finds no tests around the code to be changed, write tests
+When `onespace-be-refactor-code` finds no tests around the code to be changed, write tests
 that pin **current** behaviour through the public interface — including odd
 behaviour. If current behaviour looks like a bug, pin it anyway, name the test
 accordingly (`test_currently_returns_200_on_missing_amount`), and report it as
@@ -88,7 +88,7 @@ coverage floor. Skips carry a reason and a ticket.
 
 ## Report
 
-When tests are the task (not a step inside another task), use the `workflow`
-report template and `workflow/references/VISUAL-REPORT.md`: a metrics table for
+When tests are the task (not a step inside another task), use the `onespace-be-workflow`
+report template and `onespace-be-workflow/references/VISUAL-REPORT.md`: a metrics table for
 coverage and test count before/after, and a list of the behaviours now pinned
 (one line each, named like the tests).

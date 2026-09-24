@@ -102,8 +102,8 @@ Rules: `domain` imports nothing outside the stdlib; `application` imports
 
 ## 4. Shared files in every layout
 
-- `pyproject.toml` with `license = "BUSL-1.1"`, Ruff/mypy/pytest config (see `coding-standards/references/tooling.md`).
+- `pyproject.toml` with `license = "BUSL-1.1"`, Ruff/mypy/pytest config (see `onespace-be-coding-standards/references/tooling.md`).
 - `.env.example` listing every variable read by the single settings module.
 - `README.md` per `readme-standard.md`.
-- `LICENSE`, `NOTICE`, `THIRD_PARTY_LICENSES.md` per `busl-licence-compliance`.
-- Tests per `write-tests`.
+- `LICENSE`, `NOTICE`, `THIRD_PARTY_LICENSES.md` per `onespace-be-busl-licence-compliance`.
+- Tests per `onespace-be-write-tests`.

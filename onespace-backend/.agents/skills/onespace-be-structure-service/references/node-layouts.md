@@ -97,8 +97,8 @@ src/
 ## 4. Shared files in every layout
 
 - `package.json`: `"type": "module"`, `"license": "BUSL-1.1"`, `"engines": { "node": ">=24" }`; lockfile committed.
-- `tsconfig.json` strict; ESLint flat config + Prettier (see `coding-standards/references/tooling.md`).
+- `tsconfig.json` strict; ESLint flat config + Prettier (see `onespace-be-coding-standards/references/tooling.md`).
 - `.env.example` listing every variable parsed by `config.ts`.
 - `README.md` per `readme-standard.md`.
-- `LICENSE`, `NOTICE`, `THIRD_PARTY_LICENSES.md` per `busl-licence-compliance`.
-- Tests per `write-tests`.
+- `LICENSE`, `NOTICE`, `THIRD_PARTY_LICENSES.md` per `onespace-be-busl-licence-compliance`.
+- Tests per `onespace-be-write-tests`.

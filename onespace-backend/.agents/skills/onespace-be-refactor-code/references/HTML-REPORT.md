@@ -1,6 +1,6 @@
 # HTML Report Format
 
-The architectural review is rendered as a single HTML file at `agent-tracking/reports/<slug>.html` (or as Markdown with Mermaid code blocks if the user chose MD). Never write it to the OS temp directory. Build it on the standard template `workflow/templates/report.html`: white page, report header on top, plain numbered sections. The look, legend, script policy, and diagram snippets are in `workflow/references/VISUAL-REPORT.md`. This file adds only what is specific to an architecture review. The report loads Mermaid from a CDN, so it must contain no secrets or security findings.
+The architectural review is rendered as a single HTML file at `agent-tracking/reports/<slug>.html` (or as Markdown with Mermaid code blocks if the user chose MD). Never write it to the OS temp directory. Build it on the standard template `onespace-be-workflow/templates/report.html`: white page, report header on top, plain numbered sections. The look, legend, script policy, and diagram snippets are in `onespace-be-workflow/references/VISUAL-REPORT.md`. This file adds only what is specific to an architecture review. The report loads Mermaid from a CDN, so it must contain no secrets or security findings.
 
 ## Layout
 
@@ -12,7 +12,7 @@ The template header: repo name in the title, date, trace links, and the one-line
 
 ## Candidate card
 
-The diagrams carry the weight. Prose is sparse, plain, and uses the glossary terms (from the module-design vocabulary (`coding-standards/references/module-design.md`)) without ceremony.
+The diagrams carry the weight. Prose is sparse, plain, and uses the glossary terms (from the module-design vocabulary (`onespace-be-coding-standards/references/module-design.md`)) without ceremony.
 
 Each candidate is one `<article class="card">`:
 
@@ -31,7 +31,7 @@ No paragraphs of explanation. If the diagram needs a paragraph to be understood,
 
 ## Diagram patterns
 
-Pick the simplest pattern that shows the candidate's problem. Snippets for each are in `workflow/references/VISUAL-REPORT.md`.
+Pick the simplest pattern that shows the candidate's problem. Snippets for each are in `onespace-be-workflow/references/VISUAL-REPORT.md`.
 
 ### Mermaid graph (the workhorse for dependencies / call flow)
 
@@ -67,7 +67,7 @@ Before: a tree of function calls rendered as nested boxes. After: the same tree 
 
 ## Style guidance
 
-- Follow the "Standard look" in `workflow/references/VISUAL-REPORT.md`: white page, colour only for the legend states and recommendation strength.
+- Follow the "Standard look" in `onespace-be-workflow/references/VISUAL-REPORT.md`: white page, colour only for the legend states and recommendation strength.
 - Keep diagrams short enough that before/after sits side by side without scrolling.
 - The only script is the template's Mermaid loader. The report is otherwise static: no app code, no interactivity beyond Mermaid's own rendering.
 
@@ -77,7 +77,7 @@ One card with a 3px accent left border. Candidate name, one sentence on why, anc
 
 ## Tone
 
-Plain English, concise, but the architectural nouns and verbs come straight from the module-design vocabulary (`coding-standards/references/module-design.md`). Concision is not an excuse to drift.
+Plain English, concise, but the architectural nouns and verbs come straight from the module-design vocabulary (`onespace-be-coding-standards/references/module-design.md`). Concision is not an excuse to drift.
 
 **Use exactly:** module, interface, implementation, depth, deep, shallow, seam, adapter, leverage, locality.
 

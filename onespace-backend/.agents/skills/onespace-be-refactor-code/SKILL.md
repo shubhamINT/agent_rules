@@ -1,12 +1,12 @@
 ---
-name: refactor-code
+name: onespace-be-refactor-code
 description: >
   Behaviour-preserving refactoring of Python and Node.js backend code, plus
   architecture review for deepening opportunities. Use whenever the user wants
   to clean up, restructure, simplify, de-duplicate, split, rename, or "fix bad
   code" — "this module is a mess", "refactor the payments service", "reduce
   complexity", "make this testable", "improve the architecture" — after scope
-  and plan are agreed through workflow. Detects the project structure first and
+  and plan are agreed through onespace-be-workflow. Detects the project structure first and
   moves misplaced code into it, baselines tests and metrics, names every smell
   and refactoring (Fowler), changes in small green steps, and reports
   before/after.
@@ -19,13 +19,13 @@ value: reviewers can approve a large diff because nothing observable changed.
 Break it — sneak in a fix, a feature, or an API change — and the diff becomes
 unreviewable. Behaviour changes are separate tasks.
 
-Prerequisite: `workflow` phases 1–3 are done (scope agreed, tracking
+Prerequisite: `onespace-be-workflow` phases 1–3 are done (scope agreed, tracking
 created). This skill supplies the content of phases 4–7.
 
-Yardsticks: `coding-standards` (what good looks like),
-`coding-standards/references/smells-and-refactorings.md`
-(names), `coding-standards/references/module-design.md` (module and seam vocabulary), and the repo's recorded
-project structure (`AGENTS.md` → `## Project structure`, set by `structure-service`).
+Yardsticks: `onespace-be-coding-standards` (what good looks like),
+`onespace-be-coding-standards/references/smells-and-refactorings.md`
+(names), `onespace-be-coding-standards/references/module-design.md` (module and seam vocabulary), and the repo's recorded
+project structure (`AGENTS.md` → `## Project structure`, set by `onespace-be-structure-service`).
 
 ---
 
@@ -43,7 +43,7 @@ Ask which mode if the request is ambiguous.
 Record in `agent-tracking/research/<slug>.md`:
 
 0. **Structure**: read the repo's recorded structure (`AGENTS.md` →
-   `## Project structure`). None recorded? Run `structure-service` first: detect
+   `## Project structure`). None recorded? Run `onespace-be-structure-service` first: detect
    the current structure, ask the user which one they want, record it. Then list
    every file or function that sits in the wrong place for that structure
    (e.g. SQL in a route handler, business rules in a repository) — these become
@@ -52,7 +52,7 @@ Record in `agent-tracking/research/<slug>.md`:
 2. **Lint/type**: `ruff check` + `mypy` / `eslint` + `tsc` counts for in-scope files.
 3. **Complexity**: functions over 10 (`ruff check --select C901` / ESLint `complexity`), longest functions, largest files.
 4. **Behaviour surface**: public functions, endpoints, CLI commands, events, DB writes the in-scope code exposes. This list is what must not change.
-5. **Smell inventory**: each smell with Fowler name, `file:line`, and why it hurts here. Apply `audit-code/references/ai-generated-code.md` too if the code was AI-generated.
+5. **Smell inventory**: each smell with Fowler name, `file:line`, and why it hurts here. Apply `onespace-be-audit-code/references/ai-generated-code.md` too if the code was AI-generated.
 
 **No tests covering the in-scope behaviour?** The first plan step is to write
 **characterization tests**: tests that pin current behaviour (including odd
@@ -97,13 +97,13 @@ changes unless approved, expected before/after metrics.
 - Do not reformat untouched code. Do not "improve" code outside scope.
 - Delete dead code instead of commenting it out. Delete tests that only tested
   deleted shallow wrappers once the deeper interface is tested (replace, don't
-  layer — see `coding-standards/references/DEEPENING.md`).
-- New files get the BUSL header (`busl-licence-compliance`).
+  layer — see `onespace-be-coding-standards/references/DEEPENING.md`).
+- New files get the BUSL header (`onespace-be-busl-licence-compliance`).
 - Structure moved? Update README project tree in the same change.
 
 ## Phase 7 — Report
 
-Use `workflow` report template and `workflow/references/VISUAL-REPORT.md`.
+Use `onespace-be-workflow` report template and `onespace-be-workflow/references/VISUAL-REPORT.md`.
 Refactor-specific content:
 
 - **Current → Target diagram**: module or call graph before and after, moved

@@ -20,7 +20,7 @@ Required sections, in order:
    matching the `## Project structure` section in `AGENTS.md`
 8. **Data stores** — collections/tables, what keys them, what they hold
 9. **Stack** — layer → technology table
-10. **Licence** — from the `busl-licence-compliance` skill
+10. **Licence** — from the `onespace-be-busl-licence-compliance` skill
 
 Rules: if it exists, read it before changing anything. If it is missing, create
 it. After any change, re-check the **whole** README for staleness — environment

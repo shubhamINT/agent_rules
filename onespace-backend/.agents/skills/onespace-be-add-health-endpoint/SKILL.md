@@ -1,5 +1,5 @@
 ---
-name: add-health-endpoint
+name: onespace-be-add-health-endpoint
 description: >
   Every backend service, in any language, exposes one deep GET /health that
   probes its real dependencies and always answers HTTP 200. Use when scaffolding
@@ -224,6 +224,6 @@ A health endpoint nobody knows the semantics of gets misused. In the same change
 
 ## Installation
 
-This skill ships in the OneSpace rules pack (`.agents/skills/`) and is
+This skill ships in the OneSpace backend rules pack (`onespace-backend/`) and is
 installed with it — see the pack `README.md`. It is self-contained: templates,
 scripts and references travel with it.

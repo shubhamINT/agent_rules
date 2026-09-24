@@ -23,7 +23,7 @@ framework of your own.
    `if __name__ == "__main__":` runner blocks, no `PYTHONPATH=` prefix — config
    handles it.
 5. **Every test file carries the BUSL-1.1 header** (see the
-   `busl-licence-compliance` skill).
+   `onespace-be-busl-licence-compliance` skill).
 
 ---
 
@@ -148,8 +148,10 @@ Config lives in `pyproject.toml` — `[dependency-groups] dev`,
    deliberate exclusion with a reason? Anything else is a gap.
 6. **BUSL header on every new file**, then sweep:
    ```bash
-   python .agents/skills/busl-licence-compliance/scripts/add_license_headers.py --root .
+   python <busl-skill-dir>/scripts/add_license_headers.py --root .
    ```
+   `<busl-skill-dir>` is the folder of the `onespace-be-busl-licence-compliance`
+   skill, wherever skills are installed.
 7. **Keep the docs true.** New endpoint, env var, or collection means
    `README.md` / `CLAUDE.md` change in the same commit.
 

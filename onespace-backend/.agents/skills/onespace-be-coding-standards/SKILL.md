@@ -1,5 +1,5 @@
 ---
-name: coding-standards
+name: onespace-be-coding-standards
 description: >
   ALWAYS-ON OneSpace coding standard for Python and Node.js/TypeScript
   backends — applies to every change an agent makes or reviews, however small.
@@ -9,8 +9,8 @@ description: >
   self-review for AI-generated code, and the tools that enforce it all (Ruff,
   mypy, ESLint 9, typescript-eslint, Prettier). Use whenever writing, changing,
   reviewing, or judging backend code, designing a module interface, or choosing
-  lint/format config; it is the yardstick for build-feature, refactor-code and
-  audit-code.
+  lint/format config; it is the yardstick for onespace-be-build-feature, onespace-be-refactor-code and
+  onespace-be-audit-code.
 ---
 
 # Coding Standards
@@ -39,7 +39,7 @@ dropped. Where a style file and the Google text disagree, the style file wins.
 | Designing a module interface: depth, seams, adapters, the deletion test | `references/module-design.md` |
 | Deepening shallow modules given their dependencies | `references/DEEPENING.md` |
 | Comparing alternative interface designs | `references/DESIGN-IT-TWICE.md` |
-| AI-generated code failure patterns (full detail) | `audit-code/references/ai-generated-code.md` |
+| AI-generated code failure patterns (full detail) | `onespace-be-audit-code/references/ai-generated-code.md` |
 
 ## 0. Bug and smell radar (always on)
 
@@ -52,7 +52,7 @@ asked to touch. For each one you notice:
 2. **Record it** in the current task's `progress.md` under "Out-of-scope
    observations" (for trivial tasks with no tracking, in your reply only).
 3. **Do not silently fix it** if it is outside the agreed scope. Offer it as a
-   follow-up task (`audit-code`, `audit-security`, `refactor-code`), because an
+   follow-up task (`onespace-be-audit-code`, `onespace-be-audit-security`, `onespace-be-refactor-code`), because an
    unreviewed fix is an unreviewed behaviour change.
 
 Security holes (injection, missing authorization, hardcoded secrets, unsafe
@@ -108,7 +108,7 @@ deserialization) are always reported immediately, even in a trivial task.
 
 SOLID is a tool, not a goal. **YAGNI beats OCP**: do not add an interface with
 one implementation or a factory for one product. The deletion test (see
-`coding-standards/references/module-design.md`) decides whether an abstraction earns its keep.
+`onespace-be-coding-standards/references/module-design.md`) decides whether an abstraction earns its keep.
 
 ## 6. Data and state
 
@@ -119,7 +119,7 @@ one implementation or a factory for one product. The deletion test (see
 
 ## 7. Tests
 
-Tests are part of the code quality bar, not an extra. See `write-tests`. Headlines: test behaviour through the interface; one behaviour
+Tests are part of the code quality bar, not an extra. See `onespace-be-write-tests`. Headlines: test behaviour through the interface; one behaviour
 per test; names state the invariant; offline; F.I.R.S.T. (fast, independent,
 repeatable, self-validating, timely); coverage floor 80%.
 
@@ -145,10 +145,10 @@ more; do not bury a design problem under ten naming nits.
 6. **Comments** — explain why; none lie?
 7. **Style** — tool-clean? consistent with the file?
 8. **Documentation** — README, env tables, API docs updated?
-9. **Security** — trust boundaries touched? then run the `audit-security` quick checklist.
+9. **Security** — trust boundaries touched? then run the `onespace-be-audit-security` quick checklist.
 
 Cite smells and fixes **by name** (see `references/smells-and-refactorings.md`);
-the full audit finding format is in `audit-code`. Severity for quality findings:
+the full audit finding format is in `onespace-be-audit-code`. Severity for quality findings:
 
 | Severity | Meaning |
 |----------|---------|
@@ -172,7 +172,7 @@ the full audit finding format is in `audit-code`. Severity for quality findings:
 ## Self-review for AI-generated code (your own output included)
 
 Before handing back any code you wrote, run these eight checks — details and
-verification steps in `audit-code/references/ai-generated-code.md`:
+verification steps in `onespace-be-audit-code/references/ai-generated-code.md`:
 
 - [ ] **No hallucinated APIs** — I opened the installed source or versioned docs for every library call I had not already seen in this repo.
 - [ ] **No invented packages** — every new dependency exists under that exact name, is the intended project, licence-compatible, and in the lockfile.

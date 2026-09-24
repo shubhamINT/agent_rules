@@ -139,5 +139,5 @@ src/core/config.py  src/core/logging/logger.py
 tests/
 ```
 
-Then run the `busl-licence-compliance` new-repository checklist before the first
+Then run the `onespace-be-busl-licence-compliance` new-repository checklist before the first
 commit.

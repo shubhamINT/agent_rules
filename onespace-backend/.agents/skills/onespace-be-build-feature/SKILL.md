@@ -1,5 +1,5 @@
 ---
-name: build-feature
+name: onespace-be-build-feature
 description: >
   How to add new behaviour to a OneSpace Python (FastAPI) or Node.js
   (TypeScript) backend service the right way: agreed acceptance criteria, the
@@ -7,7 +7,7 @@ description: >
   boundary, docs and licence in the same change. Use whenever the user asks to
   build, add, implement, integrate, or support something new — "add an
   endpoint", "build a webhook", "integrate Stripe", "support CSV export", "new
-  job that…" — after scope and plan are agreed through workflow.
+  job that…" — after scope and plan are agreed through onespace-be-workflow.
 ---
 
 # Feature Development
@@ -16,7 +16,7 @@ A feature is done when it does what was agreed, is tested through its
 interface, is safe at its trust boundaries, sits in the right place, and the
 docs say it exists. Code that works on the happy path is roughly a third of that.
 
-Prerequisite: `workflow` phases 1–3. This skill supplies phases 4–7.
+Prerequisite: `onespace-be-workflow` phases 1–3. This skill supplies phases 4–7.
 
 ## Phase 4 — Research
 
@@ -24,14 +24,14 @@ Prerequisite: `workflow` phases 1–3. This skill supplies phases 4–7.
    who may call it and see what, limits (size, rate, time). Write them as a
    numbered list in `scope.md`; each becomes at least one test.
 2. **Read the neighbourhood** — the repo's recorded structure (`AGENTS.md` →
-   `## Project structure`; if missing, run `structure-service` first), the closest existing
+   `## Project structure`; if missing, run `onespace-be-structure-service` first), the closest existing
    feature of the same kind (a similar route, a similar upstream client), and its
    tests. The new feature copies that shape unless there is a reason not to.
 3. **Reuse before writing** — search for existing helpers, clients, models,
    error types, and fixtures that already do part of the job.
 4. **External facts** — for any library or upstream API involved, read the
    docs for the **installed** version and record the relevant bits with links in
-   `research/<slug>.md`. Never code against a remembered API (`audit-code/references/ai-generated-code.md` §1).
+   `research/<slug>.md`. Never code against a remembered API (`onespace-be-audit-code/references/ai-generated-code.md` §1).
 5. **Baseline** — run tests, lint, types; record results.
 
 ## Phase 5 — Design and plan
@@ -44,7 +44,7 @@ Design the interface first, in `plan.md`:
   structure's "where does X go" table says. HTTP handlers stay HTTP-only;
   business logic and data access go where the structure puts them.
 - **Module interface**: smallest interface that covers the acceptance criteria
-  (`coding-standards/references/module-design.md`: deep modules, no speculative seams — one adapter is not a
+  (`onespace-be-coding-standards/references/module-design.md`: deep modules, no speculative seams — one adapter is not a
   seam; production + test fake is two).
 - **Data**: new collections/tables/fields, indexes, migrations (reversible).
 - **Config**: new env vars with defaults, added to the settings module and `.env.example`.
@@ -71,22 +71,22 @@ Steps in `plan.md` are ordered so each ends green. Get approval.
    - errors through the central handler; no internals in responses
 4. **No new dependency** unless the plan approved it — then verify it exists, is
    maintained, licence-compatible, and regenerate `THIRD_PARTY_LICENSES.md`.
-5. **Licence header** on every new file (`busl-licence-compliance`).
+5. **Licence header** on every new file (`onespace-be-busl-licence-compliance`).
 6. **Docs in the same change**: README endpoint table, env table, structure
    tree, data stores; docstrings / JSDoc on public functions.
 7. Log each step in `progress.md`.
 
 ## Phase 6b — Self-review before calling it done
 
-- The AI-generated-code self-review in `coding-standards` (all eight checks).
-- `audit-security` checklist items for every trust boundary the feature touched.
-- `coding-standards` checklist.
+- The AI-generated-code self-review in `onespace-be-coding-standards` (all eight checks).
+- `onespace-be-audit-security` checklist items for every trust boundary the feature touched.
+- `onespace-be-coding-standards` checklist.
 - Gates: formatter, linter, type checker, full test suite, coverage ≥ 80%, BUSL
   `--check`. All green, no new ignores.
 
 ## Phase 7 — Report
 
-`workflow` report template and `workflow/references/VISUAL-REPORT.md`.
+`onespace-be-workflow` report template and `onespace-be-workflow/references/VISUAL-REPORT.md`.
 Required visuals: a Current → Target component graph with the added parts
 green, and a sequence diagram of the new request path end to end.
 Feature-specific content: what was built

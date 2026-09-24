@@ -1,5 +1,5 @@
 ---
-name: workflow
+name: onespace-be-workflow
 description: >
   The mandatory scope → track → plan → approve → execute → report workflow for
   every non-trivial backend task (feature, refactor, code audit, security audit,
@@ -31,11 +31,11 @@ Name the task type. It sets the slug and which skills apply.
 
 | Type | Follow-on skill(s) |
 |------|--------------------|
-| `feature` | `build-feature` |
-| `refactor` | `refactor-code` |
-| `audit` | `audit-code` |
-| `security` | `audit-security` |
-| `test` | `write-tests` |
+| `feature` | `onespace-be-build-feature` |
+| `refactor` | `onespace-be-refactor-code` |
+| `audit` | `onespace-be-audit-code` |
+| `security` | `onespace-be-audit-security` |
+| `test` | `onespace-be-write-tests` |
 
 A request can span types ("audit and fix"). Split it: the audit is one task, the
 fix is a second task planned from the audit's findings. This keeps each report
@@ -121,12 +121,12 @@ Now read. Write findings to `research/<slug>.md` (template
 
 - **project structure** — read the `## Project structure` section of the repo's
   `AGENTS.md`. Missing, and the task will place or move code (feature,
-  refactor)? Run `structure-service` now and settle the structure with the user
+  refactor)? Run `onespace-be-structure-service` now and settle the structure with the user
   before writing the plan. Record the structure in research.
 - entry points and the files in scope (with line counts)
 - how the pieces connect (a short dependency map)
 - baseline measurements — run what the repo already has: tests, coverage,
-  linters, type checker, and for security the scanners in `audit-security`.
+  linters, type checker, and for security the scanners in `onespace-be-audit-security`.
   Record exact commands and summarised output. These numbers are the "before" in
   the final report.
 - external facts you looked up (library versions, standards) with sources

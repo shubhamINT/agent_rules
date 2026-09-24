@@ -1,5 +1,5 @@
 ---
-name: audit-code
+name: onespace-be-audit-code
 description: >
   Code-quality audit of Python and Node.js / TypeScript backend code: bugs, bad
   code, code smells, structure violations, weak tests, and the failure patterns
@@ -8,9 +8,9 @@ description: >
   comments that lie). Use whenever the user asks to review, audit, or assess
   code — "check for bad code", "is this code ok", "review this PR / module",
   "code quality report", "review what Copilot/Claude/Cursor wrote", "find bugs"
-  — after scope is agreed via workflow. Produces a traceable findings report
+  — after scope is agreed via onespace-be-workflow. Produces a traceable findings report
   that names each smell and the refactoring that fixes it; fixes nothing unless
-  remediation is in scope. For vulnerabilities use audit-security (they can run
+  remediation is in scope. For vulnerabilities use onespace-be-audit-security (they can run
   together).
 ---
 
@@ -22,31 +22,31 @@ named (a bug class or a Fowler smell), justified (why it hurts here), and
 actionable (the named refactoring or fix). Vague feedback ("could be cleaner")
 is not a finding.
 
-Prerequisite: `workflow` phases 1–3 (request recorded, scope agreed). This skill
+Prerequisite: `onespace-be-workflow` phases 1–3 (request recorded, scope agreed). This skill
 supplies phases 4–7. **Default is report-only.** Fixing is a separate planned
-task (`refactor-code` for structure, `build-feature`/a fix task for behaviour).
+task (`onespace-be-refactor-code` for structure, `onespace-be-build-feature`/a fix task for behaviour).
 
 Yardsticks:
 
 | Need | Read |
 |------|------|
-| The quality bar, finding severity, review dimensions | `coding-standards/SKILL.md` |
-| Smell names → refactoring names | `coding-standards/references/smells-and-refactorings.md` |
-| Language idioms | `coding-standards/references/python-style.md`, `typescript-style.md` |
-| The repo's structure rules | `AGENTS.md` → `## Project structure` (or `structure-service`) |
+| The quality bar, finding severity, review dimensions | `onespace-be-coding-standards/SKILL.md` |
+| Smell names → refactoring names | `onespace-be-coding-standards/references/smells-and-refactorings.md` |
+| Language idioms | `onespace-be-coding-standards/references/python-style.md`, `typescript-style.md` |
+| The repo's structure rules | `AGENTS.md` → `## Project structure` (or `onespace-be-structure-service`) |
 | AI-generated code failure patterns | `references/ai-generated-code.md` |
 
 ---
 
 ## Phase 4 — Automated pass
 
-Run what the repo has, or the tools in `coding-standards/references/tooling.md`
+Run what the repo has, or the tools in `onespace-be-coding-standards/references/tooling.md`
 ephemerally (ask before installing permanently):
 
 - formatter check, linter (incl. complexity: Ruff `C901` / ESLint `complexity`)
 - type checker (`mypy`/`pyright` / `tsc --noEmit`)
 - test suite with coverage
-- dependency audit (`pip-audit` / `npm audit`) — flag, and hand security depth to `audit-security`
+- dependency audit (`pip-audit` / `npm audit`) — flag, and hand security depth to `onespace-be-audit-security`
 
 Record counts and the worst offenders in `research/<slug>.md`. Tool output is a
 starting point, not the audit.
@@ -77,7 +77,7 @@ For each in-scope file, walk these in order — earlier ones matter more:
 6. **AI-generated code** — the eight checks in `references/ai-generated-code.md`.
    Apply them to all code: humans make the same mistakes, AI makes them more
    confidently.
-7. **Security smell spotted?** Record it briefly and recommend `audit-security`
+7. **Security smell spotted?** Record it briefly and recommend `onespace-be-audit-security`
    if it is not already in scope.
 
 Verify suspected bugs instead of guessing: read the called library's source or
@@ -105,12 +105,12 @@ Q-012 | Medium | Long Function + Repeated Switches | src/billing/invoice.py:120-
 Severity (quality): **High** causes or hides bugs, or breaks a structure rule
 that blocks change · **Medium** makes change slow or risky · **Low** local
 readability · **Info** observation. Bugs that are exploitable belong in
-`audit-security` with security severity.
+`onespace-be-audit-security` with security severity.
 
 ## Phase 7 — Report
 
-`workflow` report template in the agreed format (HTML default). Visuals per
-`workflow/references/VISUAL-REPORT.md`: severity tiles and severity bar, one
+`onespace-be-workflow` report template in the agreed format (HTML default). Visuals per
+`onespace-be-workflow/references/VISUAL-REPORT.md`: severity tiles and severity bar, one
 card per finding, structure conformance as a tree with violating paths red.
 **No Mermaid or any external script** — delete the template's script block;
 use the template's plain boxes and tables. Include:
@@ -119,7 +119,7 @@ use the template's plain boxes and tables. Include:
 - findings table + details (format above), grouped by file or by theme
 - automated results before any change (lint, types, complexity, coverage)
 - structure conformance: what matches the recorded structure, what does not
-- recommended follow-up tasks, each scoped (e.g. "refactor-code: split
+- recommended follow-up tasks, each scoped (e.g. "onespace-be-refactor-code: split
   `src/billing/invoice.py` into service + repository")
 - what was not reviewed
 

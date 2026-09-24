@@ -28,7 +28,7 @@ config.
 - No mutable exports (`export let`). Export functions or `const`.
 - No namespaces (`namespace Foo {}`) — use modules.
 - One concept per file; filename in `kebab-case.ts` or the repo's existing convention.
-- Licence header first (see `busl-licence-compliance`), then imports.
+- Licence header first (see `onespace-be-busl-licence-compliance`), then imports.
 
 ## 2. Language features
 
@@ -92,7 +92,7 @@ From Node.js Best Practices (§ numbers are that guide's sections):
   - Graceful shutdown on `SIGTERM`: stop accepting, drain, close DB / clients, then exit.
   - `NODE_ENV=production`.
   - Lock dependencies (`package-lock.json` / `pnpm-lock.yaml` committed; `npm ci` in CI).
-- **Security (§6)** — see `audit-security/references/node-checks.md`.
+- **Security (§6)** — see `onespace-be-audit-security/references/node-checks.md`.
 - **Outbound HTTP** — built-in `fetch` (undici) with `AbortSignal.timeout(ms)` on every call, or a shared client with a timeout.
 
 ## 7. Anti-patterns
@@ -129,7 +129,7 @@ hand in review; `override` = OneSpace deliberately differs (reason given);
 | 2.1.2 | Special escape sequences | rule | Use `\n`, `\t`, `\'` and similar instead of numeric escapes; never legacy octal escapes. |
 | 2.1.3 | Non-ASCII characters | rule | Write printable Unicode characters directly; escape non-printable ones and add an explanatory comment. |
 | 3 | Source file structure | rule | Order: licence header, optional `@fileoverview`, imports, implementation; one blank line between sections. |
-| 3.1 | Copyright information | rule | Licence header first in every file, as produced by `busl-licence-compliance`. |
+| 3.1 | Copyright information | rule | Licence header first in every file, as produced by `onespace-be-busl-licence-compliance`. |
 | 3.2 | @fileoverview JSDoc | rule | Optional file-level `@fileoverview` JSDoc describing content and use; wrapped lines not indented. |
 | 3.3 | Imports | rule | Use named or namespace imports; default imports only when external code requires; side-effect imports only for side effects. |
 | 3.3.1 | Import paths | override | Relative paths with the `.js` extension, because ESM with `NodeNext` requires it; keep `../` chains short. |

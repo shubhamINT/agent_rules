@@ -1,5 +1,5 @@
 ---
-name: structure-service
+name: onespace-be-structure-service
 description: >
   Detect, choose, record, and apply the project structure (architecture +
   folder layout) of a Python (FastAPI) or Node.js (TypeScript) backend service.
@@ -8,7 +8,7 @@ description: >
   repo", "fix the folder structure", "where should this file go", "organise the
   code", "set up a new service", or asks which architecture to use (layered,
   feature-based, hexagonal, clean, MVC); and as the first step of every
-  refactor-code and build-feature task. Never imposes a structure silently: it
+  onespace-be-refactor-code and onespace-be-build-feature task. Never imposes a structure silently: it
   detects what exists, asks the user, and writes the decision into AGENTS.md so
   every later task follows it.
 ---
@@ -84,8 +84,8 @@ For a large existing repo, also ask whether to migrate everything or only code
 touched by current and future tasks (incremental, usually the right answer).
 
 When the recommendation moves code (anything except "follow what exists"),
-show it as a structure proposal before asking: a `workflow` report of type
-`structure`, saved to `agent-tracking/reports/<slug>.html`, per `workflow/references/VISUAL-REPORT.md`, with a Current → Target
+show it as a structure proposal before asking: a `onespace-be-workflow` report of type
+`structure`, saved to `agent-tracking/reports/<slug>.html`, per `onespace-be-workflow/references/VISUAL-REPORT.md`, with a Current → Target
 tree diff (added paths green, moved amber, removed grey) and a
 dependency-direction graph with rule violations red. The user decides on the
 picture, not on a paragraph.
@@ -124,12 +124,12 @@ the current task's `progress.md`.
 
 ## Step 5 — Apply
 
-- **New code** (`build-feature`): goes exactly where the recorded structure says.
-- **Refactors** (`refactor-code`): moving misplaced code into the recorded
+- **New code** (`onespace-be-build-feature`): goes exactly where the recorded structure says.
+- **Refactors** (`onespace-be-refactor-code`): moving misplaced code into the recorded
   structure is a planned step (`Move Function` / `Move File`, `git mv` to keep
-  history), approved through `workflow` like any other step. Behaviour must not
+  history), approved through `onespace-be-workflow` like any other step. Behaviour must not
   change; update every import in the same step.
-- **Audits** (`audit-code`): code that breaks the recorded dependency rules is a
+- **Audits** (`onespace-be-audit-code`): code that breaks the recorded dependency rules is a
   finding (layer leak).
 - **README**: the project-structure tree in the README changes in the same
   change as the code (`references/readme-standard.md`).

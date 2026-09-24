@@ -4,9 +4,9 @@ Adapted from the `improve-codebase-architecture` guidance. Surfaces
 **deepening opportunities** — refactors that turn shallow modules into deep ones
 — so the service becomes easier to test and to navigate. Output is a candidate
 report; nothing is changed. Each candidate the user picks becomes its own
-`refactor-code` task with its own scope and plan.
+`onespace-be-refactor-code` task with its own scope and plan.
 
-Vocabulary is mandatory: read `coding-standards/references/module-design.md` first and use its terms
+Vocabulary is mandatory: read `onespace-be-coding-standards/references/module-design.md` first and use its terms
 exactly — **module, interface, implementation, depth, deep, shallow, seam,
 adapter, leverage, locality**. Do not drift into "component", "service" (for a
 module), "API" (for an interface), or "boundary" (for a seam).
@@ -34,14 +34,14 @@ Walk the code organically; note where understanding hurts:
 - Pure functions were extracted for testability, but bugs hide in how they are called (no **locality**).
 - Tightly coupled modules leak across their seams.
 - Code is untested, or hard to test through its current interface.
-- Layer rules from `structure-service` are broken.
+- Layer rules from `onespace-be-structure-service` are broken.
 
 Apply the **deletion test** to every suspect: delete it in your head — does
 complexity vanish (pass-through, remove it) or reappear in N callers (it earns
 its keep)?
 
 Classify each candidate's dependencies (in-process, local-substitutable,
-remote-but-owned, true external) per `coding-standards/references/DEEPENING.md`; the
+remote-but-owned, true external) per `onespace-be-coding-standards/references/DEEPENING.md`; the
 category decides how the deepened module gets tested.
 
 ## 3. Write the report
@@ -49,7 +49,7 @@ category decides how the deepened module gets tested.
 Format as chosen in scope (HTML default). Save to
 `agent-tracking/reports/<slug>.html|md`. HTML follows `HTML-REPORT.md` in this
 directory, built on the shared template and patterns in
-`workflow/references/VISUAL-REPORT.md`.
+`onespace-be-workflow/references/VISUAL-REPORT.md`.
 
 Per candidate:
 
@@ -68,8 +68,8 @@ Do not propose detailed interfaces yet. Ask the user which candidate to pursue.
 
 ## 4. After the user picks
 
-- Start a new `workflow` task (`refactor-code` type) for that candidate.
-- To explore interface alternatives, use `coding-standards/references/DESIGN-IT-TWICE.md`
+- Start a new `onespace-be-workflow` task (`onespace-be-refactor-code` type) for that candidate.
+- To explore interface alternatives, use `onespace-be-coding-standards/references/DESIGN-IT-TWICE.md`
   (several radically different designs compared on depth, locality, seam
   placement), and record the chosen design in the plan.
 - User rejects a candidate for a lasting reason? Offer to record an ADR so
