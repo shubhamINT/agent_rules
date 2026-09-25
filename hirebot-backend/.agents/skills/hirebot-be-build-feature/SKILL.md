@@ -16,7 +16,12 @@ A feature is done when it does what was agreed, is tested through its
 interface, is safe at its trust boundaries, sits in the right place, and the
 docs say it exists. Code that works on the happy path is roughly a third of that.
 
-Prerequisite: `hirebot-be-workflow` phases 1–3. This skill supplies phases 4–7.
+**Gate — before anything else:** load `hirebot-be-workflow`. If
+`agent-tracking/plans/<slug>/scope.md` for this task is missing, or its
+"Agreed scope" rows are not all filled, run `hirebot-be-workflow` phases 1–3 now and
+end your turn at the scope questions. Invoking this skill directly (a slash command, a one-line
+request) is not an exemption, and harness plan mode does not replace
+`plan.md`. This skill supplies phases 4–7.
 
 ## Phase 4 — Research
 
@@ -104,6 +109,10 @@ finding before the gates.
   All green, no new ignores.
 
 ## Phase 7 — Report
+
+Write the report to `agent-tracking/reports/<slug>.html` (or `.md`). Never the
+repo root, the temp directory, or a hosted page (claude.ai Artifact, gist, docs
+connector).
 
 `hirebot-be-workflow` report template and `hirebot-be-workflow/references/VISUAL-REPORT.md`.
 Required visuals: a Current → Target component graph with the added parts

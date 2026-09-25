@@ -75,7 +75,7 @@ mkdir -p <repo>/.agents
 cp -r agent_rules/onespace-backend/.agents/skills <repo>/.agents/
 ```
 
-### Then: add `AGENTS.md`
+### Optional: add `AGENTS.md`
 
 The plugin and `npx skills` install skills only. Put the pack's `AGENTS.md` at
 the root of your repo:
@@ -86,6 +86,10 @@ curl -o AGENTS.md https://raw.githubusercontent.com/shubhamINT/agent_rules/maste
 
 If the repo already has an `AGENTS.md`, keep your repo-specific notes at the top
 and paste the pack's sections below them.
+
+Skills are self-sufficient: every rule the agent needs lives in a skill.
+`AGENTS.md` is optional (agents such as Codex read it automatically). Install
+the whole pack: skills load each other, so `--skill <one>` alone breaks links.
 
 ## Update
 

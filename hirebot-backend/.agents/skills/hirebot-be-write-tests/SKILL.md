@@ -22,6 +22,11 @@ rules below hold for both.
 | Python — pytest, httpx `MockTransport`, `uv run pytest` | `references/python-pytest.md` |
 | Node / TypeScript — vitest, undici `MockAgent` / MSW, supertest / `app.inject` | `references/node-vitest.md` |
 
+**Gate — when this is the task itself** (not a step inside another task):
+load `hirebot-be-workflow` and run its phases 1–3 before anything else. Invoking this
+skill directly (a slash command, a one-line request) is not an exemption,
+and harness plan mode does not replace `plan.md`.
+
 ---
 
 ## Non-negotiables (both stacks)
@@ -97,6 +102,10 @@ plausible bug that would make it fail.
 5. Headers on new files; docs updated if behaviour or config changed.
 
 ## Report
+
+Write the report to `agent-tracking/reports/<slug>.html` (or `.md`). Never the
+repo root, the temp directory, or a hosted page (claude.ai Artifact, gist, docs
+connector).
 
 When tests are the task (not a step inside another task), use the `hirebot-be-workflow`
 report template and `hirebot-be-workflow/references/VISUAL-REPORT.md`: a metrics table for

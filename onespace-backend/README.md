@@ -80,7 +80,7 @@ Pick one of the three ways to get the skills. Then add `AGENTS.md` (step 2).
      cp -r onespace-backend/.agents/skills <repo>/.agents/
      ```
 
-2. **Add `AGENTS.md`** to the repo root. Neither the plugin nor `npx skills`
+2. **Optional: add `AGENTS.md`** to the repo root. Neither the plugin nor `npx skills`
    installs it:
 
    ```bash
@@ -89,6 +89,10 @@ Pick one of the three ways to get the skills. Then add `AGENTS.md` (step 2).
 
    If the repo already has an `AGENTS.md`, merge: keep repo-specific notes at
    the top, then paste this pack's sections below them.
+
+   Skills are self-sufficient: every rule the agent needs lives in a skill.
+   `AGENTS.md` is optional (agents such as Codex read it automatically). Install
+   the whole pack: skills load each other, so `--skill <one>` alone breaks links.
 
 3. Commit both. `agent-tracking/` is created by the agent on first use and is
    committed too — it is the audit trail.
