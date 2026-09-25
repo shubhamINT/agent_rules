@@ -76,7 +76,18 @@ In order of likelihood: **a real bug** (fix the source, keep the test), **a
 stale expectation** (the contract changed on purpose — update the test and say
 so), **a bad test** (flaky, over-mocked, asserting implementation — rewrite it).
 Never delete a test to go green, never loosen an assertion, never lower the
-coverage floor. Skips carry a reason and a ticket.
+coverage floor. Skips carry a reason and a ticket. If the cause is not obvious
+within a few minutes, or the failure is flaky, switch to `onespace-be-debug`.
+
+## Independence — who writes the test
+
+Tests written by reading the implementation tend to assert what the code does,
+bugs included. For new behaviour, write tests from the contract first — or
+delegate to a `test-writer` subagent that sees the contract and signatures but
+not the function bodies (`onespace-be-workflow/references/SUBAGENTS.md`).
+For a large campaign, split by module across test-writers with disjoint test
+paths. Finish with a `reviewer` pass that names, for each new test, the
+plausible bug that would make it fail.
 
 ## Working procedure
 

@@ -36,7 +36,15 @@ Prerequisite: `onespace-be-workflow` phases 1–3. This skill supplies phases 4�
 
 ## Phase 5 — Design and plan
 
-Design the interface first, in `plan.md`:
+Think like the engineer who will be paged when this breaks. Before the
+interface, run the **system design pass** in `references/system-design.md` and
+write its answers into the Design notes of `plan.md`: numbers, data and
+invariants, concurrency and idempotency, failure mode of every outbound call,
+limits, compatibility, observability. Answer each in a line or write
+`N/A — reason`; add machinery (queues, caches, retries, flags) only for a risk
+named there.
+
+Then design the interface, in `plan.md`:
 
 - **HTTP surface**: method, path, auth, request schema, response schema (in the
   service's envelope), every status code.
@@ -52,13 +60,20 @@ Design the interface first, in `plan.md`:
 - **Tests**: list them, mapped to acceptance criteria.
 - **Docs**: README sections that change.
 
-Steps in `plan.md` are ordered so each ends green. Get approval.
+Steps in `plan.md` follow `onespace-be-workflow/references/SAFE-DELIVERY.md`:
+small, each green and revertable, expand → migrate → contract for anything
+already deployed, riskiest step last, and a concrete rollback recipe. Get
+approval.
 
 ## Phase 6 — Build
 
 1. **Tests first where the behaviour is clear**: write the failing test for the
    next acceptance criterion, make it pass with the least code, repeat. At
    minimum every criterion has a test by the end of the step that implements it.
+   For more than a couple of criteria, hand them to a `test-writer` subagent
+   (`onespace-be-workflow/references/SUBAGENTS.md`) — it writes the tests from
+   the criteria without reading your implementation, so they check the
+   contract rather than echo the code.
 2. **Smallest change at the right layer.** Routes validate, delegate, shape the
    response. Business rules in the domain. I/O in services, behind a function
    that condenses the upstream response at the boundary.
@@ -77,6 +92,11 @@ Steps in `plan.md` are ordered so each ends green. Get approval.
 7. Log each step in `progress.md`.
 
 ## Phase 6b — Self-review before calling it done
+
+Start with a fresh-context review: a `reviewer` subagent (or, without
+subagents, a separate pass reading `plan.md` before the diff) checks the diff
+against the plan, the design notes, and the items below. Fix or answer every
+finding before the gates.
 
 - The AI-generated-code self-review in `onespace-be-coding-standards` (all eight checks).
 - `onespace-be-audit-security` checklist items for every trust boundary the feature touched.

@@ -58,7 +58,9 @@ Record in `agent-tracking/research/<slug>.md`:
 **characterization tests**: tests that pin current behaviour (including odd
 behaviour) through the public interface. Without them you cannot prove the
 refactor preserved anything. If current behaviour looks like a bug, pin it
-anyway, record it as an out-of-scope observation, and ask.
+anyway, record it as an out-of-scope observation, and ask. A `test-writer`
+subagent can write them from the public interface while you plan
+(`onespace-be-workflow/references/SUBAGENTS.md`).
 
 ## Phase 5 — Plan
 
@@ -100,6 +102,9 @@ changes unless approved, expected before/after metrics.
   layer — see `onespace-be-coding-standards/references/DEEPENING.md`).
 - New files get the BUSL header (`onespace-be-busl-licence-compliance`).
 - Structure moved? Update README project tree in the same change.
+- Before the report, a fresh-context `reviewer` subagent checks the diff for
+  behaviour changes and scope creep; a large move follows
+  `onespace-be-workflow/references/SAFE-DELIVERY.md`.
 
 ## Phase 7 — Report
 

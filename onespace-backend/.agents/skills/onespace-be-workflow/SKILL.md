@@ -3,9 +3,9 @@ name: onespace-be-workflow
 description: >
   The mandatory scope → track → plan → approve → execute → report workflow for
   every non-trivial backend task (feature, refactor, code audit, security audit,
-  test campaign). Use it BEFORE touching code whenever the user asks to refactor,
-  clean up, audit, review, "check for bad code", find vulnerabilities, add a
-  feature, or raise test coverage — even when they phrase it casually ("fix this
+  test campaign, debugging). Use it BEFORE touching code whenever the user asks
+  to refactor, clean up, audit, review, "check for bad code", find
+  vulnerabilities, add a feature, fix a bug, or raise test coverage — even when they phrase it casually ("fix this
   mess", "make it secure", "is this code ok"). Creates and maintains the
   `agent-tracking/` folder (scope, research, plan, progress, report) so every
   piece of agent work is structured and traceable.
@@ -36,6 +36,7 @@ Name the task type. It sets the slug and which skills apply.
 | `audit` | `onespace-be-audit-code` |
 | `security` | `onespace-be-audit-security` |
 | `test` | `onespace-be-write-tests` |
+| `debug` | `onespace-be-debug` |
 
 A request can span types ("audit and fix"). Split it: the audit is one task, the
 fix is a second task planned from the audit's findings. This keeps each report
@@ -103,6 +104,9 @@ the user can answer fast.
    - security: which ASVS level (L1 / **L2 default** / L3)? does the service call an LLM?
    - feature: acceptance criteria, API shape, auth rules, who can see what.
    - audit: fix nothing (default) or propose patches in the report?
+   - debug: the bug report is most of the scope — ask only for missing
+     symptom, expected behaviour, where/when, and hotfix vs proper fix
+     (`onespace-be-debug`).
 
 If an answer is vague ("just check everything", "make it good"), say what you
 would assume and ask the user to confirm. Never silently assume scope — the most
@@ -143,7 +147,11 @@ Write `plans/<slug>/plan.md` from `templates/plan.md`:
 - skills that apply
 - steps as a checkbox list; each step small enough to verify on its own
 - files expected to change or be created
-- risks and how each is mitigated; rollback approach
+- design notes for features: the system design pass
+  (`onespace-be-build-feature/references/system-design.md`)
+- risks and how each is mitigated; delivery and rollback per
+  `references/SAFE-DELIVERY.md` (small reversible steps, expand → contract,
+  concrete rollback recipe)
 - verification: exact commands and expected results
 
 Show the plan to the user (summary in chat, path to the file) and **wait for
@@ -166,6 +174,10 @@ When you discover something outside the approved scope (a bug next door, a
 security hole in another module), **record it in `progress.md` under
 "Out-of-scope observations" and tell the user**. Do not fix it unasked. Scope
 creep is how a reviewed plan turns into an unreviewed diff.
+
+Delegate where it helps: parallel read-only investigation, black-box test
+writing, and a fresh-context review of the diff before the report
+(`references/SUBAGENTS.md`). You stay responsible for everything they return.
 
 Set INDEX status `in-progress`.
 

@@ -6,7 +6,7 @@
     {
       "name": "onespace-backend",
       "source": "./onespace-backend",
-      "description": "OneSpace backend rules (Python + Node.js): workflow, coding standards, refactoring, code and security audits, tests, structure, health endpoint, BUSL licence."
+      "description": "OneSpace backend rules (Python + Node.js): workflow, system design, coding standards, refactoring, code and security audits, debugging, tests with subagents, structure, health endpoint, BUSL licence."
     }
   ]
 }

@@ -51,6 +51,7 @@ Always-on behaviour:
 | **Code audit** | "review this code", "check for bad code", "find bugs", "review what the AI wrote" | `onespace-be-workflow` → `onespace-be-audit-code` |
 | **Security audit** | "security audit", "find vulnerabilities", "is this safe", "OWASP check" | `onespace-be-workflow` → `onespace-be-audit-security` |
 | **Tests** | "add tests", "raise coverage", "fix the failing suite" | `onespace-be-workflow` → `onespace-be-write-tests` |
+| **Debug** | "this returns 500", "flaky test", "worked yesterday", "users see wrong data", "it's slow", a pasted stack trace | `onespace-be-workflow` → `onespace-be-debug` |
 | **Structure** | "structure this repo", "where should this go", "which architecture" | `onespace-be-workflow` → `onespace-be-structure-service` |
 | **Health endpoint** | "add a health check", "readiness probe" | `onespace-be-workflow` → `onespace-be-add-health-endpoint` |
 
@@ -77,6 +78,19 @@ Follow the `onespace-be-workflow` skill. In short:
 4. **Execute the approved plan only.** Log each step in `progress.md`. New scope
    found mid-task: stop, record it, ask.
 5. **Report** into `agent-tracking/reports/` and update `INDEX.md`.
+
+**Think like the senior engineer on call for it.** Features get a system design
+pass (`onespace-be-build-feature/references/system-design.md`): concurrency,
+idempotency, failure modes, limits, compatibility — sized to the real risk.
+Every code change ships in small reversible steps with a concrete rollback
+(`onespace-be-workflow/references/SAFE-DELIVERY.md`).
+
+**Use subagents where they add independence or parallelism**
+(`onespace-be-workflow/references/SUBAGENTS.md`): read-only `investigator`s for
+audit fan-out and debugging hypotheses, a `test-writer` that writes tests from
+the contract, and a fresh-context `reviewer` before every report. Brief a
+general-purpose subagent with the role text from `SUBAGENTS.md`. Verify what
+they return.
 
 `agent-tracking/` belongs in version control, but the user commits it — see rule 12.
 
@@ -139,6 +153,7 @@ indexed (enforced by tool / rule / OneSpace override) in
 | `onespace-be-audit-code` | task | Finding bugs, bad code, weak tests, AI-generated-code failures |
 | `onespace-be-audit-security` | task | Finding vulnerabilities (OWASP, ASVS, CWE) |
 | `onespace-be-write-tests` | task | Writing or fixing tests; coverage |
+| `onespace-be-debug` | task | Reproducing, root-causing, and fixing bugs, flaky tests, slowness |
 | `onespace-be-structure-service` | task | Detecting, choosing, recording, applying the project structure |
 | `onespace-be-add-health-endpoint` | task | Adding or fixing `GET /health` |
 

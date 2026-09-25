@@ -29,14 +29,15 @@ onespace-backend/
     ├── onespace-be-coding-standards/           # clean code, full Google style guides + section index, module design, bug radar, AI self-review, tooling
     ├── onespace-be-busl-licence-compliance/    # BUSL-1.1 LICENSE/NOTICE/headers + header script
     ├── onespace-be-workflow/                   # record → scope → plan → approve → execute → report
-    │   ├── references/                         # VISUAL-REPORT.md — diagram patterns, legend, Current → Target, script policy
+    │   ├── references/                         # VISUAL-REPORT (diagrams), SAFE-DELIVERY (rollout/rollback), SUBAGENTS (roles, briefs)
     │   └── templates/                          # INDEX, scope, research, plan, progress, report (.md + .html)
     │  tasks
-    ├── onespace-be-build-feature/              # building new behaviour
+    ├── onespace-be-build-feature/              # building new behaviour + system design pass
     ├── onespace-be-refactor-code/              # behaviour-preserving refactors + architecture review
     ├── onespace-be-audit-code/                 # bugs, bad code, weak tests, AI-generated-code failure patterns
     ├── onespace-be-audit-security/             # OWASP / ASVS / CWE audit, scanners, per-language checks
     ├── onespace-be-write-tests/                # pytest + vitest, offline mocks, 80% floor
+    ├── onespace-be-debug/                      # reproduce → hypotheses → root cause → fix + regression test
     ├── onespace-be-structure-service/          # detect / choose / record / apply project structure
     └── onespace-be-add-health-endpoint/        # GET /health contract, per-stack references
 ```

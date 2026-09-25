@@ -24,14 +24,24 @@
 | Path | Change |
 |------|--------|
 
+## Design notes
+
+<features: answers from onespace-be-build-feature/references/system-design.md —
+numbers, data, concurrency/idempotency, failure modes, limits, compatibility,
+observability. Each answered or "N/A — reason". Other task types: delete.>
+
 ## Risks and mitigations
 
 | Risk | Mitigation |
 |------|------------|
 
-## Rollback
+## Delivery and rollback
 
-<how to undo: revert commits, feature flag, etc.>
+- **Blast radius:** <who is affected if this is wrong>
+- **Rollout:** <plain deploy / expand → migrate → contract / flag>
+- **Rollback recipe:** <exact steps; data impact; irreversible side effects>
+
+See onespace-be-workflow/references/SAFE-DELIVERY.md.
 
 ## Verification
 

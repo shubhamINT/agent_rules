@@ -59,6 +59,12 @@ checklists to apply, whether the code is (partly) AI-generated. Get approval.
 
 ## Phase 6 — Manual review
 
+**Fan out at `standard` / `deep` depth.** With more than a handful of files,
+split them into groups (by module or trust boundary) and give each group to a
+read-only `investigator` subagent with the checklist below
+(`onespace-be-workflow/references/SUBAGENTS.md`). You own the report: open
+every returned `file:line` and confirm the finding before it goes in.
+
 For each in-scope file, walk these in order — earlier ones matter more:
 
 1. **Bugs** — wrong logic, unhandled `None`/`undefined`, off-by-one, wrong

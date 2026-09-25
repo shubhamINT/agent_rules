@@ -62,6 +62,12 @@ confirmation. Get approval.
 
 ## Phase 6 — Manual review
 
+**Fan out at `standard` / `deep` depth.** With more than a handful of files,
+split them into groups (by module or trust boundary) and give each group to a
+read-only `investigator` subagent with the checklists below, after you map the attack surface
+(`onespace-be-workflow/references/SUBAGENTS.md`). You own the report: open
+every returned `file:line` and confirm the finding before it goes in.
+
 Map the attack surface first:
 
 1. **Entry points**: every route (method + path), queue consumer, cron job, CLI, webhook.
