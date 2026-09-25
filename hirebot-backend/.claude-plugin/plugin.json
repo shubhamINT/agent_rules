@@ -1,0 +1,6 @@
+{
+  "name": "hirebot-backend",
+  "description": "HireBot backend engineering rules and skills (Python + Node.js).",
+  "author": { "name": "Shubham Halder" },
+  "skills": "./.agents/skills/"
+}

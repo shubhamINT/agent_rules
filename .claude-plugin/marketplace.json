@@ -7,6 +7,11 @@
       "name": "onespace-backend",
       "source": "./onespace-backend",
       "description": "OneSpace backend rules (Python + Node.js): workflow, system design, coding standards, refactoring, code and security audits, debugging, tests with subagents, structure, health endpoint, BUSL licence."
+    },
+    {
+      "name": "hirebot-backend",
+      "source": "./hirebot-backend",
+      "description": "HireBot backend rules (Python + Node.js): workflow, system design, coding standards, refactoring, code and security audits, debugging, tests with subagents, structure, health endpoint."
     }
   ]
 }
