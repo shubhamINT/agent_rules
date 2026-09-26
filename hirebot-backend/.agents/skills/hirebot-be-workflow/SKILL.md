@@ -8,7 +8,9 @@ description: >
   vulnerabilities, add a feature, fix a bug, or raise test coverage — even when they phrase it casually ("fix this
   mess", "make it secure", "is this code ok"). Creates and maintains the
   `agent-tracking/` folder (scope, research, plan, progress, report) so every
-  piece of agent work is structured and traceable.
+  piece of agent work is structured and traceable. Also keeps the repo README current
+  (setup, run, env, endpoints, structure) and registers the pack in the repo's
+  AGENTS.md and CLAUDE.md so later agents follow the rules without being told.
 ---
 
 # Workflow
@@ -20,7 +22,9 @@ file on disk before the next begins. The files are the audit trail: a reviewer
 who never saw the conversation must be able to reconstruct what was asked, what
 was decided, and what was done.
 
-Trivial tasks (a question, a typo, a one-line rename) skip this skill. Unsure =
+Trivial tasks (a question, a typo, a one-line rename) skip this skill — but a
+trivial change that adds or changes an endpoint, env variable, dependency,
+script, or folder still updates the README (`hirebot-be-structure-service/references/readme-standard.md`). Unsure =
 not trivial. Touching more than one file, any trust boundary (auth, input
 parsing, external calls, secrets), or any public interface is never trivial.
 
@@ -85,6 +89,27 @@ Copy the templates from this skill's `templates/` directory and fill them in:
   clarification log. If the topic is unclear, use a provisional slug and rename
   the folder once scope is agreed.
 
+### Register the pack in the repo
+
+So that the next agent follows these rules even when nobody invokes a skill,
+make sure the repo root carries them. Agents such as Codex and Cursor read
+`AGENTS.md` on their own; Claude Code reads `CLAUDE.md`, which imports it.
+Do this on every non-trivial task; it is a no-op when nothing changed.
+
+1. **No `AGENTS.md`** — copy `templates/AGENTS.md` to the repo root.
+2. **`AGENTS.md` without the markers** `<!-- hirebot-be:start -->` /
+   `<!-- hirebot-be:end -->` — append the template's marked block (markers
+   included) below the existing content. Add the template's
+   `## Project structure` section too if the file has none.
+3. **Markers present** — replace only the text between them with the
+   template's current block. Never edit anything outside the markers: the
+   repo's own notes and `## Project structure` belong to the repo.
+4. **`CLAUDE.md`** — missing: create it containing the single line
+   `@AGENTS.md`. Present without that line: append `@AGENTS.md` once at the
+   end. Never rewrite the rest of it.
+5. Tell the user in one line what you created or updated, and log it in
+   `progress.md`. These files are left for the user to commit.
+
 ## Phase 3 — Scope interview (no work yet)
 
 Do not read deeply, run scanners, or edit source until scope is agreed. A
@@ -142,6 +167,10 @@ Now read. Write findings to `research/<slug>.md` (template
   the final report.
 - external facts you looked up (library versions, standards) with sources
 - open questions for the user
+- **README gaps** — compare the README with `hirebot-be-structure-service/references/readme-standard.md` and with
+  reality (dependency manifest scripts, `.env.example`, the settings module,
+  routes, the folder tree). List what is missing or stale; the docs sync in
+  Phase 7 fixes it.
 
 If a tool the plan needs is not installed, record that and ask before installing
 anything.
@@ -192,7 +221,20 @@ Set INDEX status `in-progress`.
 
 ## Phase 7 — Report
 
-Produce `agent-tracking/reports/<slug>.html` or
+**Docs sync first** (every task that changed code or config; audits and
+security reviews change nothing, so they only register the pack). A developer
+who clones the repo tomorrow must be able to install, configure, run, and find
+their way from the README alone:
+
+- update the README per `hirebot-be-structure-service/references/readme-standard.md` — requirements, installation,
+  environment table, endpoints, project structure, and stack must match the
+  code as it now is; create the README if it is missing
+- update `## Project structure` in `AGENTS.md` if folders changed
+- refresh the marked block in `AGENTS.md` and the `CLAUDE.md` import
+  (Phase 2, "Register the pack")
+- list every doc change in `progress.md`
+
+Then the report. Produce `agent-tracking/reports/<slug>.html` or
 `agent-tracking/reports/<slug>.md` in the format the user chose. Always write
 it there, never to the OS temp directory, the repo root, a hosted page (claude.ai
 Artifact, gist, docs connector), or only to chat, so
@@ -212,6 +254,8 @@ the report sits next to its scope, plan, and progress. Build it from
 6. **Verification** — commands run and results (before vs after)
 7. **Out-of-scope observations** and **recommended next tasks**
 8. **Trace** — links to scope, research, plan, progress
+9. **Docs updated** — README and `AGENTS.md` sections changed (omit for audit
+   and security)
 
 Reports are visual first. Follow `references/VISUAL-REPORT.md` for the
 diagram patterns, the colour legend, and the visuals each report type must

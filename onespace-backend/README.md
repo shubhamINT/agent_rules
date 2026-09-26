@@ -23,14 +23,13 @@ It covers three main jobs: **building features**, **refactoring bad code**, and
 onespace-backend/
 ├── .claude-plugin/plugin.json                  # Claude Code plugin manifest
 ├── README.md                                   # this file
-├── AGENTS.md                                   # always-on rules, task routing, per-repo "Project structure" section
 └── .agents/skills/
     │  always on
     ├── onespace-be-coding-standards/           # clean code, full Google style guides + section index, module design, bug radar, AI self-review, tooling
     ├── onespace-be-busl-licence-compliance/    # BUSL-1.1 LICENSE/NOTICE/headers + header script
     ├── onespace-be-workflow/                   # record → scope → plan → approve → execute → report
     │   ├── references/                         # VISUAL-REPORT (diagrams), SAFE-DELIVERY (rollout/rollback), SUBAGENTS (roles, briefs)
-    │   └── templates/                          # INDEX, scope, research, plan, progress, report (.md + .html)
+    │   └── templates/                          # AGENTS.md (repo rules block), INDEX, scope, research, plan, progress, report (.md + .html)
     │  tasks
     ├── onespace-be-build-feature/              # building new behaviour + system design pass
     ├── onespace-be-refactor-code/              # behaviour-preserving refactors + architecture review
@@ -48,7 +47,8 @@ is inside `onespace-backend/` — nothing points outside it.
 
 ## Install into a service repository
 
-Pick one of the three ways to get the skills. Then add `AGENTS.md` (step 2).
+Pick one of the three ways to get the skills. The agent writes `AGENTS.md` and
+`CLAUDE.md` itself on its first task (step 2).
 
 1. **Install the skills.**
 
@@ -80,21 +80,28 @@ Pick one of the three ways to get the skills. Then add `AGENTS.md` (step 2).
      cp -r onespace-backend/.agents/skills <repo>/.agents/
      ```
 
-2. **Optional: add `AGENTS.md`** to the repo root. Neither the plugin nor `npx skills`
-   installs it:
+2. **`AGENTS.md` and `CLAUDE.md` are written by the agent.** On every
+   non-trivial task, `onespace-be-workflow` makes sure the repo root has:
+
+   - `AGENTS.md` with the pack block between `<!-- onespace-be:start -->` and
+     `<!-- onespace-be:end -->` (always-on rules, task routing, skill index). Only
+     the text between the markers is refreshed; your own notes and
+     `## Project structure` are never touched.
+   - `CLAUDE.md` containing `@AGENTS.md`, so Claude Code loads the same rules.
+     Codex and Cursor read `AGENTS.md` directly.
+
+   The block's source is `onespace-be-workflow/templates/AGENTS.md`; the skills carry
+   it, so plugin and `npx skills` installs get it too. To add it up front:
 
    ```bash
-   curl -o AGENTS.md https://raw.githubusercontent.com/shubhamINT/agent_rules/master/onespace-backend/AGENTS.md
+   curl -o AGENTS.md https://raw.githubusercontent.com/shubhamINT/agent_rules/master/onespace-backend/.agents/skills/onespace-be-workflow/templates/AGENTS.md
+   echo "@AGENTS.md" >> CLAUDE.md
    ```
 
-   If the repo already has an `AGENTS.md`, merge: keep repo-specific notes at
-   the top, then paste this pack's sections below them.
+   Skills are self-sufficient. Install the whole pack: skills load each other,
+   so `--skill <one>` alone breaks links.
 
-   Skills are self-sufficient: every rule the agent needs lives in a skill.
-   `AGENTS.md` is optional (agents such as Codex read it automatically). Install
-   the whole pack: skills load each other, so `--skill <one>` alone breaks links.
-
-3. Commit both. `agent-tracking/` is created by the agent on first use and is
+3. Commit the skills, `AGENTS.md`, and `CLAUDE.md`. `agent-tracking/` is created by the agent on first use and is
    committed too — it is the audit trail.
 
 4. First task in the repo: the agent fills the `## Project structure` section at
@@ -135,7 +142,8 @@ agent-tracking/
   (`plugin.json` has no `version` field on purpose). Plugin users with
   auto-update get it automatically; `npx skills` users pull the change with their update command; manual
   installs re-copy `.agents/skills/`. When updating a
-  repo's `AGENTS.md`, keep its `## Project structure` section — it is repo-specific.
+  repo's `AGENTS.md`, the next task refreshes the pack block automatically and
+  keeps its `## Project structure` section — it is repo-specific.
 - `onespace-be-busl-licence-compliance` and `onespace-be-add-health-endpoint` are owned by the platform
   team; keep them in sync with the owners.
 - Standards editions move (OWASP Top 10, CWE Top 25 yearly). Update

@@ -23,6 +23,12 @@ end your turn at the scope questions. Invoking this skill directly (a slash comm
 request) is not an exemption, and harness plan mode does not replace
 `plan.md`. This skill supplies phases 4–7.
 
+**Always, even inside another task:** make sure the repo is registered — the
+hirebot-be block in `AGENTS.md` and the `@AGENTS.md` import in `CLAUDE.md`
+(`hirebot-be-workflow`, Phase 2, "Register the pack") — and, when code or config
+changed, finish with the docs sync (`hirebot-be-workflow`, Phase 7) so the README
+matches the code.
+
 ## Phase 4 — Research
 
 1. **Acceptance criteria** — confirm from scope: inputs, outputs, error cases,

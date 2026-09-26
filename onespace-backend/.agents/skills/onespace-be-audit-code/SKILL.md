@@ -31,6 +31,12 @@ not replace `plan.md`. This skill
 supplies phases 4–7. **Default is report-only.** Fixing is a separate planned
 task (`onespace-be-refactor-code` for structure, `onespace-be-build-feature`/a fix task for behaviour).
 
+**Always, even inside another task:** make sure the repo is registered — the
+onespace-be block in `AGENTS.md` and the `@AGENTS.md` import in `CLAUDE.md`
+(`onespace-be-workflow`, Phase 2, "Register the pack") — and, when code or config
+changed, finish with the docs sync (`onespace-be-workflow`, Phase 7) so the README
+matches the code.
+
 Yardsticks:
 
 | Need | Read |

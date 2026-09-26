@@ -27,6 +27,12 @@ load `onespace-be-workflow` and run its phases 1–3 before anything else. Invok
 skill directly (a slash command, a one-line request) is not an exemption,
 and harness plan mode does not replace `plan.md`.
 
+**Always, even inside another task:** make sure the repo is registered — the
+onespace-be block in `AGENTS.md` and the `@AGENTS.md` import in `CLAUDE.md`
+(`onespace-be-workflow`, Phase 2, "Register the pack") — and, when code or config
+changed, finish with the docs sync (`onespace-be-workflow`, Phase 7) so the README
+matches the code.
+
 ---
 
 ## Non-negotiables (both stacks)

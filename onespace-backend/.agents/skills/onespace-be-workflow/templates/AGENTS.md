@@ -1,4 +1,9 @@
-# AGENTS.md — HireBot Backend Engineering Rules
+<!-- onespace-be:start -->
+# AGENTS.md — OneSpace Backend Engineering Rules
+
+<!-- Managed by the onespace-backend skill pack (onespace-be-workflow, "Register the
+pack"). Agents refresh the text between the onespace-be markers; edit the pack, not
+this block. Repo-specific notes go outside the markers. -->
 
 These rules apply to every agent working in this repository. They cover backend
 services written in **Python** (FastAPI, async, uv) and **Node.js** (TypeScript,
@@ -9,6 +14,26 @@ the ones named here before you act.
 > Talk first, plan first, then build. Simple, clean, verified code beats clever
 > code. Tools enforce style; you enforce correctness, security, and scope.
 
+## Load the skills before you act
+
+This repo uses the `onespace-be-*` skills. Before any code change, load
+`onespace-be-coding-standards`. For any non-trivial task, load `onespace-be-workflow`
+first; it routes to the other skills. Find them by name (Claude Code plugin
+skills appear as `onespace-backend:onespace-be-<skill>`).
+
+Skills not installed? Tell the user and suggest one of:
+
+```
+/plugin marketplace add shubhamINT/agent_rules
+/plugin install onespace-backend@int-agent-rules
+```
+
+```bash
+npx skills add shubhamINT/agent_rules      # pick every onespace-be-* skill
+```
+
+Until they are installed, follow the rules in this file.
+
 ---
 
 ## 1. Always on — every task, however small
@@ -17,8 +42,9 @@ These apply to everything, including trivial edits and questions.
 
 | Always-on skill | What it guarantees |
 |-----------------|--------------------|
-| `hirebot-be-coding-standards` | Clean code, style, module design, the self-review for AI-generated code, and the **bug and smell radar** |
-| `hirebot-be-workflow` | Non-trivial work is recorded, scoped with the user, planned, and approved before any code changes |
+| `onespace-be-coding-standards` | Clean code, style, module design, the self-review for AI-generated code, and the **bug and smell radar** |
+| `onespace-be-busl-licence-compliance` | Licence header on every new file, BUSL-1.1 manifest, licence check on every new dependency |
+| `onespace-be-workflow` | Non-trivial work is recorded, scoped with the user, planned, and approved before any code changes |
 
 Always-on behaviour:
 
@@ -34,7 +60,7 @@ Always-on behaviour:
    scope; offer a follow-up task. Report security holes immediately.
 4. **Structure first.** Before placing or moving code, read the
    `## Project structure` section at the end of this file. If it is empty, run
-   `hirebot-be-structure-service`: detect the current structure, confirm it with the user,
+   `onespace-be-structure-service`: detect the current structure, confirm it with the user,
    and record it there.
 5. **Help the user understand.** Explain decisions and findings so a developer
    new to the code could follow and apply them. Prefer showing the fix over
@@ -45,14 +71,14 @@ Always-on behaviour:
 | Task type | Examples | Skills |
 |-----------|----------|--------|
 | **Trivial** | answer a question, fix a typo, rename one variable, explain code | Just do it (always-on rules still apply, radar included). No tracking. |
-| **Feature** | "add an endpoint", "support X", "integrate Y" | `hirebot-be-workflow` → `hirebot-be-build-feature` |
-| **Refactor** | "clean this up", "this code is a mess", "restructure", "reduce duplication" | `hirebot-be-workflow` → `hirebot-be-refactor-code` |
-| **Code audit** | "review this code", "check for bad code", "find bugs", "review what the AI wrote" | `hirebot-be-workflow` → `hirebot-be-audit-code` |
-| **Security audit** | "security audit", "find vulnerabilities", "is this safe", "OWASP check" | `hirebot-be-workflow` → `hirebot-be-audit-security` |
-| **Tests** | "add tests", "raise coverage", "fix the failing suite" | `hirebot-be-workflow` → `hirebot-be-write-tests` |
-| **Debug** | "this returns 500", "flaky test", "worked yesterday", "users see wrong data", "it's slow", a pasted stack trace | `hirebot-be-workflow` → `hirebot-be-debug` |
-| **Structure** | "structure this repo", "where should this go", "which architecture" | `hirebot-be-workflow` → `hirebot-be-structure-service` |
-| **Health endpoint** | "add a health check", "readiness probe" | `hirebot-be-workflow` → `hirebot-be-add-health-endpoint` |
+| **Feature** | "add an endpoint", "support X", "integrate Y" | `onespace-be-workflow` → `onespace-be-build-feature` |
+| **Refactor** | "clean this up", "this code is a mess", "restructure", "reduce duplication" | `onespace-be-workflow` → `onespace-be-refactor-code` |
+| **Code audit** | "review this code", "check for bad code", "find bugs", "review what the AI wrote" | `onespace-be-workflow` → `onespace-be-audit-code` |
+| **Security audit** | "security audit", "find vulnerabilities", "is this safe", "OWASP check" | `onespace-be-workflow` → `onespace-be-audit-security` |
+| **Tests** | "add tests", "raise coverage", "fix the failing suite" | `onespace-be-workflow` → `onespace-be-write-tests` |
+| **Debug** | "this returns 500", "flaky test", "worked yesterday", "users see wrong data", "it's slow", a pasted stack trace | `onespace-be-workflow` → `onespace-be-debug` |
+| **Structure** | "structure this repo", "where should this go", "which architecture" | `onespace-be-workflow` → `onespace-be-structure-service` |
+| **Health endpoint** | "add a health check", "readiness probe" | `onespace-be-workflow` → `onespace-be-add-health-endpoint` |
 
 Unsure whether a task is trivial? Treat it as non-trivial. A change that touches
 more than one file, any trust boundary (auth, input parsing, external calls,
@@ -60,7 +86,7 @@ secrets), or any public interface is never trivial.
 
 ## 3. The non-trivial workflow (mandatory)
 
-Follow the `hirebot-be-workflow` skill. In short:
+Follow the `onespace-be-workflow` skill. In short:
 
 1. **Record first.** Create `agent-tracking/` if missing and write the user's
    request verbatim to `agent-tracking/plans/<slug>/scope.md`, plus a row in
@@ -70,7 +96,7 @@ Follow the `hirebot-be-workflow` skill. In short:
    what is out of scope, constraints, success criteria, and the report format
    (**HTML by default, or Markdown**). Log questions and answers in `scope.md`.
    Reports are visual: a Current → Target diagram for every change
-   (`hirebot-be-workflow/references/VISUAL-REPORT.md`). Audit and security reports load no
+   (`onespace-be-workflow/references/VISUAL-REPORT.md`). Audit and security reports load no
    external scripts.
 3. **Research**, then **plan**: write `plan.md`, show it, and wait for explicit
    approval.
@@ -79,13 +105,13 @@ Follow the `hirebot-be-workflow` skill. In short:
 5. **Report** into `agent-tracking/reports/` and update `INDEX.md`.
 
 **Think like the senior engineer on call for it.** Features get a system design
-pass (`hirebot-be-build-feature/references/system-design.md`): concurrency,
+pass (`onespace-be-build-feature/references/system-design.md`): concurrency,
 idempotency, failure modes, limits, compatibility — sized to the real risk.
 Every code change ships in small reversible steps with a concrete rollback
-(`hirebot-be-workflow/references/SAFE-DELIVERY.md`).
+(`onespace-be-workflow/references/SAFE-DELIVERY.md`).
 
 **Use subagents where they add independence or parallelism**
-(`hirebot-be-workflow/references/SUBAGENTS.md`): read-only `investigator`s for
+(`onespace-be-workflow/references/SUBAGENTS.md`): read-only `investigator`s for
 audit fan-out and debugging hypotheses, a `test-writer` that writes tests from
 the contract, and a fresh-context `reviewer` before every report. Brief a
 general-purpose subagent with the role text from `SUBAGENTS.md`. Verify what
@@ -113,10 +139,11 @@ they return.
    resource-scoped read checks ownership.**
 8. **Tests ship with the change** and pass offline. Coverage floor 80%; never
    lower it, never loosen an assertion to go green.
-9. **Docs stay true.** README endpoint, env, and structure sections change in
+9. **Licence header on every new source file** (`onespace-be-busl-licence-compliance`).
+10. **Docs stay true.** README endpoint, env, and structure sections change in
     the same change as the code.
-10. **Do not reformat code you did not otherwise change.** Keep diffs reviewable.
-11. **No git side effects unless asked.** Do not commit, branch, push, or delete
+11. **Do not reformat code you did not otherwise change.** Keep diffs reviewable.
+12. **No git side effects unless asked.** Do not commit, branch, push, or delete
     lockfiles. Leave changes in the working tree for the user to review.
 
 ## 5. Language baselines
@@ -131,34 +158,34 @@ they return.
 | Dependencies | `pip-audit` | `npm audit` / `pnpm audit` |
 | Secrets | gitleaks | gitleaks |
 | Complexity | Ruff `C901`, max 10 | ESLint `complexity`, max 10 |
-| Tests | pytest (`hirebot-be-write-tests`) | vitest (`hirebot-be-write-tests`) |
+| Tests | pytest (`onespace-be-write-tests`) | vitest (`onespace-be-write-tests`) |
 
 Every section of the Google Python, TypeScript and JavaScript style guides is
-indexed (enforced by tool / rule / HireBot override) in
+indexed (enforced by tool / rule / OneSpace override) in
 `references/{python,typescript,javascript}-style.md` of the
-`hirebot-be-coding-standards` skill; the full guides are bundled in its
+`onespace-be-coding-standards` skill; the full guides are bundled in its
 `references/google/`.
 
 ## 6. Skill index
 
 | Skill | Kind | Use when |
 |-------|------|----------|
-| `hirebot-be-coding-standards` | always on | Writing, changing, or judging any code |
-| `hirebot-be-workflow` | always on | Any non-trivial task: record, scope, plan, approve, report |
-| `hirebot-be-build-feature` | task | Building new behaviour |
-| `hirebot-be-refactor-code` | task | Changing structure without changing behaviour; architecture review |
-| `hirebot-be-audit-code` | task | Finding bugs, bad code, weak tests, AI-generated-code failures |
-| `hirebot-be-audit-security` | task | Finding vulnerabilities (OWASP, ASVS, CWE) |
-| `hirebot-be-write-tests` | task | Writing or fixing tests; coverage |
-| `hirebot-be-debug` | task | Reproducing, root-causing, and fixing bugs, flaky tests, slowness |
-| `hirebot-be-structure-service` | task | Detecting, choosing, recording, applying the project structure |
-| `hirebot-be-add-health-endpoint` | task | Adding or fixing `GET /health` |
-
----
+| `onespace-be-coding-standards` | always on | Writing, changing, or judging any code |
+| `onespace-be-busl-licence-compliance` | always on | Any new file, new repo, new dependency |
+| `onespace-be-workflow` | always on | Any non-trivial task: record, scope, plan, approve, report |
+| `onespace-be-build-feature` | task | Building new behaviour |
+| `onespace-be-refactor-code` | task | Changing structure without changing behaviour; architecture review |
+| `onespace-be-audit-code` | task | Finding bugs, bad code, weak tests, AI-generated-code failures |
+| `onespace-be-audit-security` | task | Finding vulnerabilities (OWASP, ASVS, CWE) |
+| `onespace-be-write-tests` | task | Writing or fixing tests; coverage |
+| `onespace-be-debug` | task | Reproducing, root-causing, and fixing bugs, flaky tests, slowness |
+| `onespace-be-structure-service` | task | Detecting, choosing, recording, applying the project structure |
+| `onespace-be-add-health-endpoint` | task | Adding or fixing `GET /health` |
+<!-- onespace-be:end -->
 
 ## Project structure
 
-<!-- Filled in per repository by the `hirebot-be-structure-service` skill, after the user
+<!-- Repo-owned. Filled in per repository by the `onespace-be-structure-service` skill, after the user
 confirms the structure: pattern, layout tree, dependency rules, "where does X
-go" table, terms, migration approach. Empty = run `hirebot-be-structure-service` before
+go" table, terms, migration approach. Empty = run `onespace-be-structure-service` before
 placing or moving code. -->

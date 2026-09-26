@@ -89,6 +89,14 @@ flowchart LR
 | Check | Before | After |
 |-------|--------|-------|
 
-## 7. Out-of-scope observations and next tasks
+## 7. Docs updated
+
+<!-- omit for audit / security -->
+| File | Section | Change |
+|------|---------|--------|
+| README.md | | |
+| AGENTS.md | | |
+
+## 8. Out-of-scope observations and next tasks
 
 - 

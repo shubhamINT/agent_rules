@@ -1,6 +1,8 @@
 {
   "name": "int-agent-rules",
-  "owner": { "name": "Shubham Halder" },
+  "owner": {
+    "name": "Shubham Halder"
+  },
   "description": "INT agent rule packs: skills and AGENTS.md per project and stack.",
   "plugins": [
     {
@@ -12,6 +14,11 @@
       "name": "hirebot-backend",
       "source": "./hirebot-backend",
       "description": "HireBot backend rules (Python + Node.js): workflow, system design, coding standards, refactoring, code and security audits, debugging, tests with subagents, structure, health endpoint."
+    },
+    {
+      "name": "hirebot-frontend",
+      "source": "./hirebot-frontend",
+      "description": "HireBot frontend rules (React + TypeScript): workflow, coding standards, premium responsive UI design with loading states, folder structure, screenshot verification; keeps README and AGENTS.md current."
     }
   ]
 }

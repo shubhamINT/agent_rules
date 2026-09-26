@@ -8,6 +8,8 @@ stack. Every pack installs as a Claude Code plugin or with `npx skills`.
 | Pack                                               | Plugin name          | Skill prefix     | Covers                                       |
 | -------------------------------------------------- | -------------------- | ---------------- | -------------------------------------------- |
 | [`onespace-backend/`](onespace-backend/README.md) | `onespace-backend` | `onespace-be-` | OneSpace backend services (Python + Node.js) |
+| [`hirebot-backend/`](hirebot-backend/README.md) | `hirebot-backend` | `hirebot-be-` | HireBot backend services (Python + Node.js) |
+| [`hirebot-frontend/`](hirebot-frontend/README.md) | `hirebot-frontend` | `hirebot-fe-` | HireBot frontend (React + TypeScript) |
 
 Each pack's README lists its skills and explains how its workflow runs.
 
@@ -75,21 +77,31 @@ mkdir -p <repo>/.agents
 cp -r agent_rules/onespace-backend/.agents/skills <repo>/.agents/
 ```
 
-### Optional: add `AGENTS.md`
+### `AGENTS.md` and `CLAUDE.md`
 
-The plugin and `npx skills` install skills only. Put the pack's `AGENTS.md` at
-the root of your repo:
+The plugin and `npx skills` install skills only. You do not need to copy
+`AGENTS.md` by hand: on every non-trivial task the pack's workflow skill
+registers the pack in the repo root.
+
+- `AGENTS.md` gets the pack's rules block between `<!-- <prefix>:start -->`
+  and `<!-- <prefix>:end -->` markers (always-on rules, task routing, skill
+  index). Later tasks refresh only the text between the markers; your own
+  notes and `## Project structure` are never touched.
+- `CLAUDE.md` gets the line `@AGENTS.md`, so Claude Code loads the same rules.
+  Codex and Cursor read `AGENTS.md` directly.
+
+The workflow skill also keeps the repo's README current (setup, run,
+environment, endpoints or scripts, structure, stack) on every task.
+
+To add the block up front, copy it from the pack's workflow templates:
 
 ```bash
-curl -o AGENTS.md https://raw.githubusercontent.com/shubhamINT/agent_rules/master/onespace-backend/AGENTS.md
+curl -o AGENTS.md https://raw.githubusercontent.com/shubhamINT/agent_rules/master/onespace-backend/.agents/skills/onespace-be-workflow/templates/AGENTS.md
+echo "@AGENTS.md" >> CLAUDE.md
 ```
 
-If the repo already has an `AGENTS.md`, keep your repo-specific notes at the top
-and paste the pack's sections below them.
-
-Skills are self-sufficient: every rule the agent needs lives in a skill.
-`AGENTS.md` is optional (agents such as Codex read it automatically). Install
-the whole pack: skills load each other, so `--skill <one>` alone breaks links.
+Skills are self-sufficient. Install the whole pack: skills load each other, so
+`--skill <one>` alone breaks links.
 
 ## Update
 
@@ -98,11 +110,15 @@ the whole pack: skills load each other, so `--skill <one>` alone breaks links.
 | Plugin         | Automatic when auto-update is on: every push to `master` is a new version, applied at the next launch or after `/reload-plugins`. Manual: `/plugin marketplace update int-agent-rules` |
 | `npx skills` | `npx skills update`                                        |
 | Manual copy    | `git pull`, then copy the skills again                                                                  |
-| `AGENTS.md`  | Run the `curl` command again, but keep your repo's `## Project structure` section                      |
+| `AGENTS.md`  | Automatic: the next task refreshes the pack block between the markers                                   |
 
 ## Add a new pack (maintainers)
 
-1. Create `<pack>/` with `AGENTS.md`, `README.md` and `.agents/skills/`.
+1. Create `<pack>/` with `README.md` and `.agents/skills/`. The pack's rules
+   block lives in `<prefix>-workflow/templates/AGENTS.md`, wrapped in
+   `<!-- <prefix>:start -->` / `<!-- <prefix>:end -->` markers, and the
+   workflow's Phase 2 registers it in each repo (copy the "Register the pack"
+   section from an existing pack).
 2. Give every skill a unique prefix, such as `onespace-fe-`. Use the prefix in
    the folder name, in the `name:` field of `SKILL.md`, and in every reference
    to the skill. Otherwise `npx skills` installs from two packs overwrite each other.

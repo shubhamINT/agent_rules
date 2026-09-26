@@ -26,6 +26,12 @@ end your turn at the scope questions. Invoking this skill directly (a slash comm
 request) is not an exemption, and harness plan mode does not replace
 `plan.md`. This skill supplies the content of phases 4–7.
 
+**Always, even inside another task:** make sure the repo is registered — the
+onespace-be block in `AGENTS.md` and the `@AGENTS.md` import in `CLAUDE.md`
+(`onespace-be-workflow`, Phase 2, "Register the pack") — and, when code or config
+changed, finish with the docs sync (`onespace-be-workflow`, Phase 7) so the README
+matches the code.
+
 Yardsticks: `onespace-be-coding-standards` (what good looks like),
 `onespace-be-coding-standards/references/smells-and-refactorings.md`
 (names), `onespace-be-coding-standards/references/module-design.md` (module and seam vocabulary), and the repo's recorded

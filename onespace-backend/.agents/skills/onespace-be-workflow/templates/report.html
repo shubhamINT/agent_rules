@@ -247,8 +247,20 @@ flowchart TB
     </div>
   </section>
 
+  <!-- omit for audit / security -->
+  <section id="docs">
+    <h2>6. Docs updated</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>File</th><th>Section</th><th>Change</th></tr></thead>
+        <tbody><tr><td><code>README.md</code></td><td>{{Environment, Endpoints}}</td><td>{{added PAYMENTS_API_URL; POST /refunds}}</td></tr>
+          <tr><td><code>AGENTS.md</code></td><td>{{onespace-be block}}</td><td>{{refreshed to current pack}}</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
   <section id="next">
-    <h2>6. Out-of-scope observations and next tasks</h2>
+    <h2>7. Out-of-scope observations and next tasks</h2>
     <ul>
       <li><b>{{refactor-code}}:</b> {{split src/billing/invoice.py into service and repository}}</li>
       <li><b>{{observation}}:</b> {{retry loop in src/sync.py never backs off}}</li>

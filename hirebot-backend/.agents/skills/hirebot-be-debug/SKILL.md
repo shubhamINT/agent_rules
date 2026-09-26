@@ -26,6 +26,12 @@ Invoking this skill directly (a slash command, a one-line request) is not an
 exemption, and harness plan mode does not replace `plan.md`. Scoping is light: the bug report is the scope. Ask only for what is
 missing from:
 
+**Always, even inside another task:** make sure the repo is registered — the
+hirebot-be block in `AGENTS.md` and the `@AGENTS.md` import in `CLAUDE.md`
+(`hirebot-be-workflow`, Phase 2, "Register the pack") — and, when code or config
+changed, finish with the docs sync (`hirebot-be-workflow`, Phase 7) so the README
+matches the code.
+
 - **Symptom** — exact error, status code, wrong output, or timing.
 - **Expected** behaviour.
 - **Where and when** — endpoint/job, environment, since when, how often
