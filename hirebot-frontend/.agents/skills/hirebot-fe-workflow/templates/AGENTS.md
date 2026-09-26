@@ -68,7 +68,7 @@ Until they are installed, follow the rules in this file.
 | **Refactor** | "clean up components", "too much duplicate code", "make it reusable" | `hirebot-fe-workflow` → `hirebot-fe-structure-app` → `hirebot-fe-verify-ui` |
 | **Structure** | "organise the src folder", "where should this go" | `hirebot-fe-workflow` → `hirebot-fe-structure-app` |
 | **Verify** | "check how it looks on mobile", "visual QA" | `hirebot-fe-workflow` → `hirebot-fe-verify-ui` → critique (`hirebot-fe-design-ui`) |
-| **Fix** | "layout breaks on iPad", "console error on jobs page" | `hirebot-fe-workflow` → `hirebot-fe-verify-ui` (reproduce, then prove) |
+| **Fix** | "layout breaks on iPad", "button does nothing", "shows old data", "infinite loop", "hydration failed", "page is slow", a pasted console error | `hirebot-fe-workflow` → `hirebot-fe-debug` → `hirebot-fe-verify-ui` |
 
 Unsure whether a task is trivial? Treat it as non-trivial. Touching more than
 one component, any layout, any data fetching, or any shared component is never
@@ -116,6 +116,7 @@ Follow `hirebot-fe-workflow`. In short:
 | `hirebot-fe-design-ui` | task | Designing, redesigning, polishing, animating, loading states, responsive layout; critiquing UI |
 | `hirebot-fe-structure-app` | task | Detecting, choosing, recording, applying the folder structure |
 | `hirebot-fe-verify-ui` | task | Screenshotting pages at every width and theme; visual and accessibility checks |
+| `hirebot-fe-debug` | task | Reproducing, root-causing, and fixing UI bugs, with a regression test and screenshot proof |
 <!-- hirebot-fe:end -->
 
 ## Project structure

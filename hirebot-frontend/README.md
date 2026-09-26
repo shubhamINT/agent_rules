@@ -43,8 +43,11 @@ hirebot-frontend/
     │   └── references/                        # inspiration, anti-patterns, tokens, responsive, motion, libraries, loading-states
     ├── hirebot-fe-structure-app/              # detect / choose / record / apply the folder layout
     │   └── references/layouts.md              # Vite SPA and Next.js App Router trees, import rules
-    └── hirebot-fe-verify-ui/                  # Playwright screenshots at 5 widths × 2 themes + checks
-        └── scripts/shoot.mjs
+    ├── hirebot-fe-verify-ui/                  # Playwright screenshots at 5 widths × 2 themes + checks
+    │   └── scripts/shoot.mjs
+    └── hirebot-fe-debug/                      # reproduce → hypotheses → root cause → fix + regression test
+        ├── references/                        # symptom-playbook (10 bug classes), tools
+        └── scripts/capture.mjs                # browser repro: steps, console, network, errors, trace
 ```
 
 ## How the skills link together
@@ -52,14 +55,14 @@ hirebot-frontend/
 ```
         hirebot-fe-workflow  (entry: register pack → classify → scope → plan → approve)
                  │
-   ┌─────────────┼──────────────┬──────────────┐
- feature         ui          refactor       structure
-   │             │              │               │
- structure-app   │          structure-app   structure-app
-   │             │              │
- design-ui ── design-ui         │
-   │             │              │
-   └─────────────┴──── verify-ui (screenshots, checks) ──── critique + ideas (design-ui)
+   ┌─────────────┼──────────────┬──────────────┬─────────────┐
+ feature         ui          refactor       structure       fix
+   │             │              │               │             │
+ structure-app   │          structure-app   structure-app   debug (repro → root cause → fix)
+   │             │              │                             │
+ design-ui ── design-ui         │                             │
+   │             │              │                             │
+   └─────────────┴──── verify-ui (screenshots, checks) ───────┘──── critique + ideas (design-ui)
                  │
      docs sync (README, AGENTS.md, CLAUDE.md) → report
    hirebot-fe-coding-standards applies to every step that writes code

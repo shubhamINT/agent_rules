@@ -18,7 +18,7 @@
     {
       "name": "hirebot-frontend",
       "source": "./hirebot-frontend",
-      "description": "HireBot frontend rules (React + TypeScript): workflow, coding standards, premium responsive UI design with loading states, folder structure, screenshot verification; keeps README and AGENTS.md current."
+      "description": "HireBot frontend rules (React + TypeScript): workflow, coding standards, premium responsive UI design with loading states, folder structure, screenshot verification, evidence-first UI debugging; keeps README and AGENTS.md current."
     }
   ]
 }

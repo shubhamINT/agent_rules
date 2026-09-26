@@ -8,7 +8,7 @@ description: >
   the user asks to build, design, redesign, restyle, "make it look better",
   "make it responsive", add skeletons, clean up components, fix a layout, or
   check how the UI looks — even when they phrase it casually ("this page looks
-  bad", "fix the mobile view"). Routes each task to the right hirebot-fe-*
+  bad", "fix the mobile view", "button does nothing"). Routes each task to the right hirebot-fe-*
   skills, keeps the `agent-tracking/` folder (scope, research, plan, progress,
   screenshots, report), keeps the repo README current (setup, run, env,
   scripts, structure), and registers the pack in the repo's AGENTS.md and
@@ -48,7 +48,7 @@ order shown; `hirebot-fe-coding-standards` applies to every type.
 | `refactor` | clean up, de-duplicate, extract shared components; no visual change | `hirebot-fe-structure-app` (check) → `hirebot-fe-verify-ui` (before and after must match) |
 | `structure` | detect, choose, or apply the folder layout | `hirebot-fe-structure-app` |
 | `verify` | "check how it looks", visual QA of existing pages; changes nothing | `hirebot-fe-verify-ui` → critique from `hirebot-fe-design-ui` |
-| `fix` | a UI bug (broken layout, wrong state, console error) | `hirebot-fe-verify-ui` (reproduce) → fix → `hirebot-fe-verify-ui` |
+| `fix` | a UI bug: broken layout, blank screen, state not updating, stale data, console error, slow page | `hirebot-fe-debug` (reproduce → root cause → fix) → `hirebot-fe-verify-ui` |
 
 A request can span types ("check the dashboard and fix it"). Split it: the
 check is one task, the fix is a second task planned from its findings.
@@ -128,6 +128,10 @@ message, with concrete options and a recommended default:
    page passes `hirebot-fe-verify-ui` at every width, with no console errors,
    no horizontal overflow, and no serious axe violations.
 7. **Output** — report format: **HTML (default)** or Markdown.
+8. **`fix` tasks** — the bug report is most of the scope: ask only for the
+   missing symptom, expected behaviour, where (route, device, width, theme,
+   dev or production build), when, and hotfix vs proper fix
+   (`hirebot-fe-debug`).
 
 If an answer is vague ("make it look good"), say what you would assume and ask
 the user to confirm. The most expensive agent failure is excellent work on the
