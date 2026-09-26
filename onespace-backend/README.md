@@ -28,7 +28,7 @@ onespace-backend/
     ├── onespace-be-coding-standards/           # clean code, full Google style guides + section index, module design, bug radar, AI self-review, tooling
     ├── onespace-be-busl-licence-compliance/    # BUSL-1.1 LICENSE/NOTICE/headers + header script
     ├── onespace-be-workflow/                   # record → scope → plan → approve → execute → report
-    │   ├── references/                         # VISUAL-REPORT (diagrams), SAFE-DELIVERY (rollout/rollback), SUBAGENTS (roles, briefs)
+    │   ├── references/                         # VISUAL-REPORT (diagrams), SAFE-DELIVERY (rollout/rollback), SUBAGENTS (roles, briefs), TOKEN-ECONOMY (lean context)
     │   └── templates/                          # AGENTS.md (repo rules block), INDEX, scope, research, plan, progress, report (.md + .html)
     │  tasks
     ├── onespace-be-build-feature/              # building new behaviour + system design pass

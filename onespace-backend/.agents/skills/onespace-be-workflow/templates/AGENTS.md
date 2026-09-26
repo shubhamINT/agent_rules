@@ -65,6 +65,10 @@ Always-on behaviour:
 5. **Help the user understand.** Explain decisions and findings so a developer
    new to the code could follow and apply them. Prefer showing the fix over
    describing it.
+6. **Spend tokens on evidence, not words.** Search before reading, read a
+   file once, run one test file while iterating, filter logs before reading.
+   Chat replies short; files in normal prose. Never skip a check to save
+   tokens (`onespace-be-workflow/references/TOKEN-ECONOMY.md`).
 
 ## 2. Classify the task
 

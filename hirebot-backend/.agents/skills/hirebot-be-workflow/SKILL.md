@@ -32,6 +32,10 @@ Paths like `hirebot-be-<skill>/references/<file>.md` name a sibling skill: resol
 them from the parent of this skill's base directory. Sibling missing? Tell the
 user to install the whole pack.
 
+Token economy applies to every phase (`references/TOKEN-ECONOMY.md`): read
+cheap, build less, think to the point, reply short, and never cut a check to
+save tokens.
+
 ---
 
 ## Phase 1 — Classify

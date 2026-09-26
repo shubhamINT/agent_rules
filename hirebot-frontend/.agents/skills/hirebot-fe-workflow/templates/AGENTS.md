@@ -57,6 +57,10 @@ Until they are installed, follow the rules in this file.
    setup steps, or folders updates the README in the same change (install,
    run, scripts, env, structure, stack). A new developer must be able to run
    and understand the app from the README alone.
+8. **Spend tokens on evidence, not words.** Search before reading, read a
+   file once, trim tool output, shoot only the widths you are changing until
+   the final verify. Chat replies short; files in normal prose. Never skip a
+   check to save tokens (`hirebot-fe-workflow/references/TOKEN-ECONOMY.md`).
 
 ## 2. Classify the task
 

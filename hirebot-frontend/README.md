@@ -36,7 +36,7 @@ hirebot-frontend/
     │  always on
     ├── hirebot-fe-coding-standards/           # reuse-first, minimal React; 19 impact-ranked rules in references/rules/
     ├── hirebot-fe-workflow/                   # record → scope → plan → approve → execute → verify → report
-    │   ├── references/                        # VISUAL-REPORT, SUBAGENTS, README-STANDARD
+    │   ├── references/                        # VISUAL-REPORT, SUBAGENTS, README-STANDARD, TOKEN-ECONOMY
     │   └── templates/                         # AGENTS.md (repo rules block), INDEX, scope, research, plan, progress, report
     │  tasks
     ├── hirebot-fe-design-ui/                  # design read + dials, inspiration research, directions, critique and ideas

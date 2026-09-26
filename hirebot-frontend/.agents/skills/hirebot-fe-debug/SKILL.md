@@ -88,6 +88,10 @@ Write the smallest thing that shows the bug, in this order of preference:
    (`npm run build` then `npm run preview` / `next start`) and reproduce
    there. Never debug against production data or real user credentials.
 
+Page redirects to sign-in? Stop. Ask the user to create `.auth/state.json`
+once (`hirebot-fe-verify-ui`, "signed-in pages"), then pass
+`--storage-state .auth/state.json`. Never ask for or type a password.
+
 Run it and record the failure verbatim. Cannot reproduce? Say so, list what
 was tried (widths, browsers, roles, dev vs prod build, slow network with
 `shoot.mjs --slow`), and ask for more data: a screen recording, the exact

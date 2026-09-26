@@ -27,7 +27,7 @@ hirebot-backend/
     │  always on
     ├── hirebot-be-coding-standards/           # clean code, full Google style guides + section index, module design, bug radar, AI self-review, tooling
     ├── hirebot-be-workflow/                   # record → scope → plan → approve → execute → report
-    │   ├── references/                         # VISUAL-REPORT (diagrams), SAFE-DELIVERY (rollout/rollback), SUBAGENTS (roles, briefs)
+    │   ├── references/                         # VISUAL-REPORT (diagrams), SAFE-DELIVERY (rollout/rollback), SUBAGENTS (roles, briefs), TOKEN-ECONOMY (lean context)
     │   └── templates/                          # AGENTS.md (repo rules block), INDEX, scope, research, plan, progress, report (.md + .html)
     │  tasks
     ├── hirebot-be-build-feature/              # building new behaviour + system design pass
