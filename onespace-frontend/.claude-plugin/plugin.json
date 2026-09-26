@@ -1,0 +1,6 @@
+{
+  "name": "onespace-frontend",
+  "description": "OneSpace frontend engineering rules and skills (React + TypeScript).",
+  "author": { "name": "Shubham Halder" },
+  "skills": "./.agents/skills/"
+}

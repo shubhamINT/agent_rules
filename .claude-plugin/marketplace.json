@@ -19,6 +19,11 @@
       "name": "hirebot-frontend",
       "source": "./hirebot-frontend",
       "description": "HireBot frontend rules (React + TypeScript): workflow, coding standards, premium responsive UI design with loading states, folder structure, screenshot verification, evidence-first UI debugging; keeps README and AGENTS.md current."
+    },
+    {
+      "name": "onespace-frontend",
+      "source": "./onespace-frontend",
+      "description": "OneSpace frontend rules (React + TypeScript): workflow, coding standards, premium responsive UI design with loading states, folder structure, screenshot verification, evidence-first UI debugging, design image to UI with pixel-diff matching, BUSL licence; keeps README and AGENTS.md current."
     }
   ]
 }

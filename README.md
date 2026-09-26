@@ -10,6 +10,7 @@ stack. Every pack installs as a Claude Code plugin or with `npx skills`.
 | [`onespace-backend/`](onespace-backend/README.md) | `onespace-backend` | `onespace-be-` | OneSpace backend services (Python + Node.js) |
 | [`hirebot-backend/`](hirebot-backend/README.md) | `hirebot-backend` | `hirebot-be-` | HireBot backend services (Python + Node.js) |
 | [`hirebot-frontend/`](hirebot-frontend/README.md) | `hirebot-frontend` | `hirebot-fe-` | HireBot frontend (React + TypeScript) |
+| [`onespace-frontend/`](onespace-frontend/README.md) | `onespace-frontend` | `onespace-fe-` | OneSpace frontend (React + TypeScript), with BUSL licence and design image to UI |
 
 Each pack's README lists its skills and explains how its workflow runs.
 
