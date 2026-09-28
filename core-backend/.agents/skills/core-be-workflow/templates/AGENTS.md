@@ -147,6 +147,11 @@ they return.
 10. **Do not reformat code you did not otherwise change.** Keep diffs reviewable.
 11. **No git side effects unless asked.** Do not commit, branch, push, or delete
     lockfiles. Leave changes in the working tree for the user to review.
+12. **Parallel agents share one board.** When other agents work here too, join
+    `agent-tracking/board/` with `core-be-workflow/scripts/board.sh`: claim a
+    task and lock its files before editing, never wait by re-reading code, and
+    `leave` when done. The last agent out removes the board
+    (`core-be-workflow/references/PARALLEL-AGENTS.md`).
 
 ## 5. Language baselines
 

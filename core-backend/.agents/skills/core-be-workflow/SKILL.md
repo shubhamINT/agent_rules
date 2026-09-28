@@ -221,6 +221,13 @@ Delegate where it helps: parallel read-only investigation, black-box test
 writing, and a fresh-context review of the diff before the report
 (`references/SUBAGENTS.md`). You stay responsible for everything they return.
 
+**More than one agent editing this repo at once** (parallel sessions, an
+orchestrator with workers, subagents that write files)? Coordinate through
+`agent-tracking/board/` with `scripts/board.sh`
+(`references/PARALLEL-AGENTS.md`): turn plan steps into tasks, claim before
+you edit, lock the files you touch, never wait by re-reading code, and
+`leave` when done. The last agent out removes the board.
+
 Set INDEX status `in-progress`.
 
 ## Phase 7 — Report

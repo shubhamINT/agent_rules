@@ -118,6 +118,11 @@ Follow `core-fe-workflow`. In short:
 12. **Ship in small reversible steps with a concrete rollback**
     (`core-fe-workflow/references/SAFE-DELIVERY.md`): tolerate old and new API
     shapes, redirect moved routes, version stored client data.
+13. **Parallel agents share one board.** When other agents work here too, join
+    `agent-tracking/board/` with `core-fe-workflow/scripts/board.sh`: claim a
+    task and lock its files before editing, never wait by re-reading code, and
+    `leave` when done. The last agent out removes the board
+    (`core-fe-workflow/references/PARALLEL-AGENTS.md`).
 
 ## 5. Skill index
 

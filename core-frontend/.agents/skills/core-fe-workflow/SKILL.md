@@ -220,6 +220,13 @@ Delegate where it helps (`references/SUBAGENTS.md`): parallel searches for
 reusable components, 2–3 design directions explored in parallel, and a
 fresh-context reviewer before the report.
 
+**More than one agent editing this repo at once** (parallel sessions, an
+orchestrator with workers, subagents that write files)? Coordinate through
+`agent-tracking/board/` with `scripts/board.sh`
+(`references/PARALLEL-AGENTS.md`): turn plan steps into tasks, claim before
+you edit, lock the files you touch, never wait by re-reading code, and
+`leave` when done. The last agent out removes the board.
+
 ## Phase 7 — Verify, then report
 
 1. **Final verify.** Run `core-fe-verify-ui` on every target page at every

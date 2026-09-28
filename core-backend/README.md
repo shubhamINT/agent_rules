@@ -27,8 +27,9 @@ core-backend/
     │  always on
     ├── core-be-coding-standards/           # clean code, full Google style guides + section index, module design, bug radar, AI self-review, tooling
     ├── core-be-workflow/                   # record → scope → plan → approve → execute → report
-    │   ├── references/                         # VISUAL-REPORT (diagrams), SAFE-DELIVERY (rollout/rollback), SUBAGENTS (roles, briefs), TOKEN-ECONOMY (lean context)
-    │   └── templates/                          # AGENTS.md (repo rules block), INDEX, scope, research, plan, progress, report (.md + .html)
+    │   ├── references/                         # VISUAL-REPORT (diagrams), SAFE-DELIVERY (rollout/rollback), SUBAGENTS (roles, briefs), TOKEN-ECONOMY (lean context), PARALLEL-AGENTS (shared board)
+    │   ├── templates/                          # AGENTS.md (repo rules block), INDEX, scope, research, plan, progress, report (.md + .html)
+    │   └── scripts/board.sh                    # multi-agent board: join, claim, lock, done, leave
     │  tasks
     ├── core-be-build-feature/              # building new behaviour + system design pass
     ├── core-be-refactor-code/              # behaviour-preserving refactors + architecture review
