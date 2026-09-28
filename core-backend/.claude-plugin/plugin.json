@@ -1,0 +1,6 @@
+{
+  "name": "core-backend",
+  "description": "General backend engineering rules and skills (Python + Node.js) for any project.",
+  "author": { "name": "Shubham Halder" },
+  "skills": "./.agents/skills/"
+}

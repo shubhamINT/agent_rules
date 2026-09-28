@@ -6,6 +6,16 @@
   "description": "INT agent rule packs: skills and AGENTS.md per project and stack.",
   "plugins": [
     {
+      "name": "core-backend",
+      "source": "./core-backend",
+      "description": "General backend rules for any Python + Node.js project: workflow, system design, coding standards, refactoring, code and security audits, debugging, tests with subagents, structure, health endpoint."
+    },
+    {
+      "name": "core-frontend",
+      "source": "./core-frontend",
+      "description": "General frontend rules for any React + TypeScript project: workflow, coding standards, premium responsive UI design with loading states, folder structure, screenshot verification, evidence-first UI debugging, design image to UI with pixel-diff matching; keeps README and AGENTS.md current."
+    },
+    {
       "name": "onespace-backend",
       "source": "./onespace-backend",
       "description": "OneSpace backend rules (Python + Node.js): workflow, system design, coding standards, refactoring, code and security audits, debugging, tests with subagents, structure, health endpoint, BUSL licence."

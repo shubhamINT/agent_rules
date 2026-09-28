@@ -1,0 +1,6 @@
+{
+  "name": "core-frontend",
+  "description": "General frontend engineering rules and skills (React + TypeScript) for any project.",
+  "author": { "name": "Shubham Halder" },
+  "skills": "./.agents/skills/"
+}

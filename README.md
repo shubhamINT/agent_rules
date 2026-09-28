@@ -7,12 +7,19 @@ stack. Every pack installs as a Claude Code plugin or with `npx skills`.
 
 | Pack                                               | Plugin name          | Skill prefix     | Covers                                       |
 | -------------------------------------------------- | -------------------- | ---------------- | -------------------------------------------- |
+| [`core-backend/`](core-backend/README.md) | `core-backend` | `core-be-` | Any backend service (Python + Node.js), project-neutral |
+| [`core-frontend/`](core-frontend/README.md) | `core-frontend` | `core-fe-` | Any frontend (React + TypeScript), project-neutral, with design image to UI |
 | [`onespace-backend/`](onespace-backend/README.md) | `onespace-backend` | `onespace-be-` | OneSpace backend services (Python + Node.js) |
 | [`hirebot-backend/`](hirebot-backend/README.md) | `hirebot-backend` | `hirebot-be-` | HireBot backend services (Python + Node.js) |
 | [`hirebot-frontend/`](hirebot-frontend/README.md) | `hirebot-frontend` | `hirebot-fe-` | HireBot frontend (React + TypeScript) |
 | [`onespace-frontend/`](onespace-frontend/README.md) | `onespace-frontend` | `onespace-fe-` | OneSpace frontend (React + TypeScript), with BUSL licence and design image to UI |
 
 Each pack's README lists its skills and explains how its workflow runs.
+
+Use the `core-*` packs for any project. The project packs add project-specific
+rules on top of the same skills (OneSpace: BUSL-1.1 licence compliance and house
+layouts). Install one backend pack and one frontend pack per repo, not a core
+pack and a project pack for the same side: their rules overlap.
 
 ## Install
 
@@ -29,7 +36,7 @@ Add the marketplace once:
 Then install the packs you need:
 
 ```
-/plugin install onespace-backend@int-agent-rules
+/plugin install core-backend@int-agent-rules
 ```
 
 A plugin installs every skill in its pack. To choose single skills, use
@@ -48,7 +55,7 @@ project folder:
     }
   },
   "enabledPlugins": {
-    "onespace-backend@int-agent-rules": true
+    "core-backend@int-agent-rules": true
   }
 }
 ```
@@ -66,7 +73,7 @@ skills, the agent, and the scope (project or global).
 ```bash
 npx skills add shubhamINT/agent_rules --list                    # show all skills
 npx skills add shubhamINT/agent_rules                           # interactive picker
-npx skills add shubhamINT/agent_rules --skill onespace-be-audit-code -a claude-code
+npx skills add shubhamINT/agent_rules --skill core-be-audit-code -a claude-code
 npx skills add shubhamINT/agent_rules -g                        # global (all projects)
 ```
 
@@ -75,7 +82,7 @@ npx skills add shubhamINT/agent_rules -g                        # global (all pr
 ```bash
 git clone https://github.com/shubhamINT/agent_rules.git
 mkdir -p <repo>/.agents
-cp -r agent_rules/onespace-backend/.agents/skills <repo>/.agents/
+cp -r agent_rules/core-backend/.agents/skills <repo>/.agents/
 ```
 
 ### `AGENTS.md` and `CLAUDE.md`
@@ -97,7 +104,7 @@ environment, endpoints or scripts, structure, stack) on every task.
 To add the block up front, copy it from the pack's workflow templates:
 
 ```bash
-curl -o AGENTS.md https://raw.githubusercontent.com/shubhamINT/agent_rules/master/onespace-backend/.agents/skills/onespace-be-workflow/templates/AGENTS.md
+curl -o AGENTS.md https://raw.githubusercontent.com/shubhamINT/agent_rules/master/core-backend/.agents/skills/core-be-workflow/templates/AGENTS.md
 echo "@AGENTS.md" >> CLAUDE.md
 ```
 
