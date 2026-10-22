@@ -45,7 +45,7 @@ Each stop ends your turn. Coding starts only after the brief and then a feature 
    - `specs/constitution.md`: run `onespace-be-constitution` if missing (it has its own questions and approval).
    - Structure: existing repo, detect and record it with `onespace-be-structure-service`; new project, choose the layout with the user and record it. Creating folders or code is a later `structure` or `feature` task, never part of init.
    - README: missing, create it per `onespace-be-structure-service/references/readme-standard.md`; present, list its gaps in the report and leave it.
-5. **Verify.** Run `doctor` again and fix every finding except the edit-guard line. That one is the user's step: tell them to run `sh <skills dir>/onespace-be-workflow/scripts/install-hook.sh` (never run it yourself).
+5. **Verify.** Run `doctor` again and fix every finding except the edit-guard line. That one is the user's step: ask which agents the team uses and tell them to run `sh <skills dir>/onespace-be-workflow/scripts/install-hook.sh --agent <name>` once per agent: `claude`, `codex`, `cursor`, `copilot`, `gemini`, or `windsurf` (never run it yourself).
 6. **Stop 3: the project brief.** Ask in one message, with defaults:
    - What it is for and who uses it.
    - The features wanted: for each, what it does, for whom, and a priority (`must`, `should`, `could`).
@@ -70,7 +70,7 @@ Target: `AGENTS.md` holds everything, each fact once. `CLAUDE.md` holds the line
 <hard-rules>
 - Source is untouched. The only files you create or edit are `AGENTS.md`, `CLAUDE.md`, `.gitignore` (only between the pack markers), `README.md` (only if missing), `agent-tracking/`, and `specs/`.
 - No file outside `agent-tracking/` is created or edited before stop 2 is approved.
-- Never run `install-hook.sh` and never edit `.claude/settings.json`.
+- Never run `install-hook.sh` and never edit an agent's hook or settings file (`.claude/settings.json`, `.codex/hooks.json`, `.cursor/hooks.json`, and the like).
 - Never delete a line the user did not approve. A dropped duplicate keeps its meaning in the surviving copy.
 - Never merge two conflicting rules yourself, and never edit inside the pack markers except by refreshing the block from the template.
 - Document what the user said. Do not invent features, users, numbers, or stack choices; an unknown stays a question.

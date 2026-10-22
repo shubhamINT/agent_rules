@@ -192,4 +192,66 @@ awk -v e="<!-- $PF:end -->" '$0==e{print "extra rule inside the block"} {print}'
 label="doctor: stale managed block reported"; $C doctor | grep -q 'managed block differs' && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
 cd $R; export SDD_ROOT=$R
 
+# ---- other agents: same policy, each agent's own stdin shape
+rm -f agent-tracking/INDEX.md
+t() { # label, want exit, stdout substring ("" = any), json
+  label=$1; out=$(printf '%s' "$4" | $H 2>/dev/null); got=$?
+  if [ "$got" = "$2" ] && { [ -z "$3" ] || printf '%s' "$out" | grep -q "$3"; }; then echo "PASS $label"; else echo "FAIL $label (exit $got, want $2; out: $out)"; fails=$((fails+1)); fi; }
+PSRC='*** Begin Patch\n*** Update File: app/main.py\n@@\n-a\n+b\n*** End Patch'
+PMD='*** Begin Patch\n*** Add File: agent-tracking/plans/x/scope.md\n+hi\n*** End Patch'
+PMIX='*** Begin Patch\n*** Add File: specs/001-x/spec.md\n+hi\n*** Update File: app/main.py\n@@\n-a\n+b\n*** End Patch'
+t "codex: apply_patch on source blocked" 2 "" "{\"hook_event_name\":\"PreToolUse\",\"tool_name\":\"apply_patch\",\"cwd\":\"$R\",\"tool_input\":{\"command\":\"$PSRC\"}}"
+t "codex: apply_patch on tracking files allowed" 0 "" "{\"hook_event_name\":\"PreToolUse\",\"tool_name\":\"apply_patch\",\"cwd\":\"$R\",\"tool_input\":{\"command\":\"$PMD\"}}"
+t "codex: patch mixing spec and source blocked" 2 "" "{\"hook_event_name\":\"PreToolUse\",\"tool_name\":\"apply_patch\",\"cwd\":\"$R\",\"tool_input\":{\"command\":\"$PMIX\"}}"
+t "codex: unparseable patch fails open" 0 "" "{\"hook_event_name\":\"PreToolUse\",\"tool_name\":\"apply_patch\",\"cwd\":\"$R\",\"tool_input\":{\"command\":\"ls\"}}"
+t "codex: session cwd in a subfolder finds the repo" 2 "" "{\"hook_event_name\":\"PreToolUse\",\"tool_name\":\"apply_patch\",\"cwd\":\"$R/app\",\"tool_input\":{\"command\":\"$PSRC\"}}"
+t "cursor: Write on source blocked with JSON deny" 2 '"permission": "deny"' "{\"hook_event_name\":\"preToolUse\",\"tool_name\":\"Write\",\"workspace_roots\":[\"$R\"],\"tool_input\":{\"path\":\"app/main.py\"}}"
+t "cursor: Shell tool ignored" 0 "" "{\"hook_event_name\":\"preToolUse\",\"tool_name\":\"Shell\",\"workspace_roots\":[\"$R\"],\"tool_input\":{\"command\":\"ls\"}}"
+t "gemini: write_file on source blocked" 2 "" "{\"hook_event_name\":\"BeforeTool\",\"tool_name\":\"write_file\",\"cwd\":\"$R\",\"tool_input\":{\"file_path\":\"$R/app/main.py\"}}"
+t "gemini: write_file on markdown allowed" 0 "" "{\"hook_event_name\":\"BeforeTool\",\"tool_name\":\"write_file\",\"cwd\":\"$R\",\"tool_input\":{\"file_path\":\"$R/docs/a.md\"}}"
+t "windsurf: pre_write_code on source blocked" 2 "" "{\"agent_action_name\":\"pre_write_code\",\"tool_info\":{\"file_path\":\"$R/app/main.py\"}}"
+t "windsurf: pre_write_code on spec allowed" 0 "" "{\"agent_action_name\":\"pre_write_code\",\"tool_info\":{\"file_path\":\"$R/specs/001-x/spec.md\"}}"
+t "copilot: preToolUse edit on source blocked with JSON deny" 2 'permissionDecision' "{\"hook_event_name\":\"preToolUse\",\"toolName\":\"edit\",\"cwd\":\"$R\",\"toolArgs\":\"{\\\"path\\\":\\\"app/main.py\\\"}\"}"
+t "copilot: non-edit tool ignored" 0 "" "{\"hook_event_name\":\"preToolUse\",\"toolName\":\"bash\",\"cwd\":\"$R\",\"toolArgs\":\"{\\\"command\\\":\\\"ls\\\"}\"}"
+mkdir -p agent-tracking; printf '| 2026-03-01 | 2026-03-01-feature-zz | feature | in-progress | y | |\n' > agent-tracking/INDEX.md
+t "cursor: stop without verdict gets followup_message" 0 followup_message "{\"hook_event_name\":\"stop\",\"status\":\"completed\",\"loop_count\":0,\"workspace_roots\":[\"$R\"]}"
+t "cursor: second loop lets it stop" 0 "" "{\"hook_event_name\":\"stop\",\"status\":\"completed\",\"loop_count\":1,\"workspace_roots\":[\"$R\"]}"
+t "cursor: aborted run is not blocked" 0 "" "{\"hook_event_name\":\"stop\",\"status\":\"aborted\",\"loop_count\":0,\"workspace_roots\":[\"$R\"]}"
+t "copilot: agentStop without verdict gets decision block" 0 '"decision": "block"' "{\"hook_event_name\":\"agentStop\",\"cwd\":\"$R\"}"
+t "gemini: AfterAgent without verdict blocks" 2 "" "{\"hook_event_name\":\"AfterAgent\",\"cwd\":\"$R\",\"stop_hook_active\":false}"
+t "gemini: AfterAgent honors stop_hook_active" 0 "" "{\"hook_event_name\":\"AfterAgent\",\"cwd\":\"$R\",\"stop_hook_active\":true}"
+t "codex: Stop without verdict blocks" 2 "" "{\"hook_event_name\":\"Stop\",\"cwd\":\"$R\",\"stop_hook_active\":false}"
+rm -f agent-tracking/INDEX.md
+label="agent shapes: garbage JSON fails open"; t "$label" 0 "" "not json"
+
+# ---- Copilot CLI as captured live: no event name in the JSON, the config entry passes pre|stop
+th() { label=$1; out=$(printf '%s' "$4" | sh "$here/sdd-hook.sh" $5 2>/dev/null); got=$?
+  if [ "$got" = "$2" ] && { [ -z "$3" ] || printf '%s' "$out" | grep -q "$3"; }; then echo "PASS $label"; else echo "FAIL $label (exit $got, want $2; out: $out)"; fails=$((fails+1)); fi; }
+rm -f agent-tracking/INDEX.md
+CPATCH="*** Begin Patch\\n*** Update File: $R/app/orders.py\\n@@\\n-a\\n+b\\n*** End Patch\\n"
+th "copilot cli: apply_patch on source blocked, JSON deny" 2 permissionDecision "{\"sessionId\":\"s\",\"cwd\":\"$R\",\"toolName\":\"apply_patch\",\"toolArgs\":\"$CPATCH\"}" pre
+th "copilot cli: apply_patch on a spec allowed" 0 "" "{\"sessionId\":\"s\",\"cwd\":\"$R\",\"toolName\":\"apply_patch\",\"toolArgs\":\"*** Begin Patch\\n*** Add File: $R/specs/001-x/spec.md\\n+hi\\n*** End Patch\\n\"}" pre
+th "copilot cli: view and bash tools ignored" 0 "" "{\"sessionId\":\"s\",\"cwd\":\"$R\",\"toolName\":\"bash\",\"toolArgs\":{\"command\":\"ls\"}}" pre
+printf '| 2026-03-01 | 2026-03-01-feature-zz | feature | in-progress | y | |\n' > agent-tracking/INDEX.md
+th "copilot cli: agentStop hint without verdict blocks with decision" 0 '"decision": "block"' "{\"sessionId\":\"s\",\"cwd\":\"$R\"}" stop
+rm -f agent-tracking/INDEX.md
+
+# ---- install-hook for every agent
+for ag in codex cursor copilot gemini windsurf; do
+  label="install-hook: $ag fresh install exits 0"; code 0 $I --agent $ag
+  label="install-hook: $ag second run changes nothing"; $I --agent $ag 2>&1 | grep -q 'already installed' && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
+done
+label="install-hook: codex file registers both events"; [ "$(grep -c 'sdd-hook.sh' "$R/.codex/hooks.json")" = 2 ] && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
+label="install-hook: cursor file carries version 1"; grep -q '"version": 1' "$R/.cursor/hooks.json" && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
+printf '{bad' > "$R/.gemini/settings.json"
+label="install-hook: invalid gemini JSON refused"; code 1 $I --agent gemini
+label="install-hook: unknown agent refused"; code 1 $I --agent nope
+
+# ---- doctor: edit guard seen in any agent's file
+D2=$R/doctor2; mkdir -p $D2/.codex; cd $D2; export SDD_ROOT=$D2
+label="doctor: no agent guarded is reported"; $C doctor | grep -q 'edit guard not registered for any agent' && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
+printf '{"hooks":{"Stop":[{"hooks":[{"command":"x/sdd-hook.sh"}]}]}}' > .codex/hooks.json
+label="doctor: a codex hook counts as guarded"; $C doctor | grep -q 'edit guard' && { echo "FAIL $label"; fails=$((fails+1)); } || echo "PASS $label"
+cd $R; export SDD_ROOT=$R
+
 [ "$fails" = 0 ] && { echo "all passed"; exit 0; } || { echo "$fails failed"; exit 1; }

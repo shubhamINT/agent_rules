@@ -109,7 +109,8 @@ debugging, and test work change no behaviour and need no spec.
 
 ### Guard
 
-An edit guard (a Claude Code hook, `core-be-workflow/scripts/sdd-hook.sh`) and a validator
+An edit guard (a command hook that Claude Code, Codex, Cursor, Copilot, Gemini CLI, and
+Windsurf can run: `core-be-workflow/scripts/sdd-hook.sh`) and a validator
 (`core-be-workflow/scripts/sdd-check.sh`) back these rules. A source edit needs an approved
 task row in `agent-tracking/INDEX.md`; a `feature` or `change` task also needs its
 spec first. You may not stop mid-implementation before `Verdict: Converged` is in

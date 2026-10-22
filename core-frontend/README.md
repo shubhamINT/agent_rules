@@ -172,10 +172,10 @@ Skills are advice; these make the workflow hard to skip, whichever model runs.
 | Piece | Where | What it does |
 |-------|-------|--------------|
 | `sdd-check.sh` | `core-fe-workflow/scripts/` | `next`, `spec`, `analyze`, `converge`, `status`, `ci`, `doctor`: deterministic checks on the spec, plan, task, and INDEX files. Exit 1 on CRITICAL or HIGH. Used by the skills and by CI. |
-| `sdd-hook.sh` | `core-fe-workflow/scripts/` | Claude Code hook. Blocks a source edit without an approved task (a `feature` or `change` also needs its spec first). Blocks stopping an in-progress `feature` or `change` before `Verdict: Converged`. |
+| `sdd-hook.sh` | `core-fe-workflow/scripts/` | Command hook for Claude Code, Codex, Copilot, Cursor, Gemini CLI, and Windsurf. Blocks a source edit without an approved task (a `feature` or `change` also needs its spec first). Blocks stopping an in-progress `feature` or `change` before `Verdict: Converged`. |
 | `hooks/hooks.json` | plugin root | Wires the hook up. Installed with the plugin; nothing to configure. |
 | `sdd-check.yml` | `core-fe-workflow/templates/` | Sample GitHub Actions job running `sdd-check.sh ci`. |
-| `install-hook.sh` | `core-fe-workflow/scripts/` | Registers the hook in `.claude/settings.json` for `npx skills` and manual installs. |
+| `install-hook.sh` | `core-fe-workflow/scripts/` | Registers the hook for the agents you use (`--agent codex`, `--all`, and so on) for `npx skills` and manual installs. |
 | `test-sdd.sh` | `core-fe-workflow/scripts/` | Self-check for the two scripts: `sh scripts/test-sdd.sh`. |
 
 **Without the plugin** (`npx skills` or manual copy) the hook is not installed. Run
@@ -215,12 +215,38 @@ without the hook: `sh <skills dir>/core-fe-workflow/scripts/sdd-check.sh status`
 `core-fe-workflow/templates/sdd-check.yml` to `.github/workflows/`; it needs the scripts in the
 repo (`npx skills` or manual copy).
 
+**Other coding agents.** The same guard runs in every agent that has command hooks. The
+script adapts each agent's JSON, so the rules are written once. Run the installer once per
+agent the team uses, from the project root, as you (it writes that agent's hook file):
+
+```bash
+sh <skills dir>/core-fe-workflow/scripts/install-hook.sh --agent codex      # also: claude, cursor, copilot, gemini, windsurf
+sh <skills dir>/core-fe-workflow/scripts/install-hook.sh --all              # every agent below
+```
+
+| Agent | Hook file it writes | Edit guard | Stop guard | Checked |
+|-------|--------------------|-----------|-----------|---------|
+| Claude Code | `.claude/settings.json` (or the plugin) | yes | yes | live |
+| Codex | `.codex/hooks.json` (run `/hooks` and trust it) | yes, through `apply_patch` | yes | live |
+| GitHub Copilot | `.github/hooks/sdd-guard.json` | yes | yes | live in the CLI with `--trust-folder`; the cloud agent needs the file on the default branch |
+| Cursor | `.cursor/hooks.json` | yes | yes | from the docs only |
+| Gemini CLI | `.gemini/settings.json` | yes | yes | from the docs only |
+| Windsurf | `.devin/hooks.json` | yes | no stop event | from the docs only |
+| opencode, Aider, Cline, Roo Code | none shipped (opencode and Cline hooks are JS plugins; not built or checked) | no | no | `AGENTS.md` and CI only |
+
+"From the docs only" means the stdin shapes come from the vendor's documentation and the
+`test-sdd.sh` fixtures, not from a run of that agent. Check one on your machine: install it,
+ask the agent to edit a source file with no task, and expect the `SDD guard:` message. Path
+keys the docs do not name (Cursor, Gemini) are matched by trying the likely names; an edit
+event with no path found is allowed, and CI is the backstop. Shell writes (`sed -i`, redirects)
+are not seen by any agent. Cursor's CLI hooks are reported as unreliable on Linux.
+
 **Limits.**
 - The hook sees `Write`, `Edit`, `MultiEdit`, and `NotebookEdit`. Source written through Bash
   (`sed -i`, redirects) is not seen; CI and the Stop hook catch the outcome.
 - A model can add its own INDEX row to pass the guard. Rows are an audit trail, and
   `sdd-check.sh ci` re-checks every approved row against its plan and spec.
-- Hooks run only in Claude Code. Codex and Cursor read `AGENTS.md`; give them CI.
+- Agents without command hooks (opencode, Aider, Cline, Roo Code) read `AGENTS.md`; give them CI.
 - Stop continues the turn at most eight times in a row, then lets it end.
 - Managed settings with `allowManagedHooksOnly` disable plugin hooks.
 - Trivial edits need one INDEX row (type `trivial`, status `in-progress`).

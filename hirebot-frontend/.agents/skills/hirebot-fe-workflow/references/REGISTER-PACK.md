@@ -26,9 +26,9 @@ Do this on every non-trivial task; it is a no-op when nothing changed.
    the template's block. Markers present: replace only the text between them. Never touch
    anything outside the markers.
 
-7. **Edit guard.** Look for `sdd-hook` in `.claude/settings.json`. It is absent, and
-   the pack was not installed as a plugin? Tell the user once: "The edit guard is
-   not registered. Run `sh <skills dir>/hirebot-fe-workflow/scripts/install-hook.sh` to add it."
+7. **Edit guard.** Run `sdd-check.sh doctor`. It reports the guard as not registered for
+   any agent, and the pack was not installed as a plugin? Tell the user once: "The edit
+   guard is not registered. For each agent the team uses, run `sh <skills dir>/hirebot-fe-workflow/scripts/install-hook.sh --agent <claude|codex|cursor|copilot|gemini|windsurf>`."
    Never run it yourself: it edits the user's settings.
 
 8. **Messy or duplicated files.** `AGENTS.md` and `CLAUDE.md` repeat each other, or

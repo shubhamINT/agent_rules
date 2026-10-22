@@ -194,8 +194,9 @@ cmd_doctor() { # is this repo set up for the pack? read-only
   [ -f specs/constitution.md ] || emit HIGH specs/constitution.md "missing; run the constitution skill"
   [ -f specs/project.md ] || emit MEDIUM specs/project.md "missing; the project brief from the init skill"
   [ -f README.md ] || emit MEDIUM README.md "missing"
-  grep -qs sdd-hook .claude/settings.json .claude/settings.local.json ||
-    emit MEDIUM .claude/settings.json "edit guard not registered (ignore if the pack is installed as a plugin); the user runs install-hook.sh"
+  grep -qs sdd-hook .claude/settings.json .claude/settings.local.json .codex/hooks.json .cursor/hooks.json \
+      .github/hooks/*.json .gemini/settings.json .devin/hooks.json ||
+    emit MEDIUM .claude/settings.json "edit guard not registered for any agent (ignore if the pack is a Claude plugin); the user runs install-hook.sh --agent <name> for each agent the team uses"
 }
 
 cmd=${1:-}; [ $# -gt 0 ] && shift
