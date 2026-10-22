@@ -30,6 +30,10 @@ dependency, or folder still updates the README
 (`references/README-STANDARD.md`). Unsure = not trivial. Touching more than one component, any layout, any
 data fetching, or any shared component is never trivial.
 
+With the edit guard installed (`scripts/sdd-hook.sh`), even a trivial source edit
+needs one row in `agent-tracking/INDEX.md` (type `trivial`, status `in-progress`)
+so the edit is on record. No scope interview, plan, or report for it.
+
 Paths like `hirebot-fe-<skill>/references/<file>.md` name a sibling skill:
 resolve them from the parent of this skill's base directory. Sibling missing?
 Tell the user to install the whole pack.
@@ -40,6 +44,29 @@ save tokens.
 
 ---
 
+## Quick path: feature and change
+
+Everything below applies. This is the order of outputs and stops for the two
+spec-driven types, so you can see the whole run first.
+
+| Stop | Before it | Files written |
+|------|-----------|---------------|
+| 1. Scope questions | classify, bootstrap tracking | `agent-tracking/INDEX.md` row, `plans/<slug>/scope.md` |
+| 2. Spec questions | `hirebot-fe-specify` (`hirebot-fe-change` for a change) | `specs/constitution.md` (once), `specs/<NNN-topic>/spec.md` |
+| 3. Plan approval | `hirebot-fe-clarify`, `hirebot-fe-plan`, `hirebot-fe-tasks`, `hirebot-fe-analyze` | `specs/<NNN-topic>/plan.md`, `plans/<slug>/plan.md`, `research/<slug>.md` |
+| done | `hirebot-fe-implement`, `hirebot-fe-converge`, docs sync | code and tests, `reports/<slug>.md` or `.html` |
+
+Every other type skips the spec files and runs Phases 1–7 below.
+
+**Scripts that check you.** `sh hirebot-fe-workflow/scripts/sdd-check.sh next|spec|analyze|converge|status|ci` and the
+edit guard `scripts/sdd-hook.sh` (a Claude Code hook) enforce this chain. When a
+script or the guard says no, do what its message says; never edit the scripts,
+the hook config, or set `SDD_GUARD`.
+
+**Read lazily.** Read a chain skill when its step starts, never before. Read a
+reference only when a step names it. Reading everything up front wastes the
+context the work needs.
+
 ## Phase 1 — Classify
 
 Name the task type. It sets the slug and the skill chain. Run the chain in the
@@ -47,12 +74,19 @@ order shown; `hirebot-fe-coding-standards` applies to every type.
 
 | Type | What it is | Skill chain |
 |------|------------|-------------|
-| `feature` | new page, flow, or widget | `hirebot-fe-structure-app` (check) → `hirebot-fe-design-ui` → `hirebot-fe-verify-ui` |
+| `feature` | new page, flow, or widget | `hirebot-fe-constitution` (once, if `specs/constitution.md` is missing) → `hirebot-fe-specify` → `hirebot-fe-clarify` → `hirebot-fe-plan` → `hirebot-fe-tasks` → `hirebot-fe-analyze` → *approval* → `hirebot-fe-implement` → `hirebot-fe-converge`; `hirebot-fe-structure-app` (check) and `hirebot-fe-design-ui` run inside plan and implement; `hirebot-fe-verify-ui` inside converge |
+| `change` | new behaviour on an existing page, flow, or widget ("make the table filterable") | `hirebot-fe-change` → `hirebot-fe-clarify` → `hirebot-fe-plan` (delta) → `hirebot-fe-tasks` → `hirebot-fe-analyze` → *approval* → `hirebot-fe-implement` → `hirebot-fe-converge` |
+| `assess` | a vague idea, "should we build X" | `hirebot-fe-assess` (verdict `go`, `needs-clarification`, or `kill`) |
+| `constitution` | set up or amend the project principles | `hirebot-fe-constitution` |
 | `ui` | new or redesigned UI, responsive fixes, loading states, motion, theming | `hirebot-fe-design-ui` → `hirebot-fe-verify-ui` |
 | `refactor` | clean up, de-duplicate, extract shared components; no visual change | `hirebot-fe-structure-app` (check) → `hirebot-fe-verify-ui` (before and after must match) |
 | `structure` | detect, choose, or apply the folder layout | `hirebot-fe-structure-app` |
 | `verify` | "check how it looks", visual QA of existing pages; changes nothing | `hirebot-fe-verify-ui` → critique from `hirebot-fe-design-ui` |
 | `fix` | a UI bug: broken layout, blank screen, state not updating, stale data, console error, slow page | `hirebot-fe-debug` (reproduce → root cause → fix) → `hirebot-fe-verify-ui` |
+
+`feature` and `change` are spec-driven (SDD) and stop the turn three times:
+(1) scope questions, (2) spec questions from `hirebot-fe-clarify`, (3) plan
+approval after `hirebot-fe-analyze`. A vague idea is `assess`.
 
 A request can span types ("check the dashboard and fix it"). Split it: the
 check is one task, the fix is a second task planned from its findings.
@@ -89,31 +123,19 @@ Copy the templates from this skill's `templates/` directory:
 
 ### Register the pack in the repo
 
-So that the next agent follows these rules even when nobody invokes a skill,
-make sure the repo root carries them. Agents such as Codex and Cursor read
-`AGENTS.md` on their own; Claude Code reads `CLAUDE.md`, which imports it.
-Do this on every non-trivial task; it is a no-op when nothing changed.
-
-1. **No `AGENTS.md`** — copy `templates/AGENTS.md` to the repo root.
-2. **`AGENTS.md` without the markers** `<!-- hirebot-fe:start -->` /
-   `<!-- hirebot-fe:end -->` — append the template's marked block (markers
-   included) below the existing content. Add the template's
-   `## Project structure` section too if the file has none.
-3. **Markers present** — replace only the text between them with the
-   template's current block. Never edit anything outside the markers: the
-   repo's own notes and `## Project structure` belong to the repo.
-4. **`CLAUDE.md`** — missing: create it containing the single line
-   `@AGENTS.md`. Present without that line: append `@AGENTS.md` once at the
-   end. Never rewrite the rest of it.
-5. Tell the user in one line what you created or updated, and log it in
-   `progress.md`. These files are left for the user to commit.
+Every non-trivial task: make sure the repo root carries the pack rules
+(`AGENTS.md` block, `CLAUDE.md` import). It is a no-op when nothing changed.
+Procedure: `references/REGISTER-PACK.md`. Read it the first time in a repo, and
+whenever `AGENTS.md` or `CLAUDE.md` is missing or lacks the markers.
 
 ## Phase 3 — Scope interview (no work yet)
 
 Do not read deeply or edit source until scope is agreed. A quick look at the
 repo tree and `package.json` to ask sensible questions is fine.
 
-Ask about every item below that the user has not already answered, in one
+Ask about every item below that the user has not already answered. A
+`change` task inherits the answers from the spec's original task and asks only
+about the change itself. Ask in one
 message, with concrete options and a recommended default:
 
 1. **Target** — which pages, routes, or components? A diff or branch?
@@ -123,7 +145,7 @@ message, with concrete options and a recommended default:
    like, brand constraints, and the three dials from `hirebot-fe-design-ui`
    (variance, motion, density) with your proposed values. If they have no
    references, say you will research and bring 2–3 directions to choose from.
-4. **Data** (`feature`) — does the screen show backend data, and is the
+4. **Data** (`feature`, `change`) — does the screen show backend data, and is the
    backend (or a mock) running locally so every state can be screenshotted?
    Wiring the API itself is the developer's call unless they ask you to.
 5. **Constraints** — no new dependencies? must match an existing design
@@ -145,102 +167,19 @@ Record the questions in `scope.md` before you send them, then end your turn
 and wait. If the user answers "use your defaults", record each default as the
 answer.
 
-## Phase 4 — Research
+## Phases 4–7
 
-Write findings to `research/<slug>.md` as you go:
+Scope is agreed (`scope.md` filled). Read `references/PHASES-4-7.md` now: it
+holds research, plan-then-stop, execute, and report. Do not start Phase 4 from
+memory. In short:
 
-- **Stack** — framework (Vite SPA, Next.js App Router, Remix, other), router,
-  styling (Tailwind version, CSS modules, CSS-in-JS), component library, data
-  layer, form library, test runner. Read `package.json`, the lockfile, and the
-  configs. Every later decision follows what is installed.
-- **Project structure** — read `## Project structure` in the repo `AGENTS.md`.
-  Missing, and the task places or moves code? Run `hirebot-fe-structure-app`
-  now.
-- **Reuse inventory** — list the existing components, hooks, tokens, and API
-  helpers that already do part of the job (`hirebot-fe-coding-standards` rule
-  `reuse-search-first`). This table decides what gets built.
-- **Before screenshots** — for `ui`, `refactor`, `fix`, `verify`: run
-  `hirebot-fe-verify-ui` on the target pages now. These are the "before".
-- **Baseline** — build, lint, type check, tests: exact commands and results.
-- **README gaps** — compare the README with `references/README-STANDARD.md`
-  and with reality (`package.json` scripts, `.env.example`, the folder tree).
-  List what is missing or stale; the docs sync in Phase 7 fixes it.
-- **Design research** (`ui`, `feature`) — per
-  `hirebot-fe-design-ui/references/inspiration.md`.
+4. **Research** — read, measure the baseline, write `research/<slug>.md`.
+5. **Plan, then stop** — write `plan.md`, show it, wait for explicit approval.
+6. **Execute** — one step at a time, tick `plan.md`, log `progress.md`.
+7. **Report** — docs sync, then the report in `agent-tracking/reports/`.
 
-If a tool the plan needs is not installed, record that and ask before
-installing anything.
+`feature` and `change`: the chain in the Quick path above runs inside Phases 4–6.
 
-## Phase 5 — Plan, then stop
-
-Write `plans/<slug>/plan.md` from `templates/plan.md`:
-
-- goal, success criteria, and the skill chain from Phase 1
-- for `ui` and `feature`: the design proposal from `hirebot-fe-design-ui`
-  (design read, dials, 2–3 directions with the recommended one first, and
-  what in the current UI is weak and why)
-- steps as a checkbox list, each small enough to verify on its own
-- files expected to change, and for each new component why no existing one fits
-- the states every data view shows
-  (`hirebot-fe-design-ui/references/loading-states.md`)
-- the README and `AGENTS.md` sections this change will touch
-- pages and widths to screenshot, and the checks that must pass
-- risks and the rollback recipe (revert; any new dependency or env var to undo)
-
-Show the plan (short summary in chat, path to the file) and **wait for
-explicit approval**. "Looks good", "go ahead" count; silence and follow-up
-questions do not. If the user changes the plan, edit `plan.md`, note the change
-in `progress.md`, and ask again.
-
-## Phase 6 — Execute
-
-Before the first edit, load `hirebot-fe-coding-standards`.
-
-Work through the checklist in order. After each step: tick the box, append to
-`progress.md` (what changed, why, commands, result), and run the step's check.
-A red step is fixed before the next one starts.
-
-For UI work, screenshot as you go, not only at the end: build a section, run
-`hirebot-fe-verify-ui` on it, look at every image, fix, repeat. Problems found
-at 375px after the whole page is built cost a rewrite.
-
-Something outside the approved scope (a bug next door, an ugly page you were
-not asked about)? Record it in `progress.md` under "Out-of-scope observations",
-tell the user, and offer ideas. Do not fix it unasked.
-
-Delegate where it helps (`references/SUBAGENTS.md`): parallel searches for
-reusable components, 2–3 design directions explored in parallel, and a
-fresh-context reviewer before the report.
-
-## Phase 7 — Verify, then report
-
-1. **Final verify.** Run `hirebot-fe-verify-ui` on every target page at every
-   agreed width and theme. Read every screenshot. A task is not done while a
-   check fails or a screenshot shows a defect you would not ship.
-2. **Critique.** List in chat what still looks weak and 2–3 concrete ideas to
-   make it better (`hirebot-fe-design-ui`, "Critique and pitch"). The user
-   decides which become follow-up tasks.
-3. **Docs sync.** A developer who clones the repo tomorrow must be able to
-   install, run, and find their way from the README alone. Before the report:
-   - update the README per `references/README-STANDARD.md` — scripts, env
-     variables, setup steps, the structure tree, and the stack must match the
-     code as it now is; create the README if it is missing
-   - update `## Project structure` in `AGENTS.md` if folders changed
-   - refresh the marked skills block in `AGENTS.md` and the `CLAUDE.md`
-     import (Phase 2, "Register the pack")
-   - list every doc change in `progress.md`
-4. **Report.** Write `agent-tracking/reports/<slug>.html` (or `.md`) from
-   `templates/`, never to the OS temp directory, the repo root, a hosted page,
-   or only to chat. Every report has: Summary, Scope and method, Current →
-   Target, Changes (components reused vs added), Verification (commands and
-   checks, before vs after), Screenshots, Docs updated (README and
-   `AGENTS.md` sections changed), Out-of-scope observations and next tasks,
-   and trace links. Follow `references/VISUAL-REPORT.md`.
-
-Set INDEX status `done` with the report link, and give the user a short chat
-summary plus the report path.
-
----
 
 ## Resuming work
 
@@ -251,4 +190,7 @@ moved on since the plan was written, say so and re-confirm the plan.
 ## Status values
 
 `scoping` → `researching` → `awaiting-approval` → `approved` → `in-progress` →
-`done` (or `blocked`, `cancelled` with a one-line reason).
+`done` (or `blocked`, `cancelled` with a one-line reason). Set each when its
+phase starts: `scoping` Phase 2, `researching` Phase 4, `awaiting-approval` when
+the plan is shown, `approved` on the user's explicit OK, `in-progress` Phase 6,
+`done` after the report.

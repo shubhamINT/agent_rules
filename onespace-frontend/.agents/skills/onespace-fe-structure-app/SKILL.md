@@ -83,6 +83,9 @@ diff. The user decides on the picture.
 
 ## Step 4 — Record the decision in `AGENTS.md`
 
+Fewer than about five source files: record Pattern, Layout, and the
+"where does X go" row only; skip the rest.
+
 Write or update `## Project structure` at the end of the repo root `AGENTS.md`:
 
 ```markdown

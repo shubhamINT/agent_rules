@@ -94,6 +94,13 @@ Then ask: **where else does this bug class live?** (the same missing owner
 filter in sibling routes, the same unguarded `None`). Record hits as
 out-of-scope observations; tell the user; do not fix them unasked.
 
+### 4.6 Check the spec
+
+Search `specs/*/spec.md` for the behaviour. Spec states it correctly: the code is
+wrong, and the regression test cites that `AC-n`. Spec wrong or silent: the bug is
+a missing requirement, so stop and run `hirebot-be-change` to edit the spec first,
+then fix. No spec for this code: skip this step.
+
 ## Phase 5 — Plan the fix
 
 In `plan.md`: root cause (link to research), fix at the narrowest responsible

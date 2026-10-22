@@ -50,7 +50,7 @@ Until they are installed, follow the rules in this file.
    inconsistent, broken on mobile — say what and why, and offer 2–3 ideas.
    Do not fix it silently outside the agreed scope.
 5. **Structure first.** Before placing or moving files, read
-   `## Project structure` below. Empty? Run `onespace-fe-structure-app`.
+   the Project structure section below. Empty? Run `onespace-fe-structure-app`.
 6. **Verify by looking.** Every UI change is screenshotted at 375, 768, 1024,
    1440, and 1920 px in light and dark themes with `onespace-fe-verify-ui`, and
    every screenshot is read, before it is called done.
@@ -68,7 +68,10 @@ Until they are installed, follow the rules in this file.
 | Task type | Examples | Skills |
 |-----------|----------|--------|
 | **Trivial** | a question, a typo, a copy change, one class name | Just do it (always-on rules still apply, docs included). No tracking. |
-| **Feature** | "build the team members page", "add a task scheduling UI" | `onespace-fe-workflow` → `onespace-fe-structure-app` → `onespace-fe-design-ui` → `onespace-fe-verify-ui` |
+| **Feature** | "build the team members page", "add a task scheduling UI" | `onespace-fe-workflow` → [`onespace-fe-constitution` once] → `onespace-fe-specify` → `onespace-fe-clarify` → `onespace-fe-plan` → `onespace-fe-tasks` → `onespace-fe-analyze` → approval → `onespace-fe-implement` → `onespace-fe-converge` |
+| **Change** | "make the table filterable", "change how the wizard validates" | `onespace-fe-workflow` → `onespace-fe-change` (edit the spec first) → `onespace-fe-clarify` → `onespace-fe-plan` (delta) → `onespace-fe-tasks` → `onespace-fe-analyze` → approval → `onespace-fe-implement` → `onespace-fe-converge` |
+| **Assess** | "should we build X", "is this worth it", a vague idea | `onespace-fe-workflow` → `onespace-fe-assess` → `go` / `needs-clarification` / `kill` |
+| **Constitution** | "set up SDD", "project principles" | `onespace-fe-workflow` → `onespace-fe-constitution` |
 | **UI** | "redesign the dashboard", "make it look premium", "fix mobile layout", "add skeletons", "add animations" | `onespace-fe-workflow` → `onespace-fe-design-ui` → `onespace-fe-verify-ui` |
 | **Refactor** | "clean up components", "too much duplicate code", "make it reusable" | `onespace-fe-workflow` → `onespace-fe-structure-app` → `onespace-fe-verify-ui` |
 | **Structure** | "organise the src folder", "where should this go" | `onespace-fe-workflow` → `onespace-fe-structure-app` |
@@ -79,6 +82,31 @@ Until they are installed, follow the rules in this file.
 Unsure whether a task is trivial? Treat it as non-trivial. Touching more than
 one component, any layout, any data fetching, or any shared component is never
 trivial.
+
+### Specs (spec-driven development)
+
+`feature` and `change` tasks are spec-driven. Files, all committed with the code:
+
+- `specs/constitution.md` — project principles, each with a yes/no gate question
+  (`onespace-fe-constitution`).
+- `specs/<NNN-topic>/spec.md` — what and why, numbered acceptance criteria
+  (`onespace-fe-specify`, edited first by `onespace-fe-change`).
+- `specs/<NNN-topic>/plan.md` — the durable design (`onespace-fe-plan`).
+
+Order: spec, then plan, then tasks, then analysis, then user approval, then
+code, then converge. Edit the spec first, never the code first. Done means
+`onespace-fe-converge` returned `Converged`. Refactors, audits, security reviews,
+debugging, and test work change no behaviour and need no spec.
+
+### Guard
+
+An edit guard (a Claude Code hook, `onespace-fe-workflow/scripts/sdd-hook.sh`) and a validator
+(`onespace-fe-workflow/scripts/sdd-check.sh`) back these rules. A source edit needs an approved
+task row in `agent-tracking/INDEX.md`; a `feature` or `change` task also needs its
+spec first. You may not stop mid-implementation before `Verdict: Converged` is in
+`progress.md`. When the guard says no, do what its message says. Never edit the
+hook, its config, or the scripts, and never set `SDD_GUARD`. CI runs
+`sdd-check.sh ci` on the committed files, so a skipped step fails the build.
 
 ## 3. The non-trivial workflow
 
@@ -114,6 +142,11 @@ Follow `onespace-fe-workflow`. In short:
     lockfiles.
 11. **Licence header on every new source file** (`onespace-fe-busl-licence-compliance`).
     New dependency or asset? Check its licence first; GPL/AGPL blocks the merge.
+12. **Parallel agents share one board.** When other agents work here too, join
+    `agent-tracking/board/` with `onespace-fe-workflow/scripts/board.sh`: claim a
+    task and lock its files before editing, never wait by re-reading code, and
+    `leave` when done. The last agent out removes the board
+    (`onespace-fe-workflow/references/PARALLEL-AGENTS.md`).
 
 ## 5. Skill index
 
@@ -121,6 +154,16 @@ Follow `onespace-fe-workflow`. In short:
 |-------|------|----------|
 | `onespace-fe-coding-standards` | always on | Writing, changing, or judging any React code |
 | `onespace-fe-workflow` | always on | Any non-trivial task: record, scope, plan, approve, verify, docs, report |
+| `onespace-fe-constitution` | task | Creating or amending `specs/constitution.md` |
+| `onespace-fe-assess` | task | Deciding go / needs-clarification / kill for an idea before any spec |
+| `onespace-fe-specify` | task | Writing the spec for a new page, flow, or widget |
+| `onespace-fe-change` | task | Changing an existing page, flow, or widget: spec first |
+| `onespace-fe-clarify` | task | Resolving open questions in a spec |
+| `onespace-fe-plan` | task | Writing the durable design plan for a spec |
+| `onespace-fe-tasks` | task | Turning spec and plan into the test-first checklist |
+| `onespace-fe-analyze` | task | Read-only consistency check before approval |
+| `onespace-fe-implement` | task | Building from the approved checklist |
+| `onespace-fe-converge` | task | Checking code against the spec; verdict `Converged` |
 | `onespace-fe-busl-licence-compliance` | always on | Any new file, new repo, new dependency, font, icon set, or image |
 | `onespace-fe-design-ui` | task | Designing, redesigning, polishing, animating, loading states, responsive layout; critiquing UI |
 | `onespace-fe-structure-app` | task | Detecting, choosing, recording, applying the folder structure |

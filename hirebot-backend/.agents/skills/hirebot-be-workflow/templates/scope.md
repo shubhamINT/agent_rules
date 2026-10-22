@@ -1,6 +1,6 @@
 # Scope — <slug>
 
-- **Type:** feature | refactor | audit | security | test
+- **Type:** feature | change | refactor | audit | security | test | debug
 - **Requested by:** <name/role>
 - **Date:** YYYY-MM-DD
 
@@ -19,6 +19,7 @@
 | Success criteria | |
 | Report format (HTML / MD) | HTML |
 | Severity cut-off | all |
+| Spec (feature / change) | specs/<NNN-topic>/spec.md |
 | Type-specific answers | |
 
 ## Assumptions confirmed with the user

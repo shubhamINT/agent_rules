@@ -59,7 +59,7 @@ Always-on behaviour:
    refactoring). Record it. Do not silently fix anything outside the agreed
    scope; offer a follow-up task. Report security holes immediately.
 4. **Structure first.** Before placing or moving code, read the
-   `## Project structure` section at the end of this file. If it is empty, run
+   the Project structure section at the end of this file. If it is empty, run
    `onespace-be-structure-service`: detect the current structure, confirm it with the user,
    and record it there.
 5. **Help the user understand.** Explain decisions and findings so a developer
@@ -75,7 +75,10 @@ Always-on behaviour:
 | Task type | Examples | Skills |
 |-----------|----------|--------|
 | **Trivial** | answer a question, fix a typo, rename one variable, explain code | Just do it (always-on rules still apply, radar included). No tracking. |
-| **Feature** | "add an endpoint", "support X", "integrate Y" | `onespace-be-workflow` → `onespace-be-build-feature` |
+| **Feature** | "add an endpoint", "support X", "integrate Y" | `onespace-be-workflow` → [`onespace-be-constitution` once] → `onespace-be-specify` → `onespace-be-clarify` → `onespace-be-plan` → `onespace-be-tasks` → `onespace-be-analyze` → approval → `onespace-be-implement` → `onespace-be-converge` |
+| **Change** | "limit it to 10k rows", "change how X works", "drop support for Y" | `onespace-be-workflow` → `onespace-be-change` (edit the spec first) → `onespace-be-clarify` → `onespace-be-plan` (delta) → `onespace-be-tasks` → `onespace-be-analyze` → approval → `onespace-be-implement` → `onespace-be-converge` |
+| **Assess** | "should we build X", "is this worth it", a vague idea | `onespace-be-workflow` → `onespace-be-assess` → `go` / `needs-clarification` / `kill` |
+| **Constitution** | "set up SDD", "project principles" | `onespace-be-workflow` → `onespace-be-constitution` |
 | **Refactor** | "clean this up", "this code is a mess", "restructure", "reduce duplication" | `onespace-be-workflow` → `onespace-be-refactor-code` |
 | **Code audit** | "review this code", "check for bad code", "find bugs", "review what the AI wrote" | `onespace-be-workflow` → `onespace-be-audit-code` |
 | **Security audit** | "security audit", "find vulnerabilities", "is this safe", "OWASP check" | `onespace-be-workflow` → `onespace-be-audit-security` |
@@ -87,6 +90,31 @@ Always-on behaviour:
 Unsure whether a task is trivial? Treat it as non-trivial. A change that touches
 more than one file, any trust boundary (auth, input parsing, external calls,
 secrets), or any public interface is never trivial.
+
+### Specs (spec-driven development)
+
+`feature` and `change` tasks are spec-driven. Files, all committed with the code:
+
+- `specs/constitution.md` — project principles, each with a yes/no gate question
+  (`onespace-be-constitution`).
+- `specs/<NNN-topic>/spec.md` — what and why, numbered acceptance criteria
+  (`onespace-be-specify`, edited first by `onespace-be-change`).
+- `specs/<NNN-topic>/plan.md` — the durable design (`onespace-be-plan`).
+
+Order: spec, then plan, then tasks, then analysis, then user approval, then
+code, then converge. Edit the spec first, never the code first. Done means
+`onespace-be-converge` returned `Converged`. Refactors, audits, security reviews,
+debugging, and test work change no behaviour and need no spec.
+
+### Guard
+
+An edit guard (a Claude Code hook, `onespace-be-workflow/scripts/sdd-hook.sh`) and a validator
+(`onespace-be-workflow/scripts/sdd-check.sh`) back these rules. A source edit needs an approved
+task row in `agent-tracking/INDEX.md`; a `feature` or `change` task also needs its
+spec first. You may not stop mid-implementation before `Verdict: Converged` is in
+`progress.md`. When the guard says no, do what its message says. Never edit the
+hook, its config, or the scripts, and never set `SDD_GUARD`. CI runs
+`sdd-check.sh ci` on the committed files, so a skipped step fails the build.
 
 ## 3. The non-trivial workflow (mandatory)
 
@@ -117,7 +145,9 @@ Every code change ships in small reversible steps with a concrete rollback
 **Use subagents where they add independence or parallelism**
 (`onespace-be-workflow/references/SUBAGENTS.md`): read-only `investigator`s for
 audit fan-out and debugging hypotheses, a `test-writer` that writes tests from
-the contract, and a fresh-context `reviewer` before every report. Brief a
+the contract, and a fresh-context `reviewer` before every report (a separate
+pass when the host has no subagents; a self-pass is enough for a diff under
+about 50 lines). Brief a
 general-purpose subagent with the role text from `SUBAGENTS.md`. Verify what
 they return.
 
@@ -149,6 +179,11 @@ they return.
 11. **Do not reformat code you did not otherwise change.** Keep diffs reviewable.
 12. **No git side effects unless asked.** Do not commit, branch, push, or delete
     lockfiles. Leave changes in the working tree for the user to review.
+12. **Parallel agents share one board.** When other agents work here too, join
+    `agent-tracking/board/` with `onespace-be-workflow/scripts/board.sh`: claim a
+    task and lock its files before editing, never wait by re-reading code, and
+    `leave` when done. The last agent out removes the board
+    (`onespace-be-workflow/references/PARALLEL-AGENTS.md`).
 
 ## 5. Language baselines
 
@@ -177,6 +212,16 @@ indexed (enforced by tool / rule / OneSpace override) in
 | `onespace-be-coding-standards` | always on | Writing, changing, or judging any code |
 | `onespace-be-busl-licence-compliance` | always on | Any new file, new repo, new dependency |
 | `onespace-be-workflow` | always on | Any non-trivial task: record, scope, plan, approve, report |
+| `onespace-be-constitution` | task | Creating or amending `specs/constitution.md` |
+| `onespace-be-assess` | task | Deciding go / needs-clarification / kill for an idea before any spec |
+| `onespace-be-specify` | task | Writing the spec for a new feature |
+| `onespace-be-change` | task | Changing an existing feature: spec first |
+| `onespace-be-clarify` | task | Resolving open questions in a spec |
+| `onespace-be-plan` | task | Writing the durable design plan for a spec |
+| `onespace-be-tasks` | task | Turning spec and plan into the test-first checklist |
+| `onespace-be-analyze` | task | Read-only consistency check before approval |
+| `onespace-be-implement` | task | Building from the approved checklist |
+| `onespace-be-converge` | task | Checking code against the spec; verdict `Converged` |
 | `onespace-be-build-feature` | task | Building new behaviour |
 | `onespace-be-refactor-code` | task | Changing structure without changing behaviour; architecture review |
 | `onespace-be-audit-code` | task | Finding bugs, bad code, weak tests, AI-generated-code failures |

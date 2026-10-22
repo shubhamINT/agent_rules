@@ -18,22 +18,22 @@
     {
       "name": "onespace-backend",
       "source": "./onespace-backend",
-      "description": "OneSpace backend rules (Python + Node.js): workflow, system design, coding standards, refactoring, code and security audits, debugging, tests with subagents, structure, health endpoint, BUSL licence."
+      "description": "OneSpace backend rules (Python + Node.js): workflow, spec-driven development, system design, coding standards, refactoring, code and security audits, debugging, tests with subagents, structure, health endpoint, BUSL licence."
     },
     {
       "name": "hirebot-backend",
       "source": "./hirebot-backend",
-      "description": "HireBot backend rules (Python + Node.js): workflow, system design, coding standards, refactoring, code and security audits, debugging, tests with subagents, structure, health endpoint."
+      "description": "HireBot backend rules (Python + Node.js): workflow, spec-driven development, system design, coding standards, refactoring, code and security audits, debugging, tests with subagents, structure, health endpoint."
     },
     {
       "name": "hirebot-frontend",
       "source": "./hirebot-frontend",
-      "description": "HireBot frontend rules (React + TypeScript): workflow, coding standards, premium responsive UI design with loading states, folder structure, screenshot verification, evidence-first UI debugging; keeps README and AGENTS.md current."
+      "description": "HireBot frontend rules (React + TypeScript): workflow, spec-driven development, coding standards, premium responsive UI design with loading states, folder structure, screenshot verification, evidence-first UI debugging; keeps README and AGENTS.md current."
     },
     {
       "name": "onespace-frontend",
       "source": "./onespace-frontend",
-      "description": "OneSpace frontend rules (React + TypeScript): workflow, coding standards, premium responsive UI design with loading states, folder structure, screenshot verification, evidence-first UI debugging, design image to UI with pixel-diff matching, BUSL licence; keeps README and AGENTS.md current."
+      "description": "OneSpace frontend rules (React + TypeScript): workflow, spec-driven development, coding standards, premium responsive UI design with loading states, folder structure, screenshot verification, evidence-first UI debugging, design image to UI with pixel-diff matching, BUSL licence; keeps README and AGENTS.md current."
     }
   ]
 }

@@ -36,9 +36,20 @@ hirebot-frontend/
     │  always on
     ├── hirebot-fe-coding-standards/           # reuse-first, minimal React; 19 impact-ranked rules in references/rules/
     ├── hirebot-fe-workflow/                   # record → scope → plan → approve → execute → verify → report
-    │   ├── references/                        # VISUAL-REPORT, SUBAGENTS, README-STANDARD, TOKEN-ECONOMY
-    │   └── templates/                         # AGENTS.md (repo rules block), INDEX, scope, research, plan, progress, report
+    │   ├── references/                        # VISUAL-REPORT, SUBAGENTS, README-STANDARD, TOKEN-ECONOMY, PARALLEL-AGENTS
+    │   ├── templates/                         # AGENTS.md (repo rules block), INDEX, scope, research, plan, progress, report
+    │   └── scripts/                           # board.sh (multi-agent board), sdd-check.sh (validator), sdd-hook.sh (edit guard), install-hook.sh, test-sdd.sh
     │  tasks
+    ├── hirebot-fe-constitution/              # specs/constitution.md: principles with yes/no gate questions; amend with approval
+    ├── hirebot-fe-assess/                    # idea to verdict: go / needs-clarification / kill
+    ├── hirebot-fe-specify/                   # new feature: specs/<NNN-topic>/spec.md, numbered acceptance criteria
+    ├── hirebot-fe-change/                    # existing feature: edit the spec first, then plan the delta
+    ├── hirebot-fe-clarify/                   # resolve open questions in a spec
+    ├── hirebot-fe-plan/                      # durable design plan with constitution check
+    ├── hirebot-fe-tasks/                     # test-first checklist, each step mapped to an AC, [P] for parallel
+    ├── hirebot-fe-analyze/                   # read-only check: constitution, spec, plan, tasks agree
+    ├── hirebot-fe-implement/                 # build from the approved checklist, test first
+    ├── hirebot-fe-converge/                  # code vs spec table; Converged / Not converged loop
     ├── hirebot-fe-design-ui/                  # design read + dials, inspiration research, directions, critique and ideas
     │   └── references/                        # inspiration, anti-patterns, tokens, responsive, motion, libraries, loading-states
     ├── hirebot-fe-structure-app/              # detect / choose / record / apply the folder layout
@@ -84,11 +95,136 @@ another task, registers the pack in the repo and ends with the docs sync.
 The block's source is `hirebot-fe-workflow/templates/AGENTS.md`; the skills
 carry it, so plugin and `npx skills` installs get it too.
 
+## Which skill for which task
+
+You do not have to name a skill. Describe the task; `hirebot-fe-workflow` classifies it and runs
+the chain. Skill names below drop the `hirebot-fe-` prefix.
+
+| You say | Task type | Skills, in order | You get |
+|---------|-----------|------------------|---------|
+| "build the team members page", "add a task scheduling UI" | `feature` | `workflow` → `constitution` (once) → `specify` → `clarify` → `plan` → `tasks` → `analyze` → you approve → `implement` → `converge`; `structure-app`, `design-ui`, `verify-ui` run inside | `specs/<NNN>/spec.md` and `plan.md`, the tracking record, screenshots, a report |
+| "make the table filterable", "change how the wizard validates" | `change` | `workflow` → `change` → `clarify` → `plan` (delta) → `tasks` → `analyze` → you approve → `implement` → `converge` | the spec edited first with a change-log row, then code, screenshots, a report |
+| "should we build X?", a fuzzy idea | `assess` | `workflow` → `assess` | `specs/assessments/<slug>.md` with a verdict: go, needs-clarification, or kill |
+| "set up SDD", "project principles" | `constitution` | `workflow` → `constitution` | `specs/constitution.md` |
+| "redesign the dashboard", "make it look premium", "fix mobile layout" | `ui` | `workflow` → `design-ui` → `verify-ui` | restyled UI, screenshots at five widths, a report; no spec |
+| "clean up", "extract shared components" | `refactor` | `workflow` → `structure-app` → `verify-ui` | no visual change, before and after screenshots; no spec |
+| "where should this go?", "structure this app" | `structure` | `workflow` → `structure-app` | the recorded `## Project structure` in `AGENTS.md` |
+| "check how it looks on mobile", "visual QA" | `verify` | `workflow` → `verify-ui` → critique from `design-ui` | screenshots and findings; changes nothing |
+| "blank screen", "state not updating", console error, slow page | `fix` | `workflow` → `debug` → `verify-ui`; if the spec was wrong or silent, `change` first | a root-cause fix, a regression test, screenshot proof |
+
+`hirebot-fe-coding-standards` and `hirebot-fe-workflow` are always on. A trivial edit (a
+question, a typo) skips the workflow, but with the edit guard installed it still
+needs one `trivial` row in `agent-tracking/INDEX.md`.
+
+## Build with SDD (spec-driven development)
+
+`agent-tracking/` is history. For new behaviour the agent also keeps durable
+files that say what the system does now. All are committed with the code.
+
+| File | Holds | Skill |
+|------|-------|-------|
+| `specs/constitution.md` | project principles, each with a yes/no gate question | `hirebot-fe-constitution` |
+| `specs/<NNN-topic>/spec.md` | what and why, numbered acceptance criteria (`AC-1`, ...), change log | `hirebot-fe-specify`, `hirebot-fe-change` |
+| `specs/<NNN-topic>/plan.md` | the design: constitution check, data, contracts, decisions, rollback | `hirebot-fe-plan` |
+| `specs/assessments/<slug>.md` | idea verdict: `go`, `needs-clarification`, `kill` | `hirebot-fe-assess` |
+
+**New feature:** `hirebot-fe-specify` → `hirebot-fe-clarify` → `hirebot-fe-plan` → `hirebot-fe-tasks` →
+`hirebot-fe-analyze` → you approve → `hirebot-fe-implement` → `hirebot-fe-converge`.
+
+**Change to an existing feature:** `hirebot-fe-change` edits the spec first and logs it,
+then `hirebot-fe-clarify` → `hirebot-fe-plan` (only the delta) → `hirebot-fe-tasks` → `hirebot-fe-analyze` →
+you approve → `hirebot-fe-implement` → `hirebot-fe-converge`. Code is never edited first.
+
+**Bug:** `hirebot-fe-debug` checks the spec. The spec states the behaviour: the
+regression test cites that `AC-n`. The spec was wrong or silent: it routes to
+`hirebot-fe-change` first.
+
+**Done** means `hirebot-fe-converge` returned `Converged`: every `AC-n` has passing
+evidence, no code does what the spec never asked for, the constitution holds.
+After three rounds without it, the agent stops and asks you.
+
+No spec for refactors, audits, security reviews, debugging, or test work, which
+change no behaviour. Nothing creates a branch or commits; review the specs with
+the code.
+
+## Enforcement (hooks, validator, CI)
+
+Skills are advice; these make the workflow hard to skip, whichever model runs.
+
+| Piece | Where | What it does |
+|-------|-------|--------------|
+| `sdd-check.sh` | `hirebot-fe-workflow/scripts/` | `next`, `spec`, `analyze`, `converge`, `status`, `ci`: deterministic checks on the spec, plan, task, and INDEX files. Exit 1 on CRITICAL or HIGH. Used by the skills and by CI. |
+| `sdd-hook.sh` | `hirebot-fe-workflow/scripts/` | Claude Code hook. Blocks a source edit without an approved task (a `feature` or `change` also needs its spec first). Blocks stopping an in-progress `feature` or `change` before `Verdict: Converged`. |
+| `hooks/hooks.json` | plugin root | Wires the hook up. Installed with the plugin; nothing to configure. |
+| `sdd-check.yml` | `hirebot-fe-workflow/templates/` | Sample GitHub Actions job running `sdd-check.sh ci`. |
+| `install-hook.sh` | `hirebot-fe-workflow/scripts/` | Registers the hook in `.claude/settings.json` for `npx skills` and manual installs. |
+| `test-sdd.sh` | `hirebot-fe-workflow/scripts/` | Self-check for the two scripts: `sh scripts/test-sdd.sh`. |
+
+**Without the plugin** (`npx skills` or manual copy) the hook is not installed. Run
+the installer once, from the project root, as you (not the agent; it edits
+`.claude/settings.json`):
+
+```bash
+sh .claude/skills/hirebot-fe-workflow/scripts/install-hook.sh            # npx skills with Claude Code
+sh .agents/skills/hirebot-fe-workflow/scripts/install-hook.sh            # manual copy
+sh .claude/skills/hirebot-fe-workflow/scripts/install-hook.sh --dry-run  # show the result, write nothing
+```
+
+It merges the `PreToolUse` and `Stop` entries into `.claude/settings.json`: other
+settings and hooks stay, an invalid file is left untouched, the old file is backed
+up as `settings.json.bak-<time>`, and a second run changes nothing. It needs
+`python3`, and it refuses to run from a skills folder outside the project (a plugin
+install already has the hook). Prefer to edit by hand? Add the same entries:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [{ "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+      "hooks": [{ "type": "command", "command": "sh",
+        "args": ["-c", "[ -f \"$1\" ] && exec sh \"$1\"; exit 0", "sdd-hook",
+                  "${CLAUDE_PROJECT_DIR}/.claude/skills/hirebot-fe-workflow/scripts/sdd-hook.sh"] }] }],
+    "Stop": [{ "hooks": [{ "type": "command", "command": "sh",
+        "args": ["-c", "[ -f \"$1\" ] && exec sh \"$1\"; exit 0", "sdd-hook",
+                  "${CLAUDE_PROJECT_DIR}/.claude/skills/hirebot-fe-workflow/scripts/sdd-hook.sh"] }] }]
+  }
+}
+```
+
+(Use `.agents/skills/` in the path for a manual copy. Write `${CLAUDE_PROJECT_DIR}` with
+braces: Claude Code does not expand the bare form. The `sh -c` wrapper makes a missing
+script a no-op instead of a block.) Check with `/hooks` in Claude Code that both entries show up. The validator works
+without the hook: `sh <skills dir>/hirebot-fe-workflow/scripts/sdd-check.sh status`. For CI, copy
+`hirebot-fe-workflow/templates/sdd-check.yml` to `.github/workflows/`; it needs the scripts in the
+repo (`npx skills` or manual copy).
+
+**Limits.**
+- The hook sees `Write`, `Edit`, `MultiEdit`, and `NotebookEdit`. Source written through Bash
+  (`sed -i`, redirects) is not seen; CI and the Stop hook catch the outcome.
+- A model can add its own INDEX row to pass the guard. Rows are an audit trail, and
+  `sdd-check.sh ci` re-checks every approved row against its plan and spec.
+- Hooks run only in Claude Code. Codex and Cursor read `AGENTS.md`; give them CI.
+- Stop continues the turn at most eight times in a row, then lets it end.
+- Managed settings with `allowManagedHooksOnly` disable plugin hooks.
+- Trivial edits need one INDEX row (type `trivial`, status `in-progress`).
+- Maintaining this pack with its own plugin installed: set `SDD_GUARD=off` in your
+  shell. Only you can set it; the hook inherits Claude's environment, not the model's
+  Bash calls.
+
 ## Install into a frontend repository
 
-1. **Install the skills.**
+1. **Install the skills.** The three methods install the same skills. They
+   differ in where the files go and in whether the edit-guard hook comes with them.
 
-   - **Claude Code plugin**:
+   | | Claude Code plugin | `npx skills` | Manual copy |
+   |---|---|---|---|
+   | Agents | Claude Code | Claude Code, Codex, Cursor, others | any agent that reads `.agents/skills/` |
+   | Skills land in | the plugin cache, not your repo | your repo: `.claude/skills/` for Claude Code, `.agents/skills/` for agents that use the shared folder (the CLI prints the exact paths) | `<repo>/.agents/skills/` |
+   | Scripts (`sdd-check.sh`, `sdd-hook.sh`, `board.sh`, `shoot.mjs`, `capture.mjs`) | come with the skills | come with the skills, inside each skill's `scripts/` | come with the skills |
+   | Edit-guard hook | **automatic** (`hooks/hooks.json`) | **not installed**: run `install-hook.sh` once (see Enforcement) | **not installed**: run `install-hook.sh` once |
+   | CI check (`sdd-check.sh ci`) | scripts are not in your repo: copy `hirebot-fe-workflow/scripts/` in, or use another method | works: scripts are in the repo | works |
+   | Update | `/plugin marketplace update int-agent-rules` or auto-update | `npx skills update` | re-copy |
+
+   - **Claude Code plugin** (hooks included):
 
      ```
      /plugin marketplace add shubhamINT/agent_rules
@@ -97,13 +233,18 @@ carry it, so plugin and `npx skills` installs get it too.
 
      Skills appear as `hirebot-frontend:hirebot-fe-<skill>`.
 
-   - **`npx skills`**:
+   - **`npx skills`**. Install the whole pack, because skills load each other and
+     one skill alone breaks links:
 
      ```bash
-     npx skills add shubhamINT/agent_rules --list
-     npx skills add shubhamINT/agent_rules                 # interactive picker: select all hirebot-fe-* skills
-     npx skills update
+     npx skills add shubhamINT/agent_rules -a claude-code -s hirebot-fe-analyze hirebot-fe-assess hirebot-fe-change hirebot-fe-clarify hirebot-fe-coding-standards hirebot-fe-constitution hirebot-fe-converge hirebot-fe-debug hirebot-fe-design-ui hirebot-fe-implement hirebot-fe-plan hirebot-fe-specify hirebot-fe-structure-app hirebot-fe-tasks hirebot-fe-verify-ui hirebot-fe-workflow
+     npx skills add shubhamINT/agent_rules --list     # or pick interactively and select every hirebot-fe-* skill
+     npx skills update                                 # pull the latest version
      ```
+
+     Drop `-a claude-code` to choose agents interactively; add `-g` for a global
+     install. Then commit the new skills folder and register the edit-guard hook:
+     `sh .claude/skills/hirebot-fe-workflow/scripts/install-hook.sh` (see Enforcement).
 
    - **Manual copy**:
 
@@ -119,9 +260,6 @@ carry it, so plugin and `npx skills` installs get it too.
    curl -o AGENTS.md https://raw.githubusercontent.com/shubhamINT/agent_rules/master/hirebot-frontend/.agents/skills/hirebot-fe-workflow/templates/AGENTS.md
    echo "@AGENTS.md" >> CLAUDE.md
    ```
-
-   Install the whole pack: skills load each other, so one skill alone breaks
-   links.
 
 3. **For screenshots**, the repo needs Playwright as a dev dependency. The
    agent asks before installing it:
@@ -144,6 +282,28 @@ User: "the jobs page looks bad on mobile, make it premium"
   7. Final verify (all widths, both themes), critique + ideas in chat
   8. Docs sync: README (run, scripts, env, structure) and AGENTS.md brought up to date
   9. Report → reports/2026-09-26-ui-jobs-page.html with before/after screenshots
+```
+
+A spec-driven task (`feature` or `change`):
+
+```
+User: "add a team members page"
+  1. Agent classifies → feature; INDEX row, scope.md; asks scope questions        (stop 1)
+  2. specs/constitution.md missing → hirebot-fe-constitution proposes principles, you confirm
+  3. hirebot-fe-specify writes specs/001-team-members/spec.md (AC-1..n, states, widths) and
+     asks the open questions it could not answer                                   (stop 2)
+  4. hirebot-fe-clarify folds your answers into the spec; sdd-check.sh spec passes; status approved
+  5. hirebot-fe-plan writes specs/001-team-members/plan.md (design, reuse inventory, gate answers)
+     hirebot-fe-tasks writes the test-first checklist; hirebot-fe-analyze runs sdd-check.sh analyze
+     Agent shows spec + design + checklist and STOPS for approval                 (stop 3)
+  6. On approval the plan is marked approved; the edit guard now allows source edits
+  7. hirebot-fe-implement builds test first with design-ui; hirebot-fe-converge fills the evidence
+     table (tests and screenshots), runs sdd-check.sh converge, writes
+     "Verdict: Converged", then the report
+
+User later: "make the table filterable"
+  1. hirebot-fe-change edits spec.md first (new AC, change-log row), then the same chain
+     plans and builds only the delta
 ```
 
 ## What the tracking folder looks like

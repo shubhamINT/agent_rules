@@ -1,6 +1,6 @@
 # <Report title> — <slug>
 
-- **Type:** feature | refactor | audit | security | test
+- **Type:** feature | change | refactor | audit | security | test
 - **Date:** YYYY-MM-DD
 - **Status:** done
 - **Trace:** [scope](../plans/<slug>/scope.md) · [research](../research/<slug>.md) · [plan](../plans/<slug>/plan.md) · [progress](../plans/<slug>/progress.md)
@@ -9,6 +9,7 @@
 
 <what was asked, what was done, headline result in 3–5 lines>
 
+<!-- audit / security only: keep this table; delete it for every other type -->
 | Critical | High | Medium | Low | Info |
 |----------|------|--------|-----|------|
 | 0 | 0 | 0 | 0 | 0 |
@@ -68,6 +69,7 @@ flowchart LR
 <!-- | Change | Named refactoring | Files | Reason | -->
 <!-- feature: replace with what was built, interface, tests added -->
 
+<!-- audit / security only: delete everything from here to the next ## heading otherwise -->
 ### Finding details
 
 #### <ID> — <title>
@@ -83,6 +85,13 @@ flowchart LR
 
 - **Impact:** 
 - **Recommendation:** 
+
+## 5b. Spec vs code (part of Findings or Changes)
+
+<!-- feature / change only: converge table (hirebot-be-converge). Else delete. -->
+| AC | Test | Code | Status |
+|----|------|------|--------|
+|    |      |      | met / partial / missing |
 
 ## 6. Verification
 

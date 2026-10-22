@@ -16,11 +16,11 @@ stack. Every pack installs as a Claude Code plugin or with `npx skills`.
 
 Each pack's README lists its skills and explains how its workflow runs.
 
-The `core-*` packs also carry the full spec-driven development (SDD) flow:
+Every pack carries the full spec-driven development (SDD) flow:
 constitution, assess, specify, change, clarify, plan, tasks, analyze, implement,
 converge. Persistent specs live in `specs/` and are edited first on every
-behaviour change. See each core pack's README. The project packs get it in a
-later pass.
+behaviour change. A hook blocks source edits without an approved task, and
+`sdd-check.sh ci` checks the same rules in CI. See each pack's README.
 
 Use the `core-*` packs for any project. The project packs add project-specific
 rules on top of the same skills (OneSpace: BUSL-1.1 licence compliance and house

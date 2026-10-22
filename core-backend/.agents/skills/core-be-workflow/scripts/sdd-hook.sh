@@ -10,7 +10,7 @@
 [ "${SDD_GUARD:-}" = off ] && exit 0
 command -v python3 >/dev/null 2>&1 || { echo "sdd-hook: python3 missing, guard off" >&2; exit 0; }
 here=$(cd "$(dirname "$0")" && pwd)
-pfx=$(basename "$(dirname "$here")"); pfx=${pfx%-workflow}   # core-be or core-fe
+pfx=$(basename "$(dirname "$here")"); pfx=${pfx%-workflow}   # e.g. onespace-be
 in=$(cat)
 field() { printf '%s' "$in" | python3 -c 'import json,sys
 d=json.load(sys.stdin)

@@ -103,6 +103,9 @@ picture, not on a paragraph.
 
 ## Step 4 — Record the decision in `AGENTS.md`
 
+Fewer than about five source files: record Pattern, Layout, and the
+"where does X go" row only; skip the rest.
+
 Write (or update) a `## Project structure` section at the end of the repo root
 `AGENTS.md`. Keep it short and concrete — it is read at the start of every task:
 

@@ -4,6 +4,10 @@ The README is part of the deliverable, not an afterthought. **A structure,
 endpoint, or configuration change is not complete until the README reflects it
 in the same change.**
 
+A section with nothing to say is omitted, never faked: no envelope, Docker, or
+Licence section for a repo that has none. Note `N/A` once in `research/<slug>.md`
+under README gaps.
+
 Required sections, in order:
 
 1. **Title + what it is** — one paragraph, plus the core model/concepts if the

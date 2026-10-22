@@ -79,7 +79,8 @@ The subagent knows nothing you have not written down. Every brief contains:
 5. **Output shape**: what to return, and whether to append to
    `research/<slug>.md` (give it a heading to write under).
 
-Parallel agents that edit files must own disjoint paths. When in doubt, only
+Parallel agents that edit files must own disjoint paths; give each one the
+board loop from `PARALLEL-AGENTS.md` in its brief. When in doubt, only
 one agent edits at a time.
 
 ## Output — compressed, technical only

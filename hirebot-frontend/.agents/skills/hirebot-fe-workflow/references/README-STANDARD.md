@@ -6,6 +6,10 @@ reflects it in the same change.** The test: a developer who has never seen the
 repo can clone it, install, run it against a backend, and find where to add a
 page, using only the README.
 
+A section with nothing to say is omitted, never faked: no Docker or Licence
+section for a repo that has none. Note `N/A` once in `research/<slug>.md` under
+README gaps.
+
 ## Required sections, in order
 
 1. **Title + what it is** — one paragraph: what the app does and for whom.

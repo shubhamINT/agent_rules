@@ -2,6 +2,9 @@
 
 **Status:** awaiting-approval | approved (YYYY-MM-DD, by <name>)
 
+**Spec:** specs/<NNN-topic>/spec.md  <!-- feature / change; else delete -->
+**Covers:** AC-1, AC-2  <!-- feature: every criterion; change: only those it adds or changes -->
+
 ## Goal
 
 <one sentence>
@@ -16,8 +19,8 @@
 
 ## Steps
 
-- [ ] 1. 
-- [ ] 2. 
+- [ ] 1. <!-- AC-n --> 
+- [ ] 2. [P] <!-- AC-n; [P] = independent of other steps -->
 
 ## Files expected to change
 

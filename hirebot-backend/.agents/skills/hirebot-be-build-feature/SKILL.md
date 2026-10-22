@@ -31,9 +31,12 @@ matches the code.
 
 ## Phase 4 — Research
 
-1. **Acceptance criteria** — confirm from scope: inputs, outputs, error cases,
-   who may call it and see what, limits (size, rate, time). Write them as a
-   numbered list in `scope.md`; each becomes at least one test.
+1. **Acceptance criteria** — read them from `specs/<NNN-topic>/spec.md`
+   (`hirebot-be-specify`): inputs, outputs, error cases, who may call it and see
+   what, limits (size, rate, time). Do not copy them into `scope.md`. Each
+   `AC-n` becomes at least one test. No spec yet? Run `hirebot-be-specify` first.
+   This skill supplies the engineering rules; the SDD chain
+   (`hirebot-be-plan`, `hirebot-be-tasks`, `hirebot-be-implement`) calls it.
 2. **Read the neighbourhood** — the repo's recorded structure (`AGENTS.md` →
    `## Project structure`; if missing, run `hirebot-be-structure-service` first), the closest existing
    feature of the same kind (a similar route, a similar upstream client), and its
@@ -104,7 +107,8 @@ approval.
 ## Phase 6b — Self-review before calling it done
 
 Start with a fresh-context review: a `reviewer` subagent (or, without
-subagents, a separate pass reading `plan.md` before the diff) checks the diff
+subagents or for a diff under about 50 lines, a separate pass reading `plan.md`
+before the diff) checks the diff
 against the plan, the design notes, and the items below. Fix or answer every
 finding before the gates.
 

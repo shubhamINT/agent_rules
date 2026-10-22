@@ -58,7 +58,7 @@ Always-on behaviour:
    refactoring). Record it. Do not silently fix anything outside the agreed
    scope; offer a follow-up task. Report security holes immediately.
 4. **Structure first.** Before placing or moving code, read the
-   `## Project structure` section at the end of this file. If it is empty, run
+   the Project structure section at the end of this file. If it is empty, run
    `hirebot-be-structure-service`: detect the current structure, confirm it with the user,
    and record it there.
 5. **Help the user understand.** Explain decisions and findings so a developer
@@ -74,7 +74,10 @@ Always-on behaviour:
 | Task type | Examples | Skills |
 |-----------|----------|--------|
 | **Trivial** | answer a question, fix a typo, rename one variable, explain code | Just do it (always-on rules still apply, radar included). No tracking. |
-| **Feature** | "add an endpoint", "support X", "integrate Y" | `hirebot-be-workflow` → `hirebot-be-build-feature` |
+| **Feature** | "add an endpoint", "support X", "integrate Y" | `hirebot-be-workflow` → [`hirebot-be-constitution` once] → `hirebot-be-specify` → `hirebot-be-clarify` → `hirebot-be-plan` → `hirebot-be-tasks` → `hirebot-be-analyze` → approval → `hirebot-be-implement` → `hirebot-be-converge` |
+| **Change** | "limit it to 10k rows", "change how X works", "drop support for Y" | `hirebot-be-workflow` → `hirebot-be-change` (edit the spec first) → `hirebot-be-clarify` → `hirebot-be-plan` (delta) → `hirebot-be-tasks` → `hirebot-be-analyze` → approval → `hirebot-be-implement` → `hirebot-be-converge` |
+| **Assess** | "should we build X", "is this worth it", a vague idea | `hirebot-be-workflow` → `hirebot-be-assess` → `go` / `needs-clarification` / `kill` |
+| **Constitution** | "set up SDD", "project principles" | `hirebot-be-workflow` → `hirebot-be-constitution` |
 | **Refactor** | "clean this up", "this code is a mess", "restructure", "reduce duplication" | `hirebot-be-workflow` → `hirebot-be-refactor-code` |
 | **Code audit** | "review this code", "check for bad code", "find bugs", "review what the AI wrote" | `hirebot-be-workflow` → `hirebot-be-audit-code` |
 | **Security audit** | "security audit", "find vulnerabilities", "is this safe", "OWASP check" | `hirebot-be-workflow` → `hirebot-be-audit-security` |
@@ -86,6 +89,31 @@ Always-on behaviour:
 Unsure whether a task is trivial? Treat it as non-trivial. A change that touches
 more than one file, any trust boundary (auth, input parsing, external calls,
 secrets), or any public interface is never trivial.
+
+### Specs (spec-driven development)
+
+`feature` and `change` tasks are spec-driven. Files, all committed with the code:
+
+- `specs/constitution.md` — project principles, each with a yes/no gate question
+  (`hirebot-be-constitution`).
+- `specs/<NNN-topic>/spec.md` — what and why, numbered acceptance criteria
+  (`hirebot-be-specify`, edited first by `hirebot-be-change`).
+- `specs/<NNN-topic>/plan.md` — the durable design (`hirebot-be-plan`).
+
+Order: spec, then plan, then tasks, then analysis, then user approval, then
+code, then converge. Edit the spec first, never the code first. Done means
+`hirebot-be-converge` returned `Converged`. Refactors, audits, security reviews,
+debugging, and test work change no behaviour and need no spec.
+
+### Guard
+
+An edit guard (a Claude Code hook, `hirebot-be-workflow/scripts/sdd-hook.sh`) and a validator
+(`hirebot-be-workflow/scripts/sdd-check.sh`) back these rules. A source edit needs an approved
+task row in `agent-tracking/INDEX.md`; a `feature` or `change` task also needs its
+spec first. You may not stop mid-implementation before `Verdict: Converged` is in
+`progress.md`. When the guard says no, do what its message says. Never edit the
+hook, its config, or the scripts, and never set `SDD_GUARD`. CI runs
+`sdd-check.sh ci` on the committed files, so a skipped step fails the build.
 
 ## 3. The non-trivial workflow (mandatory)
 
@@ -116,7 +144,9 @@ Every code change ships in small reversible steps with a concrete rollback
 **Use subagents where they add independence or parallelism**
 (`hirebot-be-workflow/references/SUBAGENTS.md`): read-only `investigator`s for
 audit fan-out and debugging hypotheses, a `test-writer` that writes tests from
-the contract, and a fresh-context `reviewer` before every report. Brief a
+the contract, and a fresh-context `reviewer` before every report (a separate
+pass when the host has no subagents; a self-pass is enough for a diff under
+about 50 lines). Brief a
 general-purpose subagent with the role text from `SUBAGENTS.md`. Verify what
 they return.
 
@@ -147,6 +177,11 @@ they return.
 10. **Do not reformat code you did not otherwise change.** Keep diffs reviewable.
 11. **No git side effects unless asked.** Do not commit, branch, push, or delete
     lockfiles. Leave changes in the working tree for the user to review.
+12. **Parallel agents share one board.** When other agents work here too, join
+    `agent-tracking/board/` with `hirebot-be-workflow/scripts/board.sh`: claim a
+    task and lock its files before editing, never wait by re-reading code, and
+    `leave` when done. The last agent out removes the board
+    (`hirebot-be-workflow/references/PARALLEL-AGENTS.md`).
 
 ## 5. Language baselines
 
@@ -174,6 +209,16 @@ indexed (enforced by tool / rule / HireBot override) in
 |-------|------|----------|
 | `hirebot-be-coding-standards` | always on | Writing, changing, or judging any code |
 | `hirebot-be-workflow` | always on | Any non-trivial task: record, scope, plan, approve, report |
+| `hirebot-be-constitution` | task | Creating or amending `specs/constitution.md` |
+| `hirebot-be-assess` | task | Deciding go / needs-clarification / kill for an idea before any spec |
+| `hirebot-be-specify` | task | Writing the spec for a new feature |
+| `hirebot-be-change` | task | Changing an existing feature: spec first |
+| `hirebot-be-clarify` | task | Resolving open questions in a spec |
+| `hirebot-be-plan` | task | Writing the durable design plan for a spec |
+| `hirebot-be-tasks` | task | Turning spec and plan into the test-first checklist |
+| `hirebot-be-analyze` | task | Read-only consistency check before approval |
+| `hirebot-be-implement` | task | Building from the approved checklist |
+| `hirebot-be-converge` | task | Checking code against the spec; verdict `Converged` |
 | `hirebot-be-build-feature` | task | Building new behaviour |
 | `hirebot-be-refactor-code` | task | Changing structure without changing behaviour; architecture review |
 | `hirebot-be-audit-code` | task | Finding bugs, bad code, weak tests, AI-generated-code failures |
