@@ -16,6 +16,12 @@ stack. Every pack installs as a Claude Code plugin or with `npx skills`.
 
 Each pack's README lists its skills and explains how its workflow runs.
 
+The `core-*` packs also carry the full spec-driven development (SDD) flow:
+constitution, assess, specify, change, clarify, plan, tasks, analyze, implement,
+converge. Persistent specs live in `specs/` and are edited first on every
+behaviour change. See each core pack's README. The project packs get it in a
+later pass.
+
 Use the `core-*` packs for any project. The project packs add project-specific
 rules on top of the same skills (OneSpace: BUSL-1.1 licence compliance and house
 layouts). Install one backend pack and one frontend pack per repo, not a core
@@ -73,9 +79,14 @@ skills, the agent, and the scope (project or global).
 ```bash
 npx skills add shubhamINT/agent_rules --list                    # show all skills
 npx skills add shubhamINT/agent_rules                           # interactive picker
-npx skills add shubhamINT/agent_rules --skill core-be-audit-code -a claude-code
 npx skills add shubhamINT/agent_rules -g                        # global (all projects)
 ```
+
+Install a whole pack, not single skills: skills load each other. The pack READMEs
+give the full command. For Claude Code the files are copied into `.claude/skills/`
+(other agents: `.agents/skills/`). The scripts come with the skills, but the
+edit-guard hook does not: run the pack's `install-hook.sh` once (see the pack README,
+Enforcement). The plugin (Option 1) installs the hook for you.
 
 ### Option 3: Manual copy
 

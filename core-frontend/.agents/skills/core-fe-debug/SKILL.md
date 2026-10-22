@@ -144,6 +144,13 @@ Then ask: **where else does this bug class live?** (the same missing effect
 cleanup in sibling components, the same fixed width in other cards). Record
 hits as out-of-scope observations; tell the user; do not fix them unasked.
 
+### 4.6 Check the spec
+
+Search `specs/*/spec.md` for the behaviour. Spec states it correctly: the code is
+wrong, and the regression test cites that `AC-n`. Spec wrong or silent: the bug is
+a missing requirement, so stop and run `core-fe-change` to edit the spec first,
+then fix. No spec for this code: skip this step.
+
 ## Phase 5 — Plan the fix
 
 In `plan.md`: root cause (link to research), the fix at the narrowest

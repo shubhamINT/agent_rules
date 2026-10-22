@@ -49,7 +49,7 @@ Until they are installed, follow the rules in this file.
    inconsistent, broken on mobile — say what and why, and offer 2–3 ideas.
    Do not fix it silently outside the agreed scope.
 5. **Structure first.** Before placing or moving files, read
-   `## Project structure` below. Empty? Run `core-fe-structure-app`.
+   the Project structure section below. Empty? Run `core-fe-structure-app`.
 6. **Verify by looking.** Every UI change is screenshotted at 375, 768, 1024,
    1440, and 1920 px in light and dark themes with `core-fe-verify-ui`, and
    every screenshot is read, before it is called done.
@@ -67,7 +67,10 @@ Until they are installed, follow the rules in this file.
 | Task type | Examples | Skills |
 |-----------|----------|--------|
 | **Trivial** | a question, a typo, a copy change, one class name | Just do it (always-on rules still apply, docs included). No tracking. |
-| **Feature** | "build the team members page", "add a task scheduling UI" | `core-fe-workflow` → `core-fe-structure-app` → `core-fe-design-ui` → `core-fe-verify-ui` |
+| **Feature** | "build the team members page", "add a task scheduling UI" | `core-fe-workflow` → [`core-fe-constitution` once] → `core-fe-specify` → `core-fe-clarify` → `core-fe-plan` → `core-fe-tasks` → `core-fe-analyze` → approval → `core-fe-implement` → `core-fe-converge` |
+| **Change** | "make the table filterable", "change how the wizard validates" | `core-fe-workflow` → `core-fe-change` (edit the spec first) → `core-fe-clarify` → `core-fe-plan` (delta) → `core-fe-tasks` → `core-fe-analyze` → approval → `core-fe-implement` → `core-fe-converge` |
+| **Assess** | "should we build X", "is this worth it", a vague idea | `core-fe-workflow` → `core-fe-assess` → `go` / `needs-clarification` / `kill` |
+| **Constitution** | "set up SDD", "project principles" | `core-fe-workflow` → `core-fe-constitution` |
 | **UI** | "redesign the dashboard", "make it look premium", "fix mobile layout", "add skeletons", "add animations" | `core-fe-workflow` → `core-fe-design-ui` → `core-fe-verify-ui` |
 | **Refactor** | "clean up components", "too much duplicate code", "make it reusable" | `core-fe-workflow` → `core-fe-structure-app` → `core-fe-verify-ui` |
 | **Structure** | "organise the src folder", "where should this go" | `core-fe-workflow` → `core-fe-structure-app` |
@@ -78,6 +81,31 @@ Until they are installed, follow the rules in this file.
 Unsure whether a task is trivial? Treat it as non-trivial. Touching more than
 one component, any layout, any data fetching, or any shared component is never
 trivial.
+
+### Specs (spec-driven development)
+
+`feature` and `change` tasks are spec-driven. Files, all committed with the code:
+
+- `specs/constitution.md` — project principles, each with a yes/no gate question
+  (`core-fe-constitution`).
+- `specs/<NNN-topic>/spec.md` — what and why, numbered acceptance criteria
+  (`core-fe-specify`, edited first by `core-fe-change`).
+- `specs/<NNN-topic>/plan.md` — the durable design (`core-fe-plan`).
+
+Order: spec, then plan, then tasks, then analysis, then user approval, then
+code, then converge. Edit the spec first, never the code first. Done means
+`core-fe-converge` returned `Converged`. Refactors, audits, security reviews,
+debugging, and test work change no behaviour and need no spec.
+
+### Guard
+
+An edit guard (a Claude Code hook, `core-fe-workflow/scripts/sdd-hook.sh`) and a validator
+(`core-fe-workflow/scripts/sdd-check.sh`) back these rules. A source edit needs an approved
+task row in `agent-tracking/INDEX.md`; a `feature` or `change` task also needs its
+spec first. You may not stop mid-implementation before `Verdict: Converged` is in
+`progress.md`. When the guard says no, do what its message says. Never edit the
+hook, its config, or the scripts, and never set `SDD_GUARD`. CI runs
+`sdd-check.sh ci` on the committed files, so a skipped step fails the build.
 
 ## 3. The non-trivial workflow
 
@@ -130,6 +158,16 @@ Follow `core-fe-workflow`. In short:
 |-------|------|----------|
 | `core-fe-coding-standards` | always on | Writing, changing, or judging any React code |
 | `core-fe-workflow` | always on | Any non-trivial task: record, scope, plan, approve, verify, docs, report |
+| `core-fe-constitution` | task | Creating or amending `specs/constitution.md` |
+| `core-fe-assess` | task | Deciding go / needs-clarification / kill for an idea before any spec |
+| `core-fe-specify` | task | Writing the spec for a new page, flow, or widget |
+| `core-fe-change` | task | Changing an existing page, flow, or widget: spec first |
+| `core-fe-clarify` | task | Resolving open questions in a spec |
+| `core-fe-plan` | task | Writing the durable design plan for a spec |
+| `core-fe-tasks` | task | Turning spec and plan into the test-first checklist |
+| `core-fe-analyze` | task | Read-only consistency check before approval |
+| `core-fe-implement` | task | Building from the approved checklist |
+| `core-fe-converge` | task | Checking code against the spec; verdict `Converged` |
 | `core-fe-design-ui` | task | Designing, redesigning, polishing, animating, loading states, responsive layout; critiquing UI |
 | `core-fe-structure-app` | task | Detecting, choosing, recording, applying the folder structure |
 | `core-fe-verify-ui` | task | Screenshotting pages at every width and theme; visual and accessibility checks |

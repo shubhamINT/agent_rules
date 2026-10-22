@@ -43,8 +43,18 @@ core-frontend/
     ├── core-fe-workflow/                   # record → scope → plan → approve → execute → verify → report
     │   ├── references/                        # VISUAL-REPORT, SUBAGENTS, SAFE-DELIVERY, README-STANDARD, TOKEN-ECONOMY, PARALLEL-AGENTS
     │   ├── templates/                         # AGENTS.md (repo rules block), INDEX, scope, research, plan, progress, report
-    │   └── scripts/board.sh                   # multi-agent board: join, claim, lock, done, leave
+    │   └── scripts/                           # board.sh (multi-agent board), sdd-check.sh (validator), sdd-hook.sh (edit guard), install-hook.sh, test-sdd.sh
     │  tasks
+    ├── core-fe-constitution/              # specs/constitution.md: principles with yes/no gate questions; amend with approval
+    ├── core-fe-assess/                    # idea to verdict: go / needs-clarification / kill
+    ├── core-fe-specify/                   # new feature: specs/<NNN-topic>/spec.md, numbered acceptance criteria
+    ├── core-fe-change/                    # existing feature: edit the spec first, then plan the delta
+    ├── core-fe-clarify/                   # resolve open questions in a spec
+    ├── core-fe-plan/                      # durable design plan with constitution check
+    ├── core-fe-tasks/                     # test-first checklist, each step mapped to an AC, [P] for parallel
+    ├── core-fe-analyze/                   # read-only check: constitution, spec, plan, tasks agree
+    ├── core-fe-implement/                 # build from the approved checklist, test first
+    ├── core-fe-converge/                  # code vs spec table; Converged / Not converged loop
     ├── core-fe-design-ui/                  # design read + dials, inspiration research, directions, critique and ideas
     │   └── references/                        # inspiration, anti-patterns, tokens, responsive, motion, libraries, loading-states
     ├── core-fe-structure-app/              # detect / choose / record / apply the folder layout
@@ -98,11 +108,137 @@ another task, registers the pack in the repo and ends with the docs sync.
 The block's source is `core-fe-workflow/templates/AGENTS.md`; the skills
 carry it, so plugin and `npx skills` installs get it too.
 
+## Which skill for which task
+
+You do not have to name a skill. Describe the task; `core-fe-workflow` classifies it and runs
+the chain. Skill names below drop the `core-fe-` prefix.
+
+| You say | Task type | Skills, in order | You get |
+|---------|-----------|------------------|---------|
+| "build the team members page", "add a task scheduling UI" | `feature` | `workflow` → `constitution` (once) → `specify` → `clarify` → `plan` → `tasks` → `analyze` → you approve → `implement` → `converge`; `structure-app`, `design-ui`, `verify-ui` run inside | `specs/<NNN>/spec.md` and `plan.md`, the tracking record, screenshots, a report |
+| "make the table filterable", "change how the wizard validates" | `change` | `workflow` → `change` → `clarify` → `plan` (delta) → `tasks` → `analyze` → you approve → `implement` → `converge` | the spec edited first with a change-log row, then code, screenshots, a report |
+| "should we build X?", a fuzzy idea | `assess` | `workflow` → `assess` | `specs/assessments/<slug>.md` with a verdict: go, needs-clarification, or kill |
+| "set up SDD", "project principles" | `constitution` | `workflow` → `constitution` | `specs/constitution.md` |
+| "redesign the dashboard", "make it look premium", "fix mobile layout" | `ui` | `workflow` → `design-ui` → `verify-ui` | restyled UI, screenshots at five widths, a report; no spec |
+| "clean up", "extract shared components" | `refactor` | `workflow` → `structure-app` → `verify-ui` | no visual change, before and after screenshots; no spec |
+| "where should this go?", "structure this app" | `structure` | `workflow` → `structure-app` | the recorded `## Project structure` in `AGENTS.md` |
+| "check how it looks on mobile", "visual QA" | `verify` | `workflow` → `verify-ui` → critique from `design-ui` | screenshots and findings; changes nothing |
+| "make it look like this", "implement designs/dashboard.png" | `image` | `workflow` → `specify` (new behaviour only) → `image-to-ui` → `structure-app` → `design-ui` → `verify-ui` | a page matched to the design image, pixel-diff proof |
+| "blank screen", "state not updating", console error, slow page | `fix` | `workflow` → `debug` → `verify-ui`; if the spec was wrong or silent, `change` first | a root-cause fix, a regression test, screenshot proof |
+
+`core-fe-coding-standards` and `core-fe-workflow` are always on. A trivial edit (a
+question, a typo) skips the workflow, but with the edit guard installed it still
+needs one `trivial` row in `agent-tracking/INDEX.md`.
+
+## Build with SDD (spec-driven development)
+
+`agent-tracking/` is history. For new behaviour the agent also keeps durable
+files that say what the system does now. All are committed with the code.
+
+| File | Holds | Skill |
+|------|-------|-------|
+| `specs/constitution.md` | project principles, each with a yes/no gate question | `core-fe-constitution` |
+| `specs/<NNN-topic>/spec.md` | what and why, numbered acceptance criteria (`AC-1`, ...), change log | `core-fe-specify`, `core-fe-change` |
+| `specs/<NNN-topic>/plan.md` | the design: constitution check, data, contracts, decisions, rollback | `core-fe-plan` |
+| `specs/assessments/<slug>.md` | idea verdict: `go`, `needs-clarification`, `kill` | `core-fe-assess` |
+
+**New feature:** `core-fe-specify` → `core-fe-clarify` → `core-fe-plan` → `core-fe-tasks` →
+`core-fe-analyze` → you approve → `core-fe-implement` → `core-fe-converge`.
+
+**Change to an existing feature:** `core-fe-change` edits the spec first and logs it,
+then `core-fe-clarify` → `core-fe-plan` (only the delta) → `core-fe-tasks` → `core-fe-analyze` →
+you approve → `core-fe-implement` → `core-fe-converge`. Code is never edited first.
+
+**Bug:** `core-fe-debug` checks the spec. The spec states the behaviour: the
+regression test cites that `AC-n`. The spec was wrong or silent: it routes to
+`core-fe-change` first.
+
+**Done** means `core-fe-converge` returned `Converged`: every `AC-n` has passing
+evidence, no code does what the spec never asked for, the constitution holds.
+After three rounds without it, the agent stops and asks you.
+
+No spec for refactors, audits, security reviews, debugging, or test work, which
+change no behaviour. Nothing creates a branch or commits; review the specs with
+the code.
+
+## Enforcement (hooks, validator, CI)
+
+Skills are advice; these make the workflow hard to skip, whichever model runs.
+
+| Piece | Where | What it does |
+|-------|-------|--------------|
+| `sdd-check.sh` | `core-fe-workflow/scripts/` | `next`, `spec`, `analyze`, `converge`, `status`, `ci`: deterministic checks on the spec, plan, task, and INDEX files. Exit 1 on CRITICAL or HIGH. Used by the skills and by CI. |
+| `sdd-hook.sh` | `core-fe-workflow/scripts/` | Claude Code hook. Blocks a source edit without an approved task (a `feature` or `change` also needs its spec first). Blocks stopping an in-progress `feature` or `change` before `Verdict: Converged`. |
+| `hooks/hooks.json` | plugin root | Wires the hook up. Installed with the plugin; nothing to configure. |
+| `sdd-check.yml` | `core-fe-workflow/templates/` | Sample GitHub Actions job running `sdd-check.sh ci`. |
+| `install-hook.sh` | `core-fe-workflow/scripts/` | Registers the hook in `.claude/settings.json` for `npx skills` and manual installs. |
+| `test-sdd.sh` | `core-fe-workflow/scripts/` | Self-check for the two scripts: `sh scripts/test-sdd.sh`. |
+
+**Without the plugin** (`npx skills` or manual copy) the hook is not installed. Run
+the installer once, from the project root, as you (not the agent; it edits
+`.claude/settings.json`):
+
+```bash
+sh .claude/skills/core-fe-workflow/scripts/install-hook.sh            # npx skills with Claude Code
+sh .agents/skills/core-fe-workflow/scripts/install-hook.sh            # manual copy
+sh .claude/skills/core-fe-workflow/scripts/install-hook.sh --dry-run  # show the result, write nothing
+```
+
+It merges the `PreToolUse` and `Stop` entries into `.claude/settings.json`: other
+settings and hooks stay, an invalid file is left untouched, the old file is backed
+up as `settings.json.bak-<time>`, and a second run changes nothing. It needs
+`python3`, and it refuses to run from a skills folder outside the project (a plugin
+install already has the hook). Prefer to edit by hand? Add the same entries:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [{ "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+      "hooks": [{ "type": "command", "command": "sh",
+        "args": ["-c", "[ -f \"$1\" ] && exec sh \"$1\"; exit 0", "sdd-hook",
+                  "${CLAUDE_PROJECT_DIR}/.claude/skills/core-fe-workflow/scripts/sdd-hook.sh"] }] }],
+    "Stop": [{ "hooks": [{ "type": "command", "command": "sh",
+        "args": ["-c", "[ -f \"$1\" ] && exec sh \"$1\"; exit 0", "sdd-hook",
+                  "${CLAUDE_PROJECT_DIR}/.claude/skills/core-fe-workflow/scripts/sdd-hook.sh"] }] }]
+  }
+}
+```
+
+(Use `.agents/skills/` in the path for a manual copy. Write `${CLAUDE_PROJECT_DIR}` with
+braces: Claude Code does not expand the bare form. The `sh -c` wrapper makes a missing
+script a no-op instead of a block.) Check with `/hooks` in Claude Code that both entries show up. The validator works
+without the hook: `sh <skills dir>/core-fe-workflow/scripts/sdd-check.sh status`. For CI, copy
+`core-fe-workflow/templates/sdd-check.yml` to `.github/workflows/`; it needs the scripts in the
+repo (`npx skills` or manual copy).
+
+**Limits.**
+- The hook sees `Write`, `Edit`, `MultiEdit`, and `NotebookEdit`. Source written through Bash
+  (`sed -i`, redirects) is not seen; CI and the Stop hook catch the outcome.
+- A model can add its own INDEX row to pass the guard. Rows are an audit trail, and
+  `sdd-check.sh ci` re-checks every approved row against its plan and spec.
+- Hooks run only in Claude Code. Codex and Cursor read `AGENTS.md`; give them CI.
+- Stop continues the turn at most eight times in a row, then lets it end.
+- Managed settings with `allowManagedHooksOnly` disable plugin hooks.
+- Trivial edits need one INDEX row (type `trivial`, status `in-progress`).
+- Maintaining this pack with its own plugin installed: set `SDD_GUARD=off` in your
+  shell. Only you can set it; the hook inherits Claude's environment, not the model's
+  Bash calls.
+
 ## Install into a frontend repository
 
-1. **Install the skills.**
+1. **Install the skills.** The three methods install the same skills. They
+   differ in where the files go and in whether the edit-guard hook comes with them.
 
-   - **Claude Code plugin**:
+   | | Claude Code plugin | `npx skills` | Manual copy |
+   |---|---|---|---|
+   | Agents | Claude Code | Claude Code, Codex, Cursor, others | any agent that reads `.agents/skills/` |
+   | Skills land in | the plugin cache, not your repo | your repo: `.claude/skills/` for Claude Code, `.agents/skills/` for agents that use the shared folder (the CLI prints the exact paths) | `<repo>/.agents/skills/` |
+   | Scripts (`sdd-check.sh`, `sdd-hook.sh`, `board.sh`, `shoot.mjs`, `capture.mjs`) | come with the skills | come with the skills, inside each skill's `scripts/` | come with the skills |
+   | Edit-guard hook | **automatic** (`hooks/hooks.json`) | **not installed**: run `install-hook.sh` once (see Enforcement) | **not installed**: run `install-hook.sh` once |
+   | CI check (`sdd-check.sh ci`) | scripts are not in your repo: copy `core-fe-workflow/scripts/` in, or use another method | works: scripts are in the repo | works |
+   | Update | `/plugin marketplace update int-agent-rules` or auto-update | `npx skills update` | re-copy |
+
+   - **Claude Code plugin** (hooks included):
 
      ```
      /plugin marketplace add shubhamINT/agent_rules
@@ -111,13 +247,18 @@ carry it, so plugin and `npx skills` installs get it too.
 
      Skills appear as `core-frontend:core-fe-<skill>`.
 
-   - **`npx skills`**:
+   - **`npx skills`**. Install the whole pack, because skills load each other and
+     one skill alone breaks links:
 
      ```bash
-     npx skills add shubhamINT/agent_rules --list
-     npx skills add shubhamINT/agent_rules                 # interactive picker: select all core-fe-* skills
-     npx skills update
+     npx skills add shubhamINT/agent_rules -a claude-code -s core-fe-analyze core-fe-assess core-fe-change core-fe-clarify core-fe-coding-standards core-fe-constitution core-fe-converge core-fe-debug core-fe-design-ui core-fe-image-to-ui core-fe-implement core-fe-plan core-fe-specify core-fe-structure-app core-fe-tasks core-fe-verify-ui core-fe-workflow
+     npx skills add shubhamINT/agent_rules --list     # or pick interactively and select every core-fe-* skill
+     npx skills update                                 # pull the latest version
      ```
+
+     Drop `-a claude-code` to choose agents interactively; add `-g` for a global
+     install. Then commit the new skills folder and register the edit-guard hook:
+     `sh .claude/skills/core-fe-workflow/scripts/install-hook.sh` (see Enforcement).
 
    - **Manual copy**:
 
@@ -133,9 +274,6 @@ carry it, so plugin and `npx skills` installs get it too.
    curl -o AGENTS.md https://raw.githubusercontent.com/shubhamINT/agent_rules/master/core-frontend/.agents/skills/core-fe-workflow/templates/AGENTS.md
    echo "@AGENTS.md" >> CLAUDE.md
    ```
-
-   Install the whole pack: skills load each other, so one skill alone breaks
-   links.
 
 3. **For screenshots**, the repo needs Playwright as a dev dependency. The
    agent asks before installing it:
@@ -172,6 +310,28 @@ User: "implement designs/billing.png as /settings/billing"
   7. Build tokens → sections; compare.mjs after each: mismatch %, worst-cell crops, fix, repeat (target ≤ 3%)
   8. verify-ui at every width and theme; docs sync
   9. Report with design vs build side by side, diff heatmap, mismatch first → final
+```
+
+A spec-driven task (`feature` or `change`):
+
+```
+User: "add a team members page"
+  1. Agent classifies → feature; INDEX row, scope.md; asks scope questions        (stop 1)
+  2. specs/constitution.md missing → core-fe-constitution proposes principles, you confirm
+  3. core-fe-specify writes specs/001-team-members/spec.md (AC-1..n, states, widths) and
+     asks the open questions it could not answer                                   (stop 2)
+  4. core-fe-clarify folds your answers into the spec; sdd-check.sh spec passes; status approved
+  5. core-fe-plan writes specs/001-team-members/plan.md (design, reuse inventory, gate answers)
+     core-fe-tasks writes the test-first checklist; core-fe-analyze runs sdd-check.sh analyze
+     Agent shows spec + design + checklist and STOPS for approval                 (stop 3)
+  6. On approval the plan is marked approved; the edit guard now allows source edits
+  7. core-fe-implement builds test first with design-ui; core-fe-converge fills the evidence
+     table (tests and screenshots), runs sdd-check.sh converge, writes
+     "Verdict: Converged", then the report
+
+User later: "make the table filterable"
+  1. core-fe-change edits spec.md first (new AC, change-log row), then the same chain
+     plans and builds only the delta
 ```
 
 ## What the tracking folder looks like

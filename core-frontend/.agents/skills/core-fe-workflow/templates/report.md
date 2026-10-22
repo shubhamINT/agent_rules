@@ -63,6 +63,13 @@ flowchart LR
 | Change | Files | Reason |
 |--------|-------|--------|
 
+### 5b. Spec vs code
+
+<!-- feature / change only: converge table (core-fe-converge). Else delete. -->
+| AC | Evidence | Code | Status |
+|----|----------|------|--------|
+|    |          |      | met / partial / missing |
+
 ## 6. Verification
 
 | Check | Before | After |

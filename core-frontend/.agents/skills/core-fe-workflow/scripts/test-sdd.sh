@@ -1,0 +1,167 @@
+#!/bin/sh
+# Self-check for sdd-check.sh and sdd-hook.sh. Builds a temp repo, mutates it,
+# prints PASS/FAIL per case, exits 1 on any failure. Run: sh scripts/test-sdd.sh
+here=$(cd "$(dirname "$0")" && pwd)
+C="sh $here/sdd-check.sh"; H="sh $here/sdd-hook.sh"
+R=$(mktemp -d); trap 'rm -rf "$R"' EXIT
+cd "$R" && git init -q . && export SDD_ROOT=$R CLAUDE_PROJECT_DIR=$R
+fails=0
+ok()   { if "$@" >/dev/null 2>&1; then echo "PASS $label"; else echo "FAIL $label"; fails=$((fails+1)); fi; }
+bad()  { "$@" >/dev/null 2>&1; got=$?; if [ "$got" = 1 ]; then echo "PASS $label"; else echo "FAIL $label (exit $got, want 1)"; fails=$((fails+1)); fi; }
+code() { want=$1; shift; "$@" >/dev/null 2>&1; got=$?; if [ "$got" = "$want" ]; then echo "PASS $label"; else echo "FAIL $label (exit $got, want $want)"; fails=$((fails+1)); fi; }
+pre() { printf '{"hook_event_name":"PreToolUse","tool_name":"Edit","cwd":"%s","tool_input":{"file_path":"%s"}}' "$R" "$1" | $H; }
+stop() { printf '{"hook_event_name":"Stop","cwd":"%s","stop_hook_active":%s}' "$R" "${1:-false}" | $H; }
+
+S=specs/001-export; T=agent-tracking/plans/2026-01-01-feature-export
+mkdir -p $S $T
+cat > specs/constitution.md <<'EOF'
+# Constitution
+EOF
+cat > $S/spec.md <<'EOF'
+# Spec 001
+- **Status:** approved
+## Acceptance criteria
+- **AC-1:** exports csv
+- **AC-2:** rejects over limit
+## Out of scope
+- xml
+## Open questions
+## Change log
+| Date | Change | Task slug |
+|------|--------|-----------|
+| 2026-01-01 | Created | 2026-01-01-feature-export |
+EOF
+cat > $S/plan.md <<'EOF'
+# Plan 001
+## Constitution check
+| # | Principle | Gate question | Answer | Note |
+|---|-----------|---------------|--------|------|
+| 1 | Simplicity | one layer? | yes | |
+## Complexity tracking
+| Violation or extra moving part | Why needed | Simpler option rejected |
+|--------------------------------|------------|-------------------------|
+EOF
+cat > $T/plan.md <<'EOF'
+# Plan
+**Status:** approved (2026-01-01, by user)
+**Spec:** specs/001-export/spec.md
+**Covers:** AC-1, AC-2
+## Steps
+- [ ] 1. AC-1 test then code
+- [ ] 2. AC-2 test then code
+- [ ] 3. converge
+EOF
+cat > $T/progress.md <<'EOF'
+## Converge
+| AC | Evidence | Code | Status |
+|----|----------|------|--------|
+| AC-1 | tests/t.py::a | app.py:1 | met |
+| AC-2 | tests/t.py::b | app.py:9 | met |
+Verdict: Converged
+EOF
+idx() { mkdir -p agent-tracking; printf '| Date | Slug | Type | Status | Summary | Report |\n|---|---|---|---|---|---|\n| 2026-01-01 | 2026-01-01-feature-export | %s | %s | x | |\n' "$1" "$2" > agent-tracking/INDEX.md; }
+
+label="next: first spec number"; [ "$(cd "$R" && rm -rf specs/009-x && $C next foo)" = "002-foo" ] && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
+mkdir specs/009-x; label="next: 009 -> 010 (no octal trap)"; [ "$($C next foo)" = "010-foo" ] && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }; rmdir specs/009-x
+
+label="spec: clean spec passes"; ok $C spec $S
+cp $S/spec.md /tmp/spec.$$; echo "- [NEEDS CLARIFICATION: x]" >> $S/spec.md
+label="spec: open marker in approved spec fails"; bad $C spec $S
+cp /tmp/spec.$$ $S/spec.md
+sed 's/^- \*\*AC-2:\*\*.*/- **AC-1:** dup/' /tmp/spec.$$ > $S/spec.md
+label="spec: duplicate AC fails"; bad $C spec $S
+cp /tmp/spec.$$ $S/spec.md; rm /tmp/spec.$$
+
+label="analyze: clean passes"; ok $C analyze 2026-01-01-feature-export
+cp $T/plan.md /tmp/tp.$$; grep -v 'AC-2' /tmp/tp.$$ > $T/plan.md
+label="analyze: AC with no task is CRITICAL"; bad $C analyze 2026-01-01-feature-export
+cp /tmp/tp.$$ $T/plan.md
+sed 's/| yes |/| no |/' $S/plan.md > /tmp/dp.$$; cp $S/plan.md /tmp/dp.orig.$$; cp /tmp/dp.$$ $S/plan.md
+label="analyze: gate no without complexity row fails"; bad $C analyze 2026-01-01-feature-export
+printf '| extra layer | needed for X | none |\n' >> $S/plan.md
+label="analyze: gate no with complexity row passes"; ok $C analyze 2026-01-01-feature-export
+cp /tmp/dp.orig.$$ $S/plan.md; rm /tmp/tp.$$ /tmp/dp.$$ /tmp/dp.orig.$$
+
+label="converge: all met passes"; ok $C converge 2026-01-01-feature-export
+cp $T/progress.md /tmp/pg.$$; sed 's/| met |$/| partial |/' /tmp/pg.$$ > $T/progress.md
+label="converge: partial fails"; bad $C converge 2026-01-01-feature-export
+grep -v 'AC-2' /tmp/pg.$$ > $T/progress.md
+label="converge: missing evidence row fails"; bad $C converge 2026-01-01-feature-export
+cp /tmp/pg.$$ $T/progress.md; rm /tmp/pg.$$
+
+# a later change task owns only the delta (AC-3); the first task keeps owning AC-1, AC-2
+T2=agent-tracking/plans/2026-02-01-change-export-limit; mkdir -p $T2
+printf '# Plan\n**Status:** approved (2026-02-01, by user)\n**Spec:** specs/001-export/spec.md\n**Covers:** AC-3\n- [ ] 1. AC-3 test then code\n- [ ] 2. converge\n' > $T2/plan.md
+cp $S/spec.md /tmp/sp3.$$; sed -i 's/^## Out of scope/- **AC-3:** limit\n## Out of scope/' $S/spec.md
+label="analyze: change task covering only the delta passes"; ok $C analyze 2026-02-01-change-export-limit
+label="analyze: first task still passes with a later AC in the spec"; ok $C analyze 2026-01-01-feature-export
+printf '# Plan\n**Status:** approved (x)\n**Spec:** specs/001-export/spec.md\n**Covers:** AC-3\n- [ ] 1. docs only\n' > $T2/plan.md
+label="analyze: delta AC with no task is CRITICAL"; bad $C analyze 2026-02-01-change-export-limit
+printf '# Plan\n**Status:** approved (2026-02-01, by user)\n**Spec:** specs/001-export/spec.md\n**Covers:** AC-3\n- [ ] 1. AC-3 test then code\n- [ ] 2. converge\n' > $T2/plan.md
+printf '| 2026-02-01 | 2026-02-01-change-export-limit | change | done | y | |\n' > /tmp/row2.$$
+idx feature done; cat /tmp/row2.$$ >> agent-tracking/INDEX.md
+sed -i 's/^## Out of scope/&/' $S/spec.md
+printf '## Converge\n| AC | Evidence | Code | Status |\n|---|---|---|---|\n| AC-3 | tests/t.py::c | app.py:20 | met |\nVerdict: Converged\n' > $T2/progress.md
+sed -i 's/^- \*\*Status:\*\* approved/- **Status:** implemented/' $S/spec.md
+label="ci: two done tasks covering every AC pass"; ok $C ci
+sed -i 's/^\*\*Covers:\*\* AC-1, AC-2/**Covers:** AC-1/' $T/plan.md
+label="ci: AC covered by no task is HIGH"; bad $C ci
+sed -i 's/^\*\*Covers:\*\* AC-1$/**Covers:** AC-1, AC-2/' $T/plan.md
+rm -rf $T2; cp /tmp/sp3.$$ $S/spec.md; rm -f /tmp/sp3.$$ /tmp/row2.$$
+idx feature done
+label="ci: done task with spec still approved fails"; bad $C ci
+sed -i 's/^- \*\*Status:\*\* approved/- **Status:** implemented/' $S/spec.md
+label="ci: done task with implemented spec passes"; ok $C ci
+
+# ---- guard
+rm -f agent-tracking/INDEX.md
+label="guard: source edit with no task blocked"; code 2 pre app/main.py
+label="guard: markdown allowed"; code 0 pre README.md
+label="guard: specs/ allowed"; code 0 pre specs/001-export/spec.md
+label="guard: agent-tracking/ allowed"; code 0 pre agent-tracking/INDEX.md
+label="guard: .agents path allowed"; code 0 pre core/.agents/skills/x/SKILL.md
+label="guard: outside project allowed"; code 0 pre /elsewhere/file.py
+idx feature scoping
+label="guard: unapproved (scoping) task blocked"; code 2 pre app/main.py
+idx feature approved
+label="guard: approved feature with spec row allowed"; code 0 pre app/main.py
+sed -i 's/2026-01-01-feature-export/other/' $S/spec.md
+label="guard: feature whose spec lacks the slug blocked"; code 2 pre app/main.py
+sed -i 's/other/2026-01-01-feature-export/' $S/spec.md
+mv $T/plan.md $T/plan.bak; printf '# Plan\n**Status:** awaiting-approval\n**Spec:** specs/001-export/spec.md\n' > $T/plan.md
+label="guard: plan not approved blocked"; code 2 pre app/main.py
+mv $T/plan.bak $T/plan.md
+idx trivial in-progress
+label="guard: trivial in-progress row allows edit"; code 0 pre app/main.py
+label="guard: SDD_GUARD=off allows"; ( SDD_GUARD=off; export SDD_GUARD; rm -f agent-tracking/INDEX.md; code 0 pre app/main.py )
+
+# ---- stop
+idx feature in-progress; mv $T/progress.md $T/progress.bak; echo "no verdict" > $T/progress.md
+label="stop: in-progress feature without verdict blocked"; code 2 stop false
+label="stop: stop_hook_active allows"; code 0 stop true
+mv $T/progress.bak $T/progress.md
+label="stop: verdict present allows"; code 0 stop false
+idx feature awaiting-approval
+label="stop: awaiting-approval may stop"; code 0 stop false
+
+# ---- install-hook
+SK=$(basename "$(dirname "$here")"); IH=$R/.claude/skills/$SK/scripts; mkdir -p "$IH"; cp "$here"/*.sh "$IH"/
+I="sh $IH/install-hook.sh"; ST=$R/.claude/settings.json; rm -f "$ST"
+label="install-hook: fresh install exits 0"; code 0 $I
+label="install-hook: both events registered"; [ "$(grep -c 'sdd-hook.sh' "$ST")" = 2 ] && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
+cp "$ST" /tmp/st1.$$
+label="install-hook: second run says already installed"; $I 2>&1 | grep -q "already installed" && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
+label="install-hook: second run changes nothing"; ok cmp "$ST" /tmp/st1.$$
+rm -f /tmp/st1.$$
+printf '{"permissions":{"allow":["Bash(ls)"]},"hooks":{"PreToolUse":[{"matcher":"Bash","hooks":[{"type":"command","command":"echo hi"}]}]}}' > "$ST"
+$I >/dev/null 2>&1
+label="install-hook: keeps existing settings and hooks"; grep -q 'Bash(ls)' "$ST" && grep -q 'echo hi' "$ST" && grep -q 'sdd-hook.sh' "$ST" && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
+label="install-hook: old file backed up"; ls "$R"/.claude/settings.json.bak-* >/dev/null 2>&1 && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
+printf '{bad' > "$ST"
+label="install-hook: invalid JSON refused"; code 1 sh "$IH/install-hook.sh"
+cp "$ST" /tmp/st2.$$; $I >/dev/null 2>&1; label="install-hook: invalid JSON left untouched"; ok cmp "$ST" /tmp/st2.$$; rm -f /tmp/st2.$$
+rm -f "$ST"; $I --dry-run >/dev/null 2>&1
+label="install-hook: dry run writes nothing"; [ ! -e "$ST" ] && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
+label="install-hook: script outside the project is refused"; code 2 sh "$here/install-hook.sh" "$R"
+
+[ "$fails" = 0 ] && { echo "all passed"; exit 0; } || { echo "$fails failed"; exit 1; }

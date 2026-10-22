@@ -234,6 +234,19 @@ flowchart TB
     </article>
   </section>
 
+  <!-- feature / change only: converge table (core-be-converge). Else delete. -->
+  <section id="spec-vs-code">
+    <h2>4b. Spec vs code (part of Changes)</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>AC</th><th>Test</th><th>Code</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>{{AC-1}}</td><td><code>{{tests/test_export.py::test_csv_header}}</code></td><td><code>{{app/export/service.py:42}}</code></td><td class="pass">{{met}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
   <section id="verification">
     <h2>5. Verification</h2>
     <div class="table-wrap">

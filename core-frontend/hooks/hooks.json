@@ -1,0 +1,40 @@
+{
+  "description": "Enforce the spec-driven workflow: no source edit without an approved task, no stopping mid-implementation before converge.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh",
+            "args": [
+              "-c",
+              "[ -f \"$1\" ] && exec sh \"$1\"; exit 0",
+              "sdd-hook",
+              "${CLAUDE_PLUGIN_ROOT}/.agents/skills/core-fe-workflow/scripts/sdd-hook.sh"
+            ],
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh",
+            "args": [
+              "-c",
+              "[ -f \"$1\" ] && exec sh \"$1\"; exit 0",
+              "sdd-hook",
+              "${CLAUDE_PLUGIN_ROOT}/.agents/skills/core-fe-workflow/scripts/sdd-hook.sh"
+            ],
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

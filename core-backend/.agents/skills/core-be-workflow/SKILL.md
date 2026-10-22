@@ -28,6 +28,10 @@ script, or folder still updates the README (`core-be-structure-service/reference
 not trivial. Touching more than one file, any trust boundary (auth, input
 parsing, external calls, secrets), or any public interface is never trivial.
 
+With the edit guard installed (`scripts/sdd-hook.sh`), even a trivial source edit
+needs one row in `agent-tracking/INDEX.md` (type `trivial`, status `in-progress`)
+so the edit is on record. No scope interview, plan, or report for it.
+
 Paths like `core-be-<skill>/references/<file>.md` name a sibling skill: resolve
 them from the parent of this skill's base directory. Sibling missing? Tell the
 user to install the whole pack.
@@ -38,13 +42,39 @@ save tokens.
 
 ---
 
+## Quick path: feature and change
+
+Everything below applies. This is the order of outputs and stops for the two
+spec-driven types, so you can see the whole run first.
+
+| Stop | Before it | Files written |
+|------|-----------|---------------|
+| 1. Scope questions | classify, bootstrap tracking | `agent-tracking/INDEX.md` row, `plans/<slug>/scope.md` |
+| 2. Spec questions | `core-be-specify` (`core-be-change` for a change) | `specs/constitution.md` (once), `specs/<NNN-topic>/spec.md` |
+| 3. Plan approval | `core-be-clarify`, `core-be-plan`, `core-be-tasks`, `core-be-analyze` | `specs/<NNN-topic>/plan.md`, `plans/<slug>/plan.md`, `research/<slug>.md` |
+| done | `core-be-implement`, `core-be-converge`, docs sync | code and tests, `reports/<slug>.md` or `.html` |
+
+Every other type skips the spec files and runs Phases 1–7 below.
+
+**Scripts that check you.** `sh core-be-workflow/scripts/sdd-check.sh next|spec|analyze|converge|status|ci` and the
+edit guard `scripts/sdd-hook.sh` (a Claude Code hook) enforce this chain. When a
+script or the guard says no, do what its message says; never edit the scripts,
+the hook config, or set `SDD_GUARD`.
+
+**Read lazily.** Read a chain skill when its step starts, never before. Read a
+reference only when a step names it. Reading everything up front wastes the
+context the work needs.
+
 ## Phase 1 — Classify
 
 Name the task type. It sets the slug and which skills apply.
 
 | Type | Follow-on skill(s) |
 |------|--------------------|
-| `feature` | `core-be-build-feature` |
+| `feature` | `core-be-constitution` (once, if `specs/constitution.md` is missing) → `core-be-specify` → `core-be-clarify` → `core-be-plan` → `core-be-tasks` → `core-be-analyze` → *approval* → `core-be-implement` → `core-be-converge`; `core-be-build-feature` supplies the engineering rules inside plan and implement |
+| `change` | `core-be-change` → `core-be-clarify` → `core-be-plan` (delta) → `core-be-tasks` → `core-be-analyze` → *approval* → `core-be-implement` → `core-be-converge` |
+| `assess` | `core-be-assess` (verdict `go`, `needs-clarification`, or `kill`) |
+| `constitution` | `core-be-constitution` |
 | `refactor` | `core-be-refactor-code` |
 | `audit` | `core-be-audit-code` |
 | `security` | `core-be-audit-security` |
@@ -52,6 +82,16 @@ Name the task type. It sets the slug and which skills apply.
 | `debug` | `core-be-debug` |
 | `structure` | `core-be-structure-service` |
 | `health` | `core-be-add-health-endpoint` |
+
+`change` is new behaviour on an existing feature ("limit it to 10k rows"). It
+starts at the spec: `core-be-change` edits `specs/<NNN-topic>/spec.md` first,
+then the plan is edited for the delta. `feature` and `change` are spec-driven
+(SDD): the spec and constitution drive the plan, the checklist, the check before
+coding, and the check after. The other types change no behaviour and need no
+spec. `feature` and `change` stop the turn three times: (1) scope questions,
+(2) spec questions from `core-be-clarify`, (3) plan approval after
+`core-be-analyze`. Unsure which? A new feature is `feature`; altering one that exists is
+`change`; a vague idea is `assess`.
 
 A request can span types ("audit and fix"). Split it: the audit is one task, the
 fix is a second task planned from the audit's findings. This keeps each report
@@ -95,31 +135,19 @@ Copy the templates from this skill's `templates/` directory and fill them in:
 
 ### Register the pack in the repo
 
-So that the next agent follows these rules even when nobody invokes a skill,
-make sure the repo root carries them. Agents such as Codex and Cursor read
-`AGENTS.md` on their own; Claude Code reads `CLAUDE.md`, which imports it.
-Do this on every non-trivial task; it is a no-op when nothing changed.
-
-1. **No `AGENTS.md`** — copy `templates/AGENTS.md` to the repo root.
-2. **`AGENTS.md` without the markers** `<!-- core-be:start -->` /
-   `<!-- core-be:end -->` — append the template's marked block (markers
-   included) below the existing content. Add the template's
-   `## Project structure` section too if the file has none.
-3. **Markers present** — replace only the text between them with the
-   template's current block. Never edit anything outside the markers: the
-   repo's own notes and `## Project structure` belong to the repo.
-4. **`CLAUDE.md`** — missing: create it containing the single line
-   `@AGENTS.md`. Present without that line: append `@AGENTS.md` once at the
-   end. Never rewrite the rest of it.
-5. Tell the user in one line what you created or updated, and log it in
-   `progress.md`. These files are left for the user to commit.
+Every non-trivial task: make sure the repo root carries the pack rules
+(`AGENTS.md` block, `CLAUDE.md` import). It is a no-op when nothing changed.
+Procedure: `references/REGISTER-PACK.md`. Read it the first time in a repo, and
+whenever `AGENTS.md` or `CLAUDE.md` is missing or lacks the markers.
 
 ## Phase 3 — Scope interview (no work yet)
 
 Do not read deeply, run scanners, or edit source until scope is agreed. A
 quick look at the repo tree to ask sensible questions is fine.
 
-Ask about every item below that the user has not already answered. Group the
+Ask about every item below that the user has not already answered. A
+`change` task inherits the answers from the spec's original task and asks only
+about the change itself. Group the
 questions into one message; offer concrete options and a recommended default so
 the user can answer fast.
 
@@ -138,7 +166,10 @@ the user can answer fast.
 7. **Type-specific** —
    - refactor: may files move / be renamed? is behaviour allowed to change? (default no)
    - security: which ASVS level (L1 / **L2 default** / L3)? does the service call an LLM?
-   - feature: acceptance criteria, API shape, auth rules, who can see what.
+   - feature / change: the acceptance criteria live in the spec
+     (`core-be-specify`), so do not ask for them here. Ask only what the spec
+     cannot hold: API shape preferences, auth rules, who can see what. Ask
+     scope only here; the spec does not exist yet.
    - audit: fix nothing (default) or propose patches in the report?
    - debug: the bug report is most of the scope — ask only for missing
      symptom, expected behaviour, where/when, and hotfix vs proper fix
@@ -154,138 +185,18 @@ wait. When answers arrive, write them into `scope.md` (INDEX status stays
 `scoping` until every row of "Agreed scope" is filled or explicitly defaulted).
 If the user answers "use your defaults", record each default as the answer.
 
-## Phase 4 — Research
+## Phases 4–7
 
-Now read. Write findings to `research/<slug>.md` (template
-`templates/research.md`) as you go, not at the end:
+Scope is agreed (`scope.md` filled). Read `references/PHASES-4-7.md` now: it
+holds research, plan-then-stop, execute, and report. Do not start Phase 4 from
+memory. In short:
 
-- **project structure** — read the `## Project structure` section of the repo's
-  `AGENTS.md`. Missing, and the task will place or move code (feature,
-  refactor)? Run `core-be-structure-service` now and settle the structure with the user
-  before writing the plan. Record the structure in research.
-- entry points and the files in scope (with line counts)
-- how the pieces connect (a short dependency map)
-- baseline measurements — run what the repo already has: tests, coverage,
-  linters, type checker, and for security the scanners in `core-be-audit-security`.
-  Record exact commands and summarised output. These numbers are the "before" in
-  the final report.
-- external facts you looked up (library versions, standards) with sources
-- open questions for the user
-- **README gaps** — compare the README with `core-be-structure-service/references/readme-standard.md` and with
-  reality (dependency manifest scripts, `.env.example`, the settings module,
-  routes, the folder tree). List what is missing or stale; the docs sync in
-  Phase 7 fixes it.
+4. **Research** — read, measure the baseline, write `research/<slug>.md`.
+5. **Plan, then stop** — write `plan.md`, show it, wait for explicit approval.
+6. **Execute** — one step at a time, tick `plan.md`, log `progress.md`.
+7. **Report** — docs sync, then the report in `agent-tracking/reports/`.
 
-If a tool the plan needs is not installed, record that and ask before installing
-anything.
-
-## Phase 5 — Plan, then stop
-
-Write `plans/<slug>/plan.md` from `templates/plan.md`:
-
-- goal (one sentence) and success criteria (from scope)
-- skills that apply
-- steps as a checkbox list; each step small enough to verify on its own
-- files expected to change or be created
-- design notes for features: the system design pass
-  (`core-be-build-feature/references/system-design.md`)
-- risks and how each is mitigated; delivery and rollback per
-  `references/SAFE-DELIVERY.md` (small reversible steps, expand → contract,
-  concrete rollback recipe)
-- verification: exact commands and expected results
-
-Show the plan to the user (summary in chat, path to the file) and **wait for
-explicit approval**. "Looks good", "go ahead", "approved" count; silence and
-follow-up questions do not. If the user changes the plan, edit `plan.md`, note
-the change in `progress.md`, and ask again. Set INDEX status `approved`.
-
-For `audit` and `security` tasks the "plan" is the review plan (which files,
-which checklists, which tools); the output is a report, not code changes.
-
-## Phase 6 — Execute
-
-Before the first edit, load `core-be-coding-standards`.
-
-Work through the checklist in order. After each step:
-
-1. tick the box in `plan.md`
-2. append to `progress.md` — what changed, why, commands run, result
-3. run the step's verification; a red step is fixed before the next starts
-
-When you discover something outside the approved scope (a bug next door, a
-security hole in another module), **record it in `progress.md` under
-"Out-of-scope observations" and tell the user**. Do not fix it unasked. Scope
-creep is how a reviewed plan turns into an unreviewed diff.
-
-Delegate where it helps: parallel read-only investigation, black-box test
-writing, and a fresh-context review of the diff before the report
-(`references/SUBAGENTS.md`). You stay responsible for everything they return.
-
-**More than one agent editing this repo at once** (parallel sessions, an
-orchestrator with workers, subagents that write files)? Coordinate through
-`agent-tracking/board/` with `scripts/board.sh`
-(`references/PARALLEL-AGENTS.md`): turn plan steps into tasks, claim before
-you edit, lock the files you touch, never wait by re-reading code, and
-`leave` when done. The last agent out removes the board.
-
-Set INDEX status `in-progress`.
-
-## Phase 7 — Report
-
-**Docs sync first** (every task that changed code or config; audits and
-security reviews change nothing, so they only register the pack). A developer
-who clones the repo tomorrow must be able to install, configure, run, and find
-their way from the README alone:
-
-- update the README per `core-be-structure-service/references/readme-standard.md` — requirements, installation,
-  environment table, endpoints, project structure, and stack must match the
-  code as it now is; create the README if it is missing
-- update `## Project structure` in `AGENTS.md` if folders changed
-- refresh the marked block in `AGENTS.md` and the `CLAUDE.md` import
-  (Phase 2, "Register the pack")
-- list every doc change in `progress.md`
-
-Then the report. Produce `agent-tracking/reports/<slug>.html` or
-`agent-tracking/reports/<slug>.md` in the format the user chose. Always write
-it there, never to the OS temp directory, the repo root, a hosted page (claude.ai
-Artifact, gist, docs connector), or only to chat, so
-the report sits next to its scope, plan, and progress. Build it from
-`templates/report.html` or `templates/report.md`. Every report has:
-
-1. **Summary** — what was asked, what was done, headline result
-2. **Scope** — in / out, depth, constraints (link `scope.md`)
-3. **Method** — tools run, checklists applied, standards referenced
-4. **Current → Target** — diagrams of what exists and what changed
-   (refactor, feature, structure, test; not audit/security, which change nothing)
-5. **Findings** or **Changes** — per type:
-   - audit/security: findings table (ID, severity, category, standard ref,
-     `file:line`, evidence, impact, recommendation, status)
-   - refactor: before/after metrics, each change with the named refactoring
-   - feature: what was built, interface, tests added
-6. **Verification** — commands run and results (before vs after)
-7. **Out-of-scope observations** and **recommended next tasks**
-8. **Trace** — links to scope, research, plan, progress
-9. **Docs updated** — README and `AGENTS.md` sections changed (omit for audit
-   and security)
-
-Reports are visual first. Follow `references/VISUAL-REPORT.md` for the
-diagram patterns, the colour legend, and the visuals each report type must
-include. The reviewer should grasp the change from the diagrams alone.
-
-Script policy for HTML reports:
-
-- **Refactor, feature, structure, test:** inline CSS plus the one Mermaid
-  import already in the template. Nothing else external. These reports must
-  hold no secrets, credentials, or security findings.
-- **Audit and security:** a single self-contained file. Delete the Mermaid
-  block; inline CSS, plain boxes and tables only, no external scripts, fonts, or CDNs.
-  Audit findings are sensitive and reports get opened offline and attached to
-  tickets.
-
-Finish by setting INDEX status `done` with the report link, and give the user a
-short chat summary plus the report path.
-
----
+`feature` and `change`: the chain in the Quick path above runs inside Phases 4–6.
 
 ## Resuming work
 
@@ -297,4 +208,7 @@ re-confirm the plan.
 ## Status values
 
 `scoping` → `researching` → `awaiting-approval` → `approved` → `in-progress` →
-`done` (or `blocked`, `cancelled` with a one-line reason).
+`done` (or `blocked`, `cancelled` with a one-line reason). Set each when its
+phase starts: `scoping` Phase 2, `researching` Phase 4, `awaiting-approval` when
+the plan is shown, `approved` on the user's explicit OK, `in-progress` Phase 6,
+`done` after the report.
