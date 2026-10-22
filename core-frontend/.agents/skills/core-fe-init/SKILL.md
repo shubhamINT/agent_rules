@@ -40,7 +40,7 @@ Each stop ends your turn. Coding starts only after the brief and then a feature 
 3. **Stop 2: plan.** Bootstrap tracking (`core-fe-workflow` Phase 2, type `init`). Write the onboarding plan into `agent-tracking/plans/<slug>/tasks.md`: one line per file, `create`, `edit`, or `merge`, with what changes. Put the consolidation table (below) in `agent-tracking/research/<slug>.md`. Show both and wait for explicit approval.
 4. **Apply** the approved lines, ticking each:
    - Consolidate `AGENTS.md` and `CLAUDE.md` (below).
-   - Register the pack: `core-fe-workflow/references/REGISTER-PACK.md` (managed block, `## Project structure` section, the `@AGENTS.md` import).
+   - Register the pack: `core-fe-workflow/references/REGISTER-PACK.md` (managed block, `## Project structure` section, the `@AGENTS.md` import, the `.gitignore` block).
    - `agent-tracking/INDEX.md` from the template if absent.
    - `specs/constitution.md`: run `core-fe-constitution` if missing (it has its own questions and approval).
    - Structure: existing repo, detect and record it with `core-fe-structure-app`; new project, choose the layout with the user and record it. Creating folders or code is a later `structure` or `feature` task, never part of init.
@@ -68,7 +68,7 @@ Target: `AGENTS.md` holds everything, each fact once. `CLAUDE.md` holds the line
 5. Apply: group the kept rules under clear headings in `AGENTS.md`, outside the pack markers, in the user's wording.
 
 <hard-rules>
-- Source is untouched. The only files you create or edit are `AGENTS.md`, `CLAUDE.md`, `README.md` (only if missing), `agent-tracking/`, and `specs/`.
+- Source is untouched. The only files you create or edit are `AGENTS.md`, `CLAUDE.md`, `.gitignore` (only between the pack markers), `README.md` (only if missing), `agent-tracking/`, and `specs/`.
 - No file outside `agent-tracking/` is created or edited before stop 2 is approved.
 - Never run `install-hook.sh` and never edit `.claude/settings.json`.
 - Never delete a line the user did not approve. A dropped duplicate keeps its meaning in the surviving copy.

@@ -21,11 +21,16 @@ Do this on every non-trivial task; it is a no-op when nothing changed.
 5. Tell the user in one line what you created or updated, and log it in
    `progress.md`. These files are left for the user to commit.
 
-6. **Edit guard.** Look for `sdd-hook` in `.claude/settings.json`. It is absent, and
+6. **`.gitignore`** — keep scratch state out of git. Missing: create it from
+   `templates/gitignore.txt`. Present without the `# hirebot-be:start` / `# hirebot-be:end` lines: append
+   the template's block. Markers present: replace only the text between them. Never touch
+   anything outside the markers.
+
+7. **Edit guard.** Look for `sdd-hook` in `.claude/settings.json`. It is absent, and
    the pack was not installed as a plugin? Tell the user once: "The edit guard is
    not registered. Run `sh <skills dir>/hirebot-be-workflow/scripts/install-hook.sh` to add it."
    Never run it yourself: it edits the user's settings.
 
-7. **Messy or duplicated files.** `AGENTS.md` and `CLAUDE.md` repeat each other, or
+8. **Messy or duplicated files.** `AGENTS.md` and `CLAUDE.md` repeat each other, or
    `CLAUDE.md` holds more than the import? Do not patch them here. `hirebot-be-init`
    consolidates them with the user: one source in `AGENTS.md`, an import in `CLAUDE.md`.

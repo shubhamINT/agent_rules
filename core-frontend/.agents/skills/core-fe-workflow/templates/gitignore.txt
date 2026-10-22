@@ -1,0 +1,6 @@
+# core-fe:start
+# Managed by the core-frontend skill pack (Register the pack). Edit the pack, not this block.
+agent-tracking/board/
+agent-tracking/screenshots/latest/
+.auth/
+# core-fe:end

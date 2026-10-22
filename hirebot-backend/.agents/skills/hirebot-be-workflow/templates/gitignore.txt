@@ -1,0 +1,4 @@
+# hirebot-be:start
+# Managed by the hirebot-backend skill pack (Register the pack). Edit the pack, not this block.
+agent-tracking/board/
+# hirebot-be:end

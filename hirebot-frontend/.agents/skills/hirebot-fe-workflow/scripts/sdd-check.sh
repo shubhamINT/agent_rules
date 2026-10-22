@@ -184,6 +184,12 @@ cmd_doctor() { # is this repo set up for the pack? read-only
       [ "$n" -eq 0 ] || emit MEDIUM $C "$n long lines also appear in AGENTS.md; AGENTS.md is the single source"
     fi
   fi
+  gt=$HERE/../templates/gitignore.txt
+  gib() { awk -v s="# $pfx:start" -v e="# $pfx:end" '$0==s{f=1} f{print} $0==e{f=0}' "$1"; }
+  if [ -f .gitignore ] && grep -qxF "# $pfx:start" .gitignore; then
+    [ ! -f "$gt" ] || [ "$(gib .gitignore)" = "$(gib "$gt")" ] ||
+      emit MEDIUM .gitignore "pack block differs from templates/gitignore.txt; refresh it (references/REGISTER-PACK.md)"
+  else emit MEDIUM .gitignore "pack block missing (board and screenshot scratch would be committed); see references/REGISTER-PACK.md"; fi
   [ -f $IDX ] || emit MEDIUM $IDX "missing; created from templates/INDEX.md"
   [ -f specs/constitution.md ] || emit HIGH specs/constitution.md "missing; run the constitution skill"
   [ -f specs/project.md ] || emit MEDIUM specs/project.md "missing; the project brief from the init skill"

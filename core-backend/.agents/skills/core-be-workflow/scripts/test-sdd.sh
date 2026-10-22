@@ -181,6 +181,11 @@ i=0; while [ $i -lt 8 ]; do printf 'note number %s\n' $i >> CLAUDE.md; i=$((i+1)
 label="doctor: CLAUDE.md with extra lines reported"; $C doctor | grep -q 'lines besides the import' && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
 printf '# notes\n' > CLAUDE.md
 label="doctor: CLAUDE.md without the import is HIGH"; bad $C doctor
+label="doctor: missing .gitignore block reported"; $C doctor | grep -q 'pack block missing' && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
+cp "$here/../templates/gitignore.txt" .gitignore
+label="doctor: current .gitignore block is clean"; $C doctor | grep -q 'gitignore' && { echo "FAIL $label"; fails=$((fails+1)); } || echo "PASS $label"
+sed -i 's/^agent-tracking\/board\/$/agent-tracking\/other\//' .gitignore
+label="doctor: stale .gitignore block reported"; $C doctor | grep -q 'pack block differs' && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
 printf '@AGENTS.md\n' > CLAUDE.md; sed "s/<!-- $PF:start -->//; s/<!-- $PF:end -->//" "$TM" > AGENTS.md
 label="doctor: AGENTS.md without markers is HIGH"; bad $C doctor
 awk -v e="<!-- $PF:end -->" '$0==e{print "extra rule inside the block"} {print}' "$TM" > AGENTS.md

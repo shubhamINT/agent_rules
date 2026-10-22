@@ -1,0 +1,6 @@
+# hirebot-fe:start
+# Managed by the hirebot-frontend skill pack (Register the pack). Edit the pack, not this block.
+agent-tracking/board/
+agent-tracking/screenshots/latest/
+.auth/
+# hirebot-fe:end
