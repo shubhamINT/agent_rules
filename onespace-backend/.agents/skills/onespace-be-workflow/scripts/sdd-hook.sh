@@ -38,7 +38,7 @@ PreToolUse)
   else
     set -- $line
     case $line in
-      *plan=no*) echo "SDD guard: task $2 is $4 but agent-tracking/plans/$2/plan.md is not marked '**Status:** approved (date, by name)'. Get approval first. Edited: $rel" >&2 ;;
+      *plan=no*) echo "SDD guard: task $2 is $4 but agent-tracking/plans/$2/tasks.md is not marked '**Status:** approved (date, by name)'. Get approval first. Edited: $rel" >&2 ;;
       *) echo "SDD guard: task $2 is a $3 task, so the spec comes first. No specs/*/spec.md names $2 in its change log. Run ${pfx}-specify (new) or ${pfx}-change (existing), then edit source. Edited: $rel" >&2 ;;
     esac
   fi

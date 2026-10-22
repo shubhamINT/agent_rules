@@ -78,6 +78,7 @@ Always-on behaviour:
 | **Change** | "limit it to 10k rows", "change how X works", "drop support for Y" | `core-be-workflow` → `core-be-change` (edit the spec first) → `core-be-clarify` → `core-be-plan` (delta) → `core-be-tasks` → `core-be-analyze` → approval → `core-be-implement` → `core-be-converge` |
 | **Assess** | "should we build X", "is this worth it", a vague idea | `core-be-workflow` → `core-be-assess` → `go` / `needs-clarification` / `kill` |
 | **Explain** | "how does X work", "walk me through this flow", "I am new to this code" | `core-be-workflow` → `core-be-explain` |
+| **Init** | "set up this repo", "onboard this project", "start a new project", messy `AGENTS.md` / `CLAUDE.md` | `core-be-workflow` → `core-be-init` → first feature through `core-be-specify` |
 | **Constitution** | "set up SDD", "project principles" | `core-be-workflow` → `core-be-constitution` |
 | **Refactor** | "clean this up", "this code is a mess", "restructure", "reduce duplication" | `core-be-workflow` → `core-be-refactor-code` |
 | **Code audit** | "review this code", "check for bad code", "find bugs", "review what the AI wrote" | `core-be-workflow` → `core-be-audit-code` |
@@ -130,7 +131,7 @@ Follow the `core-be-workflow` skill. In short:
    Reports are visual: a Current → Target diagram for every change
    (`core-be-workflow/references/VISUAL-REPORT.md`). Audit and security reports load no
    external scripts.
-3. **Research**, then **plan**: write `plan.md`, show it, and wait for explicit
+3. **Research**, then **plan**: write `tasks.md`, show it, and wait for explicit
    approval.
 4. **Execute the approved plan only.** Log each step in `progress.md`. New scope
    found mid-task: stop, record it, ask.
@@ -213,6 +214,7 @@ indexed (enforced by tool / rule / override) in
 | `core-be-constitution` | task | Creating or amending `specs/constitution.md` |
 | `core-be-assess` | task | Deciding go / needs-clarification / kill for an idea before any spec |
 | `core-be-explain` | task | Explaining how existing code works: read-only trace, HTML page |
+| `core-be-init` | task | Setting up or repairing a repo for the pack; fixing `AGENTS.md` and `CLAUDE.md`; the project brief |
 | `core-be-specify` | task | Writing the spec for a new feature |
 | `core-be-change` | task | Changing an existing feature: spec first |
 | `core-be-clarify` | task | Resolving open questions in a spec |

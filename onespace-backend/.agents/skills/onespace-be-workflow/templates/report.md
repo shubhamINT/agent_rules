@@ -3,7 +3,7 @@
 - **Type:** feature | change | refactor | audit | security | test
 - **Date:** YYYY-MM-DD
 - **Status:** done
-- **Trace:** [scope](../plans/<slug>/scope.md) · [research](../research/<slug>.md) · [plan](../plans/<slug>/plan.md) · [progress](../plans/<slug>/progress.md)
+- **Trace:** [scope](../plans/<slug>/scope.md) · [research](../research/<slug>.md) · [plan](../plans/<slug>/tasks.md) · [progress](../plans/<slug>/progress.md)
 
 ## 1. Summary
 

@@ -57,7 +57,7 @@ the regression test for a bug.
 
 ### reviewer — read-only, fresh eyes
 
-Reviews a finished diff against `plan.md`, `scope.md`, and
+Reviews a finished diff against `tasks.md`, `scope.md`, and
 `onespace-fe-coding-standards` (including its self-review), and the
 screenshots in `agent-tracking/screenshots/<slug>/` against
 `onespace-fe-design-ui` (anti-patterns, responsive checklist).
@@ -72,7 +72,7 @@ Use for: the end of every feature, ui and refactor task, before the report.
 The subagent knows nothing you have not written down. Every brief contains:
 
 1. **Role** and what it may touch (read-only, or the exact paths it may edit).
-2. **Task slug** and paths to `scope.md` / `plan.md` / `research/<slug>.md`.
+2. **Task slug** and paths to `scope.md` / `tasks.md` / `research/<slug>.md`.
 3. **The question** or deliverable, specific enough to finish:
    "Which components under `src/` render a table of rows? Path, props, and callers for each."
 4. **Files or directories** in scope.
@@ -104,5 +104,5 @@ user, check it is real. Record what was delegated and what came back in
 
 Play the role yourself, in sequence, and protect the independence that made the
 role useful: write tests from the acceptance criteria *before* reopening the
-implementation; review the diff as a separate pass, reading `plan.md` first and
+implementation; review the diff as a separate pass, reading `tasks.md` first and
 the diff second, as if someone else wrote it.

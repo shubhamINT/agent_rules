@@ -35,7 +35,7 @@ load `core-fe-workflow` and run its phases 1–3 before anything else.
 Invoking this skill directly (a slash command, a one-line request) is not an
 </gate>
 
-exemption, and harness plan mode does not replace `plan.md`.
+exemption, and harness plan mode does not replace `tasks.md`.
 
 **Always, even inside another task:** make sure the repo is registered — the
 core-fe block in `AGENTS.md` and the `@AGENTS.md` import in `CLAUDE.md`

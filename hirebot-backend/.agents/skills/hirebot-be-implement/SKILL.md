@@ -10,7 +10,7 @@ description: >
 # Implement
 
 <gate>
-the checklist at `agent-tracking/plans/<slug>/plan.md` is approved,
+the checklist at `agent-tracking/plans/<slug>/tasks.md` is approved,
 and `hirebot-be-analyze` left no Critical or High finding. Either missing? Stop.
 </gate>
 
@@ -28,7 +28,7 @@ For each step in order (`hirebot-be-workflow`, Phase 6):
    passes on existing code is allowed: log it in `progress.md` as a guard.
 2. Write the smallest code that makes it pass.
 3. Run the step's verification. A red step is fixed before the next starts.
-4. Tick the box in `plan.md`; append to `progress.md`: what changed, why,
+4. Tick the box in `tasks.md`; append to `progress.md`: what changed, why,
    commands, result.
 
 `[P]` steps may run in parallel through the board

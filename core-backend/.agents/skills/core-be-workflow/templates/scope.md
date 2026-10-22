@@ -1,6 +1,6 @@
 # Scope — <slug>
 
-- **Type:** feature | change | explain | refactor | audit | security | test | debug
+- **Type:** feature | change | explain | init | refactor | audit | security | test | debug
 - **Requested by:** <name/role>
 - **Date:** YYYY-MM-DD
 

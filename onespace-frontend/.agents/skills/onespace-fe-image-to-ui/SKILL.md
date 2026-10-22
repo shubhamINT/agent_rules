@@ -32,7 +32,7 @@ it is.
 `agent-tracking/plans/<slug>/scope.md` for this task is missing, run
 `onespace-fe-workflow` phases 1–2 now (task type `image`, request recorded).
 Invoking this skill directly (a slash command, a one-line request) is not an
-exemption, and harness plan mode does not replace `plan.md`.
+exemption, and harness plan mode does not replace `tasks.md`.
 </gate>
 
 **Always, even inside another task:** make sure the repo is registered — the
@@ -126,14 +126,14 @@ a command palette, sticky headers on long tables. For each: what, why, and
 the cost.
 
 The user picks. Each accepted change is an **intentional deviation**, recorded
-in `plan.md` with the region of the image it affects (x, y, w, h in CSS px of
+in `tasks.md` with the region of the image it affects (x, y, w, h in CSS px of
 the design). Rejected ideas go to "Out-of-scope observations". Never apply an
 improvement the user did not accept: the image is the spec until they say
 otherwise.
 
 ## Step 5 — Plan (Phase 5)
 
-`plan.md`, from the workflow template, adds:
+`tasks.md`, from the workflow template, adds:
 
 - the images and their widths, and how the other widths behave
 - new tokens, and components reused vs added

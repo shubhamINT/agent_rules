@@ -25,7 +25,7 @@ unreviewable. Behaviour changes are separate tasks.
 "Agreed scope" rows are not all filled, run `onespace-be-workflow` phases 1–3 now and
 end your turn at the scope questions. Invoking this skill directly (a slash command, a one-line
 request) is not an exemption, and harness plan mode does not replace
-`plan.md`. This skill supplies the content of phases 4–7.
+`tasks.md`. This skill supplies the content of phases 4–7.
 </gate>
 
 **Always, even inside another task:** make sure the repo is registered — the

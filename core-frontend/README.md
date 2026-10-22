@@ -48,6 +48,7 @@ core-frontend/
     ├── core-fe-constitution/              # specs/constitution.md: principles with yes/no gate questions; amend with approval
     ├── core-fe-assess/                    # idea to verdict: go / needs-clarification / kill
     ├── core-fe-explain/                   # read-only trace of how code works; one HTML page with diagrams
+    ├── core-fe-init/                       # set up or repair a repo: AGENTS.md / CLAUDE.md, tracking, constitution, project brief
     ├── core-fe-specify/                   # new feature: specs/<NNN-topic>/spec.md, numbered acceptance criteria
     ├── core-fe-change/                    # existing feature: edit the spec first, then plan the delta
     ├── core-fe-clarify/                   # resolve open questions in a spec
@@ -116,10 +117,11 @@ the chain. Skill names below drop the `core-fe-` prefix.
 
 | You say | Task type | Skills, in order | You get |
 |---------|-----------|------------------|---------|
-| "build the team members page", "add a task scheduling UI" | `feature` | `workflow` → `constitution` (once) → `specify` → `clarify` → `plan` → `tasks` → `analyze` → you approve → `implement` → `converge`; `structure-app`, `design-ui`, `verify-ui` run inside | `specs/<NNN>/spec.md` and `plan.md`, the tracking record, screenshots, a report |
+| "build the team members page", "add a task scheduling UI" | `feature` | `workflow` → `constitution` (once) → `specify` → `clarify` → `plan` → `tasks` → `analyze` → you approve → `implement` → `converge`; `structure-app`, `design-ui`, `verify-ui` run inside | `specs/<NNN>/spec.md` and `tasks.md`, the tracking record, screenshots, a report |
 | "make the table filterable", "change how the wizard validates" | `change` | `workflow` → `change` → `clarify` → `plan` (delta) → `tasks` → `analyze` → you approve → `implement` → `converge` | the spec edited first with a change-log row, then code, screenshots, a report |
 | "should we build X?", a fuzzy idea | `assess` | `workflow` → `assess` | `specs/assessments/<slug>.md` with a verdict: go, needs-clarification, or kill |
 | "how does X work?", "walk me through this" | `explain` | `workflow` → `explain` | `agent-tracking/reports/<slug>.html`: flow diagram, `file:line` evidence, where code and spec disagree |
+| "set up this repo", "start a new project", messy `AGENTS.md` | `init` | `workflow` → `init` → first feature through `specify` | clean `AGENTS.md` + `CLAUDE.md` import, `specs/constitution.md`, approved `specs/project.md` |
 | "set up SDD", "project principles" | `constitution` | `workflow` → `constitution` | `specs/constitution.md` |
 | "redesign the dashboard", "make it look premium", "fix mobile layout" | `ui` | `workflow` → `design-ui` → `verify-ui` | restyled UI, screenshots at five widths, a report; no spec |
 | "clean up", "extract shared components" | `refactor` | `workflow` → `structure-app` → `verify-ui` | no visual change, before and after screenshots; no spec |
@@ -169,7 +171,7 @@ Skills are advice; these make the workflow hard to skip, whichever model runs.
 
 | Piece | Where | What it does |
 |-------|-------|--------------|
-| `sdd-check.sh` | `core-fe-workflow/scripts/` | `next`, `spec`, `analyze`, `converge`, `status`, `ci`: deterministic checks on the spec, plan, task, and INDEX files. Exit 1 on CRITICAL or HIGH. Used by the skills and by CI. |
+| `sdd-check.sh` | `core-fe-workflow/scripts/` | `next`, `spec`, `analyze`, `converge`, `status`, `ci`, `doctor`: deterministic checks on the spec, plan, task, and INDEX files. Exit 1 on CRITICAL or HIGH. Used by the skills and by CI. |
 | `sdd-hook.sh` | `core-fe-workflow/scripts/` | Claude Code hook. Blocks a source edit without an approved task (a `feature` or `change` also needs its spec first). Blocks stopping an in-progress `feature` or `change` before `Verdict: Converged`. |
 | `hooks/hooks.json` | plugin root | Wires the hook up. Installed with the plugin; nothing to configure. |
 | `sdd-check.yml` | `core-fe-workflow/templates/` | Sample GitHub Actions job running `sdd-check.sh ci`. |
@@ -253,7 +255,7 @@ repo (`npx skills` or manual copy).
      one skill alone breaks links:
 
      ```bash
-     npx skills add shubhamINT/agent_rules -a claude-code -s core-fe-analyze core-fe-assess core-fe-change core-fe-clarify core-fe-coding-standards core-fe-constitution core-fe-converge core-fe-debug core-fe-design-ui core-fe-explain core-fe-image-to-ui core-fe-implement core-fe-plan core-fe-specify core-fe-structure-app core-fe-tasks core-fe-verify-ui core-fe-workflow
+     npx skills add shubhamINT/agent_rules -a claude-code -s core-fe-analyze core-fe-assess core-fe-change core-fe-clarify core-fe-coding-standards core-fe-constitution core-fe-converge core-fe-debug core-fe-design-ui core-fe-explain core-fe-image-to-ui core-fe-implement core-fe-init core-fe-plan core-fe-specify core-fe-structure-app core-fe-tasks core-fe-verify-ui core-fe-workflow
      npx skills add shubhamINT/agent_rules --list     # or pick interactively and select every core-fe-* skill
      npx skills update                                 # pull the latest version
      ```
@@ -294,7 +296,7 @@ User: "the projects page looks bad on mobile, make it premium"
   2. agent-tracking/plans/2026-09-26-ui-projects-page/scope.md (request verbatim), INDEX row
   3. Registers the pack in AGENTS.md / CLAUDE.md; scope questions: devices, themes, references, dials, constraints, report format
   4. Research: stack, reuse inventory, README gaps, before screenshots at 5 widths, 3–5 design references
-  5. plan.md with what is weak now and 2–3 design directions → STOP for approval
+  5. tasks.md with what is weak now and 2–3 design directions → STOP for approval
   6. Build: tokens → mobile layout → components → states → motion, screenshotting as it goes
   7. Final verify (all widths, both themes), critique + ideas in chat
   8. Docs sync: README (run, scripts, env, structure) and AGENTS.md brought up to date
@@ -308,7 +310,7 @@ User: "implement designs/billing.png as /settings/billing"
   3. Asks what the image cannot show: other widths, hover/loading/empty/error, dark mode, data, fonts, asset licences
   4. Design read (grid, spacing, type, colour, components mapped to existing ones)
   5. Critique + 2–3 upgrades → you pick; accepted ones become intentional deviations
-  6. plan.md → STOP for approval
+  6. tasks.md → STOP for approval
   7. Build tokens → sections; compare.mjs after each: mismatch %, worst-cell crops, fix, repeat (target ≤ 3%)
   8. verify-ui at every width and theme; docs sync
   9. Report with design vs build side by side, diff heatmap, mismatch first → final
@@ -341,7 +343,7 @@ User later: "make the table filterable"
 ```
 agent-tracking/
 ├── INDEX.md
-├── plans/<YYYY-MM-DD-type-topic>/{scope.md, plan.md, progress.md}
+├── plans/<YYYY-MM-DD-type-topic>/{scope.md, tasks.md, progress.md}
 ├── research/<YYYY-MM-DD-type-topic>.md
 ├── designs/<YYYY-MM-DD-type-topic>/*.png        # reference images for image tasks (copies)
 ├── screenshots/<YYYY-MM-DD-type-topic>/{before,after,refs,compare-NN}/*.png

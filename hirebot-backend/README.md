@@ -34,6 +34,7 @@ hirebot-backend/
     ├── hirebot-be-constitution/              # specs/constitution.md: principles with yes/no gate questions; amend with approval
     ├── hirebot-be-assess/                    # idea to verdict: go / needs-clarification / kill
     ├── hirebot-be-explain/                   # read-only trace of how code works; one HTML page with diagrams
+    ├── hirebot-be-init/                       # set up or repair a repo: AGENTS.md / CLAUDE.md, tracking, constitution, project brief
     ├── hirebot-be-specify/                   # new feature: specs/<NNN-topic>/spec.md, numbered acceptance criteria
     ├── hirebot-be-change/                    # existing feature: edit the spec first, then plan the delta
     ├── hirebot-be-clarify/                   # resolve open questions in a spec
@@ -63,10 +64,11 @@ the chain. Skill names below drop the `hirebot-be-` prefix.
 
 | You say | Task type | Skills, in order | You get |
 |---------|-----------|------------------|---------|
-| "add CSV export", "build a webhook", "integrate Stripe" | `feature` | `workflow` → `constitution` (once) → `specify` → `clarify` → `plan` → `tasks` → `analyze` → you approve → `implement` → `converge` | `specs/<NNN>/spec.md` and `plan.md`, the tracking record, a report |
+| "add CSV export", "build a webhook", "integrate Stripe" | `feature` | `workflow` → `constitution` (once) → `specify` → `clarify` → `plan` → `tasks` → `analyze` → you approve → `implement` → `converge` | `specs/<NNN>/spec.md` and `tasks.md`, the tracking record, a report |
 | "limit it to 10k rows", "change how login works", "drop support for Y" | `change` | `workflow` → `change` → `clarify` → `plan` (delta) → `tasks` → `analyze` → you approve → `implement` → `converge` | the spec edited first with a change-log row, then code and a report |
 | "should we build X?", a fuzzy idea | `assess` | `workflow` → `assess` | `specs/assessments/<slug>.md` with a verdict: go, needs-clarification, or kill |
 | "how does X work?", "walk me through this" | `explain` | `workflow` → `explain` | `agent-tracking/reports/<slug>.html`: flow diagram, `file:line` evidence, where code and spec disagree |
+| "set up this repo", "start a new project", messy `AGENTS.md` | `init` | `workflow` → `init` → first feature through `specify` | clean `AGENTS.md` + `CLAUDE.md` import, `specs/constitution.md`, approved `specs/project.md` |
 | "set up SDD", "project principles" | `constitution` | `workflow` → `constitution` | `specs/constitution.md` |
 | "clean this up", "this code is a mess" | `refactor` | `workflow` → `refactor-code` | behaviour-preserving changes and a report; no spec |
 | "review this code", "find bad code" | `audit` | `workflow` → `audit-code` | a report; no spec |
@@ -116,7 +118,7 @@ Skills are advice; these make the workflow hard to skip, whichever model runs.
 
 | Piece | Where | What it does |
 |-------|-------|--------------|
-| `sdd-check.sh` | `hirebot-be-workflow/scripts/` | `next`, `spec`, `analyze`, `converge`, `status`, `ci`: deterministic checks on the spec, plan, task, and INDEX files. Exit 1 on CRITICAL or HIGH. Used by the skills and by CI. |
+| `sdd-check.sh` | `hirebot-be-workflow/scripts/` | `next`, `spec`, `analyze`, `converge`, `status`, `ci`, `doctor`: deterministic checks on the spec, plan, task, and INDEX files. Exit 1 on CRITICAL or HIGH. Used by the skills and by CI. |
 | `sdd-hook.sh` | `hirebot-be-workflow/scripts/` | Claude Code hook. Blocks a source edit without an approved task (a `feature` or `change` also needs its spec first). Blocks stopping an in-progress `feature` or `change` before `Verdict: Converged`. |
 | `hooks/hooks.json` | plugin root | Wires the hook up. Installed with the plugin; nothing to configure. |
 | `sdd-check.yml` | `hirebot-be-workflow/templates/` | Sample GitHub Actions job running `sdd-check.sh ci`. |
@@ -203,7 +205,7 @@ Pick one of the three ways to get the skills. The agent writes `AGENTS.md` and
      one skill alone breaks links:
 
      ```bash
-     npx skills add shubhamINT/agent_rules -a claude-code -s hirebot-be-add-health-endpoint hirebot-be-analyze hirebot-be-assess hirebot-be-audit-code hirebot-be-audit-security hirebot-be-build-feature hirebot-be-change hirebot-be-clarify hirebot-be-coding-standards hirebot-be-constitution hirebot-be-converge hirebot-be-debug hirebot-be-explain hirebot-be-implement hirebot-be-plan hirebot-be-refactor-code hirebot-be-specify hirebot-be-structure-service hirebot-be-tasks hirebot-be-workflow hirebot-be-write-tests
+     npx skills add shubhamINT/agent_rules -a claude-code -s hirebot-be-add-health-endpoint hirebot-be-analyze hirebot-be-assess hirebot-be-audit-code hirebot-be-audit-security hirebot-be-build-feature hirebot-be-change hirebot-be-clarify hirebot-be-coding-standards hirebot-be-constitution hirebot-be-converge hirebot-be-debug hirebot-be-explain hirebot-be-implement hirebot-be-init hirebot-be-plan hirebot-be-refactor-code hirebot-be-specify hirebot-be-structure-service hirebot-be-tasks hirebot-be-workflow hirebot-be-write-tests
      npx skills add shubhamINT/agent_rules --list     # or pick interactively and select every hirebot-be-* skill
      npx skills update                                 # pull the latest version
      ```
@@ -253,7 +255,7 @@ User: "refactor the billing module, it's a mess"
   3. Agent asks scope: which paths? depth? behaviour change allowed? report HTML or MD? — logged in scope.md
   4. Agent researches → research/2026-09-24-refactor-billing.md (structure, tests, lint, complexity baseline);
      no recorded structure → detects it, asks you, records it in AGENTS.md
-  5. Agent writes plan.md and STOPS for approval
+  5. Agent writes tasks.md and STOPS for approval
   6. On approval: executes step by step, logging progress.md
   7. Report → reports/2026-09-24-refactor-billing.html, INDEX row → done
 ```
@@ -288,7 +290,7 @@ holes it notices, without fixing them unasked.
 ```
 agent-tracking/
 ├── INDEX.md
-├── plans/<YYYY-MM-DD-type-topic>/{scope.md, plan.md, progress.md}
+├── plans/<YYYY-MM-DD-type-topic>/{scope.md, tasks.md, progress.md}
 ├── research/<YYYY-MM-DD-type-topic>.md
 └── reports/<YYYY-MM-DD-type-topic>.html | .md
 ```

@@ -21,7 +21,7 @@ Either missing? Stop and run `core-be-clarify` or `core-be-constitution`.
 Two plans exist, on purpose:
 
 - `specs/<NNN-topic>/plan.md` (this skill): the durable design.
-- `agent-tracking/plans/<slug>/plan.md` (`core-be-tasks`): this task's approved
+- `agent-tracking/plans/<slug>/tasks.md` (`core-be-tasks`): this task's approved
   checklist.
 
 ## Steps

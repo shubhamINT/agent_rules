@@ -1,10 +1,11 @@
 #!/bin/sh
 # SDD validator. Checks spec, plan, and task files; same checks run in CI.
-# usage: sdd-check.sh next <topic> | spec <dir> | analyze <slug> | converge <slug> | status | ci
+# usage: sdd-check.sh next <topic> | spec <dir> | analyze <slug> | converge <slug> | status | ci | doctor
 # Output: SEVERITY  path:line  message. Exit 1 on any CRITICAL or HIGH.
 # POSIX sh + awk only. ponytail: greps the Markdown templates, so a spec that
 # departs from templates/spec.md can fool it; keep the templates' line shapes.
 set -u
+HERE=$(cd "$(dirname "$0")" && pwd)   # before the cd below: $0 may be relative
 ROOT=${SDD_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}
 cd "$ROOT" || exit 2
 IDX=agent-tracking/INDEX.md
@@ -18,9 +19,11 @@ index_rows() { # slug TAB type TAB status, one line per INDEX row
   awk -F'|' 'NF>=6 { for(i=2;i<=5;i++) gsub(/^ +| +$/,"",$i)
     if ($3!="" && $3!="Slug" && $3 !~ /^-+$/) print $3 "\t" $4 "\t" $5 }' "$IDX"
 }
-spec_of() { sed -n 's/^\*\*Spec:\*\* *\([^ ]*\).*/\1/p' "agent-tracking/plans/$1/plan.md" 2>/dev/null | head -1; }
+tf() { # task file; the legacy name plan.md still works in repos created before the rename
+  d=agent-tracking/plans/$1; if [ ! -f "$d/tasks.md" ] && [ -f "$d/plan.md" ]; then echo "$d/plan.md"; else echo "$d/tasks.md"; fi; }
+spec_of() { sed -n 's/^\*\*Spec:\*\* *\([^ ]*\).*/\1/p' "$(tf "$1")" 2>/dev/null | head -1; }
 ac_active() { sed -n 's/^- \*\*\(AC-[0-9]*\):\*\*.*/\1/p' "$1"; }
-covers_of() { sed -n 's/^\*\*Covers:\*\*//p' "agent-tracking/plans/$1/plan.md" 2>/dev/null | head -1 | grep -oE 'AC-[0-9]+'; }
+covers_of() { sed -n 's/^\*\*Covers:\*\*//p' "$(tf "$1")" 2>/dev/null | head -1 | grep -oE 'AC-[0-9]+'; }
 task_acs() { # ACs the task owns: its Covers line, else every active AC of the spec
   c=$(covers_of "$1"); if [ -n "$c" ]; then printf '%s\n' "$c"; else ac_active "$2"; fi; }
 cov_all() { # ACs covered by any non-cancelled task that points at spec $1
@@ -53,7 +56,7 @@ cmd_spec() {
 }
 
 cmd_analyze() {
-  s=$1; p=agent-tracking/plans/$s/plan.md
+  s=$1; p=$(tf "$s")
   [ -f "$p" ] || { emit CRITICAL "$p" "task plan missing"; return; }
   sp=$(spec_of "$s")
   [ -n "$sp" ] && [ -f "$sp" ] || { emit CRITICAL "$p" "Spec: line missing or file not found ('$sp')"; return; }
@@ -98,7 +101,7 @@ cmd_analyze() {
 cmd_converge() {
   s=$1; pg=agent-tracking/plans/$s/progress.md; sp=$(spec_of "$s")
   [ -f "$pg" ] || { emit CRITICAL "$pg" "progress.md missing"; return; }
-  [ -n "$sp" ] && [ -f "$sp" ] || { emit CRITICAL "$pg" "no readable Spec: line in the task plan.md"; return; }
+  [ -n "$sp" ] && [ -f "$sp" ] || { emit CRITICAL "$pg" "no readable Spec: line in the task file (tasks.md)"; return; }
   for a in $(task_acs "$s" "$sp"); do
     ac_active "$sp" | grep -qx "$a" || continue
     row=$(grep -E "^\| *$a *\|" "$pg" | tail -1)
@@ -113,7 +116,7 @@ cmd_converge() {
 cmd_status() { # TASK slug type status plan=yes|no spec=yes|no verdict=yes|no
   index_rows | while IFS="$TAB" read -r slug type st; do
     case $st in approved|in-progress|scoping|researching|awaiting-approval) ;; *) continue ;; esac
-    pa=no; grep -q '^\*\*Status:\*\* approved' "agent-tracking/plans/$slug/plan.md" 2>/dev/null && pa=yes
+    pa=no; grep -q '^\*\*Status:\*\* approved' "$(tf "$slug")" 2>/dev/null && pa=yes
     [ "$type" = trivial ] && pa=yes
     sp=yes
     case $type in feature|change)
@@ -138,7 +141,7 @@ cmd_ci() {
   done
   [ "$any" = 0 ] || [ -f specs/constitution.md ] || emit CRITICAL specs/constitution.md "specs exist but the constitution is missing"
   index_rows | while IFS="$TAB" read -r slug type st; do
-    pf=agent-tracking/plans/$slug/plan.md
+    pf=$(tf "$slug")
     case $st in
       done) case $type in feature|change)
           sp=$(spec_of "$slug")
@@ -148,13 +151,49 @@ cmd_ci() {
           else emit HIGH "$pf" "done $type task has no readable Spec: line"; fi ;; esac ;;
       approved|in-progress) [ "$type" = trivial ] ||
           grep -q '^\*\*Status:\*\* approved' "$pf" 2>/dev/null ||
-          emit HIGH "$pf" "task $slug is $st but plan.md is not 'Status: approved'" ;;
+          emit HIGH "$pf" "task $slug is $st but its tasks file is not 'Status: approved'" ;;
     esac
   done
 }
 
+cmd_doctor() { # is this repo set up for the pack? read-only
+  A=AGENTS.md; C=CLAUDE.md
+  pfx=$(basename "$(dirname "$HERE")"); pfx=${pfx%-workflow}; tm=$HERE/../templates/AGENTS.md
+  blk() { awk -v s="<!-- $pfx:start -->" -v e="<!-- $pfx:end -->" '$0==s{f=1;next} $0==e{f=0} f' "$1"; }
+  own() { awk -v s="<!-- $pfx:start -->" -v e="<!-- $pfx:end -->" '$0==s{f=1;next} $0==e{f=0;next} !f' "$1"; }
+  long() { sed 's/^[ >*-]*//; s/ *$//' | awk 'length($0)>=25 && $0 !~ /^(```|\||<!--|-->)/'; }
+  t1=${TMPDIR:-/tmp}/sdd-doctor1.$$; t2=${TMPDIR:-/tmp}/sdd-doctor2.$$
+  if [ ! -f $A ]; then emit HIGH $A "missing; init creates it from templates/AGENTS.md"
+  else
+    if grep -qF "<!-- $pfx:start -->" $A && grep -qF "<!-- $pfx:end -->" $A; then
+      [ ! -f "$tm" ] || [ "$(blk $A)" = "$(blk "$tm")" ] ||
+        emit MEDIUM $A "managed block differs from the pack's current template; refresh it (references/REGISTER-PACK.md)"
+    else emit HIGH $A "pack markers <!-- $pfx:start --> / <!-- $pfx:end --> missing"; fi
+    grep -q '^## Project structure' $A || emit MEDIUM $A "no '## Project structure' section"
+    n=$(own $A | long | sort | uniq -d | wc -l)
+    [ "$n" -eq 0 ] || emit MEDIUM $A "$n long lines appear more than once outside the managed block; keep each fact once"
+  fi
+  if [ ! -f $C ]; then emit HIGH $C "missing; it must contain the line @AGENTS.md"
+  else
+    grep -qx '@AGENTS.md' $C || emit HIGH $C "no '@AGENTS.md' import line"
+    n=$(grep -v '^[[:space:]]*$' $C | grep -vxF '@AGENTS.md' | wc -l)
+    [ "$n" -le 5 ] || emit MEDIUM $C "$n lines besides the import; keep only Claude-specific notes, move the rest to AGENTS.md"
+    if [ -f $A ]; then
+      long < $C | sort -u > $t1; long < $A | sort -u > $t2
+      n=$(comm -12 $t1 $t2 | wc -l); rm -f $t1 $t2
+      [ "$n" -eq 0 ] || emit MEDIUM $C "$n long lines also appear in AGENTS.md; AGENTS.md is the single source"
+    fi
+  fi
+  [ -f $IDX ] || emit MEDIUM $IDX "missing; created from templates/INDEX.md"
+  [ -f specs/constitution.md ] || emit HIGH specs/constitution.md "missing; run the constitution skill"
+  [ -f specs/project.md ] || emit MEDIUM specs/project.md "missing; the project brief from the init skill"
+  [ -f README.md ] || emit MEDIUM README.md "missing"
+  grep -qs sdd-hook .claude/settings.json .claude/settings.local.json ||
+    emit MEDIUM .claude/settings.json "edit guard not registered (ignore if the pack is installed as a plugin); the user runs install-hook.sh"
+}
+
 cmd=${1:-}; [ $# -gt 0 ] && shift
-usage() { echo "usage: sdd-check.sh next <topic> | spec <dir> | analyze <slug> | converge <slug> | status | ci" >&2; exit 2; }
+usage() { echo "usage: sdd-check.sh next <topic> | spec <dir> | analyze <slug> | converge <slug> | status | ci | doctor" >&2; exit 2; }
 report() { # run $1, print findings, exit 1 on CRITICAL/HIGH
   out=$("$@")
   [ -n "$out" ] || { echo "OK"; exit 0; }
@@ -170,6 +209,7 @@ case $cmd in
   analyze)  [ $# -ge 1 ] || usage; report cmd_analyze "$1" ;;
   converge) [ $# -ge 1 ] || usage; report cmd_converge "$1" ;;
   ci)       report cmd_ci ;;
+  doctor)   report cmd_doctor ;;
   status)   cmd_status ;;
   *) usage ;;
 esac

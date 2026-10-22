@@ -62,7 +62,7 @@ not extra. Premium design is the agreed result; do not trim it to save code.
 
 - Think in short notes: facts, decision, next action. Do not restate the
   request, narrate tool calls, or draft the reply twice.
-- Decide once. Settled decisions live in `scope.md` and `plan.md`; do not
+- Decide once. Settled decisions live in `scope.md` and `tasks.md`; do not
   re-argue them.
 - Think longer only where it pays: root cause, design direction, a risky
   trade-off. Mechanical steps (rename, copy a template, run a check) need
@@ -82,7 +82,7 @@ not extra. Premium design is the agreed result; do not trim it to save code.
   could be misread.
 - The user's own style instructions win over this section.
 
-Files that persist (`scope.md`, `plan.md`, reports, README, `AGENTS.md`,
+Files that persist (`scope.md`, `tasks.md`, reports, README, `AGENTS.md`,
 commit messages, code comments) stay in normal prose for human readers. They
 should still be concise: tables over paragraphs, no filler.
 

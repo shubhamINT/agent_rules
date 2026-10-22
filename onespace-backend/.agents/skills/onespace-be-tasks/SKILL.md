@@ -3,7 +3,7 @@ name: onespace-be-tasks
 description: >
   Turn a spec and its design plan into the ordered task checklist: test-first,
   each step mapped to an acceptance criterion, independent steps marked `[P]`.
-  Writes it into `agent-tracking/plans/<slug>/plan.md`. Use after `onespace-be-plan`.
+  Writes it into `agent-tracking/plans/<slug>/tasks.md`. Use after `onespace-be-plan`.
   The list is then checked by `onespace-be-analyze` and approved by the user.
 ---
 
@@ -13,8 +13,8 @@ description: >
 `specs/<NNN-topic>/spec.md` and `specs/<NNN-topic>/plan.md` exist.
 </gate>
 
-Write the checklist into `agent-tracking/plans/<slug>/plan.md` from
-`onespace-be-workflow/templates/plan.md`: goal, `Spec:` line, steps, files expected to change,
+Write the checklist into `agent-tracking/plans/<slug>/tasks.md` from
+`onespace-be-workflow/templates/tasks.md`: goal, `Spec:` line, steps, files expected to change,
 verification, risks. This is the approved checklist the workflow's Phase 5
 stops on.
 

@@ -29,7 +29,7 @@ finding traceable to a standard ID and a `file:line`.
 "Agreed scope" rows are not all filled, run `hirebot-be-workflow` phases 1–3 now and
 end your turn at the scope questions. Invoking this skill directly (a slash command, a one-line
 request) is not an exemption, and harness plan mode does not replace
-`plan.md`. Scope must include ASVS level (L2 default) and whether the
+`tasks.md`. Scope must include ASVS level (L2 default) and whether the
 service calls an LLM. This skill supplies phases 4–7.
 </gate>
 
@@ -68,7 +68,7 @@ does not re-triage them.
 
 ## Phase 5 — Review plan
 
-In `plan.md` list: files/endpoints in review order (trust boundaries first),
+In `tasks.md` list: files/endpoints in review order (trust boundaries first),
 checklists to apply, ASVS level, and which scanner hits need manual
 confirmation. Get approval.
 

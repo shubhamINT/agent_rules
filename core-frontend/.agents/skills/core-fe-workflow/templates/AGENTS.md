@@ -71,6 +71,7 @@ Until they are installed, follow the rules in this file.
 | **Change** | "make the table filterable", "change how the wizard validates" | `core-fe-workflow` → `core-fe-change` (edit the spec first) → `core-fe-clarify` → `core-fe-plan` (delta) → `core-fe-tasks` → `core-fe-analyze` → approval → `core-fe-implement` → `core-fe-converge` |
 | **Assess** | "should we build X", "is this worth it", a vague idea | `core-fe-workflow` → `core-fe-assess` → `go` / `needs-clarification` / `kill` |
 | **Explain** | "how does X work", "walk me through this flow", "I am new to this code" | `core-fe-workflow` → `core-fe-explain` |
+| **Init** | "set up this repo", "onboard this project", "start a new project", messy `AGENTS.md` / `CLAUDE.md` | `core-fe-workflow` → `core-fe-init` → first feature through `core-fe-specify` |
 | **Constitution** | "set up SDD", "project principles" | `core-fe-workflow` → `core-fe-constitution` |
 | **UI** | "redesign the dashboard", "make it look premium", "fix mobile layout", "add skeletons", "add animations" | `core-fe-workflow` → `core-fe-design-ui` → `core-fe-verify-ui` |
 | **Refactor** | "clean up components", "too much duplicate code", "make it reusable" | `core-fe-workflow` → `core-fe-structure-app` → `core-fe-verify-ui` |
@@ -162,6 +163,7 @@ Follow `core-fe-workflow`. In short:
 | `core-fe-constitution` | task | Creating or amending `specs/constitution.md` |
 | `core-fe-assess` | task | Deciding go / needs-clarification / kill for an idea before any spec |
 | `core-fe-explain` | task | Explaining how existing code works: read-only trace, HTML page |
+| `core-fe-init` | task | Setting up or repairing a repo for the pack; fixing `AGENTS.md` and `CLAUDE.md`; the project brief |
 | `core-fe-specify` | task | Writing the spec for a new page, flow, or widget |
 | `core-fe-change` | task | Changing an existing page, flow, or widget: spec first |
 | `core-fe-clarify` | task | Resolving open questions in a spec |

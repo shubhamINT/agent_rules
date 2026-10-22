@@ -56,7 +56,7 @@ the regression test for a bug.
 
 ### reviewer — read-only, fresh eyes
 
-Reviews a finished diff against `plan.md`, `scope.md`, and
+Reviews a finished diff against `tasks.md`, `scope.md`, and
 `onespace-be-coding-standards` (including the AI-generated-code self-review),
 plus the `onespace-be-audit-security` items for the trust boundaries touched.
 It also asks of each new test: *what plausible bug would make this fail?* — a
@@ -71,7 +71,7 @@ non-trivial bug.
 The subagent knows nothing you have not written down. Every brief contains:
 
 1. **Role** and what it may touch (read-only, or the exact paths it may edit).
-2. **Task slug** and paths to `scope.md` / `plan.md` / `research/<slug>.md`.
+2. **Task slug** and paths to `scope.md` / `tasks.md` / `research/<slug>.md`.
 3. **The question** or deliverable, specific enough to finish:
    "Does `list_orders` filter by `owner_id` on every code path? Evidence per path."
 4. **Files or directories** in scope.
@@ -103,5 +103,5 @@ user, check it is real. Record what was delegated and what came back in
 
 Play the role yourself, in sequence, and protect the independence that made the
 role useful: write tests from the acceptance criteria *before* reopening the
-implementation; review the diff as a separate pass, reading `plan.md` first and
+implementation; review the diff as a separate pass, reading `tasks.md` first and
 the diff second, as if someone else wrote it.

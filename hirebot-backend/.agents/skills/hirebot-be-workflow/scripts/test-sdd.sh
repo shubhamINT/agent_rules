@@ -41,7 +41,7 @@ cat > $S/plan.md <<'EOF'
 | Violation or extra moving part | Why needed | Simpler option rejected |
 |--------------------------------|------------|-------------------------|
 EOF
-cat > $T/plan.md <<'EOF'
+cat > $T/tasks.md <<'EOF'
 # Plan
 **Status:** approved (2026-01-01, by user)
 **Spec:** specs/001-export/spec.md
@@ -73,9 +73,9 @@ label="spec: duplicate AC fails"; bad $C spec $S
 cp /tmp/spec.$$ $S/spec.md; rm /tmp/spec.$$
 
 label="analyze: clean passes"; ok $C analyze 2026-01-01-feature-export
-cp $T/plan.md /tmp/tp.$$; grep -v 'AC-2' /tmp/tp.$$ > $T/plan.md
+cp $T/tasks.md /tmp/tp.$$; grep -v 'AC-2' /tmp/tp.$$ > $T/tasks.md
 label="analyze: AC with no task is CRITICAL"; bad $C analyze 2026-01-01-feature-export
-cp /tmp/tp.$$ $T/plan.md
+cp /tmp/tp.$$ $T/tasks.md
 sed 's/| yes |/| no |/' $S/plan.md > /tmp/dp.$$; cp $S/plan.md /tmp/dp.orig.$$; cp /tmp/dp.$$ $S/plan.md
 label="analyze: gate no without complexity row fails"; bad $C analyze 2026-01-01-feature-export
 printf '| extra layer | needed for X | none |\n' >> $S/plan.md
@@ -91,22 +91,22 @@ cp /tmp/pg.$$ $T/progress.md; rm /tmp/pg.$$
 
 # a later change task owns only the delta (AC-3); the first task keeps owning AC-1, AC-2
 T2=agent-tracking/plans/2026-02-01-change-export-limit; mkdir -p $T2
-printf '# Plan\n**Status:** approved (2026-02-01, by user)\n**Spec:** specs/001-export/spec.md\n**Covers:** AC-3\n- [ ] 1. AC-3 test then code\n- [ ] 2. converge\n' > $T2/plan.md
+printf '# Plan\n**Status:** approved (2026-02-01, by user)\n**Spec:** specs/001-export/spec.md\n**Covers:** AC-3\n- [ ] 1. AC-3 test then code\n- [ ] 2. converge\n' > $T2/tasks.md
 cp $S/spec.md /tmp/sp3.$$; sed -i 's/^## Out of scope/- **AC-3:** limit\n## Out of scope/' $S/spec.md
 label="analyze: change task covering only the delta passes"; ok $C analyze 2026-02-01-change-export-limit
 label="analyze: first task still passes with a later AC in the spec"; ok $C analyze 2026-01-01-feature-export
-printf '# Plan\n**Status:** approved (x)\n**Spec:** specs/001-export/spec.md\n**Covers:** AC-3\n- [ ] 1. docs only\n' > $T2/plan.md
+printf '# Plan\n**Status:** approved (x)\n**Spec:** specs/001-export/spec.md\n**Covers:** AC-3\n- [ ] 1. docs only\n' > $T2/tasks.md
 label="analyze: delta AC with no task is CRITICAL"; bad $C analyze 2026-02-01-change-export-limit
-printf '# Plan\n**Status:** approved (2026-02-01, by user)\n**Spec:** specs/001-export/spec.md\n**Covers:** AC-3\n- [ ] 1. AC-3 test then code\n- [ ] 2. converge\n' > $T2/plan.md
+printf '# Plan\n**Status:** approved (2026-02-01, by user)\n**Spec:** specs/001-export/spec.md\n**Covers:** AC-3\n- [ ] 1. AC-3 test then code\n- [ ] 2. converge\n' > $T2/tasks.md
 printf '| 2026-02-01 | 2026-02-01-change-export-limit | change | done | y | |\n' > /tmp/row2.$$
 idx feature done; cat /tmp/row2.$$ >> agent-tracking/INDEX.md
 sed -i 's/^## Out of scope/&/' $S/spec.md
 printf '## Converge\n| AC | Evidence | Code | Status |\n|---|---|---|---|\n| AC-3 | tests/t.py::c | app.py:20 | met |\nVerdict: Converged\n' > $T2/progress.md
 sed -i 's/^- \*\*Status:\*\* approved/- **Status:** implemented/' $S/spec.md
 label="ci: two done tasks covering every AC pass"; ok $C ci
-sed -i 's/^\*\*Covers:\*\* AC-1, AC-2/**Covers:** AC-1/' $T/plan.md
+sed -i 's/^\*\*Covers:\*\* AC-1, AC-2/**Covers:** AC-1/' $T/tasks.md
 label="ci: AC covered by no task is HIGH"; bad $C ci
-sed -i 's/^\*\*Covers:\*\* AC-1$/**Covers:** AC-1, AC-2/' $T/plan.md
+sed -i 's/^\*\*Covers:\*\* AC-1$/**Covers:** AC-1, AC-2/' $T/tasks.md
 rm -rf $T2; cp /tmp/sp3.$$ $S/spec.md; rm -f /tmp/sp3.$$ /tmp/row2.$$
 idx feature done
 label="ci: done task with spec still approved fails"; bad $C ci
@@ -128,9 +128,12 @@ label="guard: approved feature with spec row allowed"; code 0 pre app/main.py
 sed -i 's/2026-01-01-feature-export/other/' $S/spec.md
 label="guard: feature whose spec lacks the slug blocked"; code 2 pre app/main.py
 sed -i 's/other/2026-01-01-feature-export/' $S/spec.md
-mv $T/plan.md $T/plan.bak; printf '# Plan\n**Status:** awaiting-approval\n**Spec:** specs/001-export/spec.md\n' > $T/plan.md
+mv $T/tasks.md $T/tasks.bak; printf '# Plan\n**Status:** awaiting-approval\n**Spec:** specs/001-export/spec.md\n' > $T/tasks.md
 label="guard: plan not approved blocked"; code 2 pre app/main.py
-mv $T/plan.bak $T/plan.md
+mv $T/tasks.bak $T/tasks.md
+mv $T/tasks.md $T/plan.md
+label="guard: legacy plan.md name still accepted"; code 0 pre app/main.py
+mv $T/plan.md $T/tasks.md
 idx trivial in-progress
 label="guard: trivial in-progress row allows edit"; code 0 pre app/main.py
 label="guard: SDD_GUARD=off allows"; ( SDD_GUARD=off; export SDD_GUARD; rm -f agent-tracking/INDEX.md; code 0 pre app/main.py )
@@ -163,5 +166,25 @@ cp "$ST" /tmp/st2.$$; $I >/dev/null 2>&1; label="install-hook: invalid JSON left
 rm -f "$ST"; $I --dry-run >/dev/null 2>&1
 label="install-hook: dry run writes nothing"; [ ! -e "$ST" ] && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
 label="install-hook: script outside the project is refused"; code 2 sh "$here/install-hook.sh" "$R"
+
+# ---- doctor
+D=$R/doctor; mkdir -p $D; cd $D; export SDD_ROOT=$D
+TM=$here/../templates/AGENTS.md; PF=$(basename "$(dirname "$here")"); PF=${PF%-workflow}
+label="doctor: empty repo is not ready"; bad $C doctor
+cp "$TM" AGENTS.md; printf '@AGENTS.md\n' > CLAUDE.md; mkdir -p specs agent-tracking; : > specs/constitution.md
+label="doctor: set-up repo has no HIGH finding"; ok $C doctor
+printf 'Run the tests with make test before every commit please.\n' >> AGENTS.md; printf 'Run the tests with make test before every commit please.\n' > CLAUDE.md; printf '@AGENTS.md\n' >> CLAUDE.md
+label="doctor: line duplicated between CLAUDE.md and AGENTS.md reported"; $C doctor | grep -q 'also appear in AGENTS.md' && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
+printf '@AGENTS.md\n' > CLAUDE.md; printf 'Always use the staging database for manual checks here.\n' >> AGENTS.md; printf 'Always use the staging database for manual checks here.\n' >> AGENTS.md
+label="doctor: line repeated inside AGENTS.md reported"; $C doctor | grep -q 'more than once outside' && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
+i=0; while [ $i -lt 8 ]; do printf 'note number %s\n' $i >> CLAUDE.md; i=$((i+1)); done
+label="doctor: CLAUDE.md with extra lines reported"; $C doctor | grep -q 'lines besides the import' && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
+printf '# notes\n' > CLAUDE.md
+label="doctor: CLAUDE.md without the import is HIGH"; bad $C doctor
+printf '@AGENTS.md\n' > CLAUDE.md; sed "s/<!-- $PF:start -->//; s/<!-- $PF:end -->//" "$TM" > AGENTS.md
+label="doctor: AGENTS.md without markers is HIGH"; bad $C doctor
+awk -v e="<!-- $PF:end -->" '$0==e{print "extra rule inside the block"} {print}' "$TM" > AGENTS.md
+label="doctor: stale managed block reported"; $C doctor | grep -q 'managed block differs' && echo "PASS $label" || { echo "FAIL $label"; fails=$((fails+1)); }
+cd $R; export SDD_ROOT=$R
 
 [ "$fails" = 0 ] && { echo "all passed"; exit 0; } || { echo "$fails failed"; exit 1; }

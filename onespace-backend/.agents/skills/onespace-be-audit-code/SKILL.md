@@ -28,7 +28,7 @@ is not a finding.
 "Agreed scope" rows are not all filled, run `onespace-be-workflow` phases 1–3 now and
 end your turn at the scope questions. Invoking this skill directly (a slash
 command, a one-line request) is not an exemption, and harness plan mode does
-not replace `plan.md`. This skill
+not replace `tasks.md`. This skill
 supplies phases 4–7. **Default is report-only.** Fixing is a separate planned
 task (`onespace-be-refactor-code` for structure, `onespace-be-build-feature`/a fix task for behaviour).
 </gate>
@@ -66,7 +66,7 @@ starting point, not the audit.
 
 ## Phase 5 — Review plan
 
-In `plan.md`: files in review order (entry points and most-changed files first —
+In `tasks.md`: files in review order (entry points and most-changed files first —
 `git log --since=6.months --name-only --pretty=format: | sort | uniq -c | sort -rn | head`),
 checklists to apply, whether the code is (partly) AI-generated. Get approval.
 

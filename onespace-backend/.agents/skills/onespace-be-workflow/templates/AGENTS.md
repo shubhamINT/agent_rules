@@ -79,6 +79,7 @@ Always-on behaviour:
 | **Change** | "limit it to 10k rows", "change how X works", "drop support for Y" | `onespace-be-workflow` → `onespace-be-change` (edit the spec first) → `onespace-be-clarify` → `onespace-be-plan` (delta) → `onespace-be-tasks` → `onespace-be-analyze` → approval → `onespace-be-implement` → `onespace-be-converge` |
 | **Assess** | "should we build X", "is this worth it", a vague idea | `onespace-be-workflow` → `onespace-be-assess` → `go` / `needs-clarification` / `kill` |
 | **Explain** | "how does X work", "walk me through this flow", "I am new to this code" | `onespace-be-workflow` → `onespace-be-explain` |
+| **Init** | "set up this repo", "onboard this project", "start a new project", messy `AGENTS.md` / `CLAUDE.md` | `onespace-be-workflow` → `onespace-be-init` → first feature through `onespace-be-specify` |
 | **Constitution** | "set up SDD", "project principles" | `onespace-be-workflow` → `onespace-be-constitution` |
 | **Refactor** | "clean this up", "this code is a mess", "restructure", "reduce duplication" | `onespace-be-workflow` → `onespace-be-refactor-code` |
 | **Code audit** | "review this code", "check for bad code", "find bugs", "review what the AI wrote" | `onespace-be-workflow` → `onespace-be-audit-code` |
@@ -131,7 +132,7 @@ Follow the `onespace-be-workflow` skill. In short:
    Reports are visual: a Current → Target diagram for every change
    (`onespace-be-workflow/references/VISUAL-REPORT.md`). Audit and security reports load no
    external scripts.
-3. **Research**, then **plan**: write `plan.md`, show it, and wait for explicit
+3. **Research**, then **plan**: write `tasks.md`, show it, and wait for explicit
    approval.
 4. **Execute the approved plan only.** Log each step in `progress.md`. New scope
    found mid-task: stop, record it, ask.
@@ -216,6 +217,7 @@ indexed (enforced by tool / rule / OneSpace override) in
 | `onespace-be-constitution` | task | Creating or amending `specs/constitution.md` |
 | `onespace-be-assess` | task | Deciding go / needs-clarification / kill for an idea before any spec |
 | `onespace-be-explain` | task | Explaining how existing code works: read-only trace, HTML page |
+| `onespace-be-init` | task | Setting up or repairing a repo for the pack; fixing `AGENTS.md` and `CLAUDE.md`; the project brief |
 | `onespace-be-specify` | task | Writing the spec for a new feature |
 | `onespace-be-change` | task | Changing an existing feature: spec first |
 | `onespace-be-clarify` | task | Resolving open questions in a spec |

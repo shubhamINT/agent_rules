@@ -33,7 +33,7 @@ written until the bug is reproduced and the root cause is shown, not guessed.
 `agent-tracking/plans/<slug>/scope.md` for this task is missing, run
 `core-fe-workflow` phases 1–2 now (task type `fix`, request recorded).
 Invoking this skill directly (a slash command, a one-line request) is not an
-exemption, and harness plan mode does not replace `plan.md`. Scoping is
+exemption, and harness plan mode does not replace `tasks.md`. Scoping is
 light: the bug report is the scope. Ask only for what is missing from:
 </gate>
 
@@ -155,7 +155,7 @@ then fix. No spec for this code: skip this step.
 
 ## Phase 5 — Plan the fix
 
-In `plan.md`: root cause (link to research), the fix at the narrowest
+In `tasks.md`: root cause (link to research), the fix at the narrowest
 responsible layer, the regression test, the widths and themes to re-shoot,
 and the rollback (`core-fe-workflow/references/SAFE-DELIVERY.md`). If the proper fix is large, offer two options — a contained
 hotfix now and the structural fix as a follow-up task — with a

@@ -28,7 +28,7 @@ Router), the import rules, and the detection signals.
 **Gate — when this is the task itself** (not a check inside another task):
 load `core-fe-workflow` and run its phases 1–3 before anything else.
 Invoking this skill directly (a slash command, a one-line request) is not an
-exemption, and harness plan mode does not replace `plan.md`.
+exemption, and harness plan mode does not replace `tasks.md`.
 </gate>
 
 **Always, even inside another task:** make sure the repo is registered — the

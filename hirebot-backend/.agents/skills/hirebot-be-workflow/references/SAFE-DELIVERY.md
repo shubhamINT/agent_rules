@@ -6,7 +6,7 @@ ceremony: it is that a reviewer can approve each step on its own, and that a
 bad deploy is a five-minute revert, not an incident.
 
 Use this when writing the **Steps** and **Delivery and rollback** sections of
-`plan.md`.
+`tasks.md`.
 
 ## 1. Small steps, each green
 

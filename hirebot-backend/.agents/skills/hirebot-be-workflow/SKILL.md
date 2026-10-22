@@ -12,6 +12,7 @@ description: >
   (setup, run, env, endpoints, structure) and registers the pack in the repo's
   AGENTS.md and CLAUDE.md so later agents follow the rules without being told.
   Also runs `explain` tasks: a read-only walkthrough of how existing code works, as an HTML page.
+  Also runs `init` tasks: set up or repair a repo (`AGENTS.md`, `CLAUDE.md`, tracking, constitution) and agree the project brief with the user.
 ---
 
 # Workflow
@@ -52,13 +53,14 @@ spec-driven types, so you can see the whole run first.
 |------|-----------|---------------|
 | 1. Scope questions | classify, bootstrap tracking | `agent-tracking/INDEX.md` row, `plans/<slug>/scope.md` |
 | 2. Spec questions | `hirebot-be-specify` (`hirebot-be-change` for a change) | `specs/constitution.md` (once), `specs/<NNN-topic>/spec.md` |
-| 3. Plan approval | `hirebot-be-clarify`, `hirebot-be-plan`, `hirebot-be-tasks`, `hirebot-be-analyze` | `specs/<NNN-topic>/plan.md`, `plans/<slug>/plan.md`, `research/<slug>.md` |
+| 3. Plan approval | `hirebot-be-clarify`, `hirebot-be-plan`, `hirebot-be-tasks`, `hirebot-be-analyze` | `specs/<NNN-topic>/plan.md`, `plans/<slug>/tasks.md`, `research/<slug>.md` |
 | done | `hirebot-be-implement`, `hirebot-be-converge`, docs sync | code and tests, `reports/<slug>.md` or `.html` |
 
 `explain` stops once (scope questions), then runs `hirebot-be-explain`: no plan, no approval, no code.
+`init` stops three times (scope questions, onboarding plan, project brief), then hands the first feature to `hirebot-be-specify`. It changes no source.
 Every other type skips the spec files and runs Phases 1–7 below.
 
-**Scripts that check you.** `sh hirebot-be-workflow/scripts/sdd-check.sh next|spec|analyze|converge|status|ci` and the
+**Scripts that check you.** `sh hirebot-be-workflow/scripts/sdd-check.sh next|spec|analyze|converge|status|ci|doctor` and the
 edit guard `scripts/sdd-hook.sh` (a Claude Code hook) enforce this chain. When a
 script or the guard says no, do what its message says; never edit the scripts,
 the hook config, or set `SDD_GUARD`.
@@ -78,6 +80,7 @@ Name the task type. It sets the slug and which skills apply.
 | `assess` | `hirebot-be-assess` (verdict `go`, `needs-clarification`, or `kill`) |
 | `constitution` | `hirebot-be-constitution` |
 | `explain` | `hirebot-be-explain` |
+| `init` | `hirebot-be-init` |
 | `refactor` | `hirebot-be-refactor-code` |
 | `audit` | `hirebot-be-audit-code` |
 | `security` | `hirebot-be-audit-security` |
@@ -115,7 +118,7 @@ agent-tracking/
 ├── plans/
 │   └── <slug>/
 │       ├── scope.md                 # the user's words + agreed scope
-│       ├── plan.md                  # the approved plan (checklist)
+│       ├── tasks.md                 # the approved plan (checklist)
 │       └── progress.md              # step log, decisions, deviations
 ├── research/
 │   └── <slug>.md                    # what was read / measured, and what it showed
@@ -142,6 +145,8 @@ Every non-trivial task: make sure the repo root carries the pack rules
 (`AGENTS.md` block, `CLAUDE.md` import). It is a no-op when nothing changed.
 Procedure: `references/REGISTER-PACK.md`. Read it the first time in a repo, and
 whenever `AGENTS.md` or `CLAUDE.md` is missing or lacks the markers.
+`sh hirebot-be-workflow/scripts/sdd-check.sh doctor` lists what is missing or stale. Many gaps,
+or a messy or duplicated `AGENTS.md` / `CLAUDE.md`? Run `hirebot-be-init` instead of patching.
 
 ## Phase 3 — Scope interview (no work yet)
 
@@ -175,6 +180,7 @@ the user can answer fast.
      scope only here; the spec does not exist yet.
    - audit: fix nothing (default) or propose patches in the report?
    - explain: ask only the six questions in `hirebot-be-explain`; skip items 4 and 5.
+   - init: ask only the questions in `hirebot-be-init`; skip items 1–6.
    - debug: the bug report is most of the scope — ask only for missing
      symptom, expected behaviour, where/when, and hotfix vs proper fix
      (`hirebot-be-debug`).
@@ -196,17 +202,17 @@ holds research, plan-then-stop, execute, and report. Do not start Phase 4 from
 memory. In short:
 
 4. **Research** — read, measure the baseline, write `research/<slug>.md`.
-5. **Plan, then stop** — write `plan.md`, show it, wait for explicit approval.
-6. **Execute** — one step at a time, tick `plan.md`, log `progress.md`.
+5. **Plan, then stop** — write `tasks.md`, show it, wait for explicit approval.
+6. **Execute** — one step at a time, tick `tasks.md`, log `progress.md`.
 7. **Report** — docs sync, then the report in `agent-tracking/reports/`.
 
 `feature` and `change`: the chain in the Quick path above runs inside Phases 4–6.
-`explain` skips Phases 4–7; `hirebot-be-explain` runs instead.
+`explain` and `init` skip Phases 4–7; `hirebot-be-explain` or `hirebot-be-init` runs instead.
 
 ## Resuming work
 
 When the user returns to a task, read `INDEX.md`, then the task's `scope.md`,
-`plan.md`, and `progress.md` before doing anything. Continue from the first
+`tasks.md`, and `progress.md` before doing anything. Continue from the first
 unticked step. If the code has moved on since the plan was written, say so and
 re-confirm the plan.
 

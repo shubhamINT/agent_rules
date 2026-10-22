@@ -13,7 +13,7 @@ Cheaper to find a contradiction in three Markdown files than in a finished
 diff. This skill reads and reports; it edits nothing.
 
 **Inputs:** `specs/constitution.md`, `specs/<NNN-topic>/spec.md`,
-`specs/<NNN-topic>/plan.md`, `agent-tracking/plans/<slug>/plan.md`.
+`specs/<NNN-topic>/plan.md`, `agent-tracking/plans/<slug>/tasks.md`.
 
 ## Run the script first
 
@@ -52,6 +52,6 @@ says), plan and task issues are fixed in place. Re-run until none remain.
 
 When clean, the workflow's Phase 5 shows the user the spec, the design plan, and
 the checklist together and asks: "Approve spec, design plan and checklist?". On a yes, record
-`approved by <name>, <date>` in the `Status:` line of the task `plan.md`.
+`approved by <name>, <date>` in the `Status:` line of the task `tasks.md`.
 </output>
 

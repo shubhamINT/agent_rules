@@ -22,7 +22,7 @@ docs say it exists. Code that works on the happy path is roughly a third of that
 "Agreed scope" rows are not all filled, run `core-be-workflow` phases 1–3 now and
 end your turn at the scope questions. Invoking this skill directly (a slash command, a one-line
 request) is not an exemption, and harness plan mode does not replace
-`plan.md`. This skill supplies phases 4–7.
+`tasks.md`. This skill supplies phases 4–7.
 </gate>
 
 **Always, even inside another task:** make sure the repo is registered — the
@@ -54,13 +54,13 @@ matches the code.
 
 Think like the engineer who will be paged when this breaks. Before the
 interface, run the **system design pass** in `references/system-design.md` and
-write its answers into the Design notes of `plan.md`: numbers, data and
+write its answers into the Design notes of `tasks.md`: numbers, data and
 invariants, concurrency and idempotency, failure mode of every outbound call,
 limits, compatibility, observability. Answer each in a line or write
 `N/A — reason`; add machinery (queues, caches, retries, flags) only for a risk
 named there.
 
-Then design the interface, in `plan.md`:
+Then design the interface, in `tasks.md`:
 
 - **HTTP surface**: method, path, auth, request schema, response schema (in the
   service's envelope), every status code.
@@ -76,7 +76,7 @@ Then design the interface, in `plan.md`:
 - **Tests**: list them, mapped to acceptance criteria.
 - **Docs**: README sections that change.
 
-Steps in `plan.md` follow `core-be-workflow/references/SAFE-DELIVERY.md`:
+Steps in `tasks.md` follow `core-be-workflow/references/SAFE-DELIVERY.md`:
 small, each green and revertable, expand → migrate → contract for anything
 already deployed, riskiest step last, and a concrete rollback recipe. Get
 approval.
@@ -109,7 +109,7 @@ approval.
 ## Phase 6b — Self-review before calling it done
 
 Start with a fresh-context review: a `reviewer` subagent (or, without
-subagents or for a diff under about 50 lines, a separate pass reading `plan.md`
+subagents or for a diff under about 50 lines, a separate pass reading `tasks.md`
 before the diff) checks the diff
 against the plan, the design notes, and the items below. Fix or answer every
 finding before the gates.

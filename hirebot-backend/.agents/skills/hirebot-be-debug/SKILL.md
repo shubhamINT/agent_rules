@@ -23,7 +23,7 @@ the bug is reproduced and the root cause is shown, not guessed.
 `agent-tracking/plans/<slug>/scope.md` for this task is missing, run
 `hirebot-be-workflow` phases 1–2 now (task type `debug`, request recorded).
 Invoking this skill directly (a slash command, a one-line request) is not an
-exemption, and harness plan mode does not replace `plan.md`. Scoping is light: the bug report is the scope. Ask only for what is
+exemption, and harness plan mode does not replace `tasks.md`. Scoping is light: the bug report is the scope. Ask only for what is
 missing from:
 
 - **Symptom** — exact error, status code, wrong output, or timing.
@@ -103,7 +103,7 @@ then fix. No spec for this code: skip this step.
 
 ## Phase 5 — Plan the fix
 
-In `plan.md`: root cause (link to research), fix at the narrowest responsible
+In `tasks.md`: root cause (link to research), fix at the narrowest responsible
 layer, the regression test, blast radius and rollback
 (`hirebot-be-workflow/references/SAFE-DELIVERY.md`). If the proper fix is
 large, offer two options — a contained hotfix now and the structural fix as a

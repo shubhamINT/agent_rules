@@ -30,7 +30,7 @@ installing anything.
 
 ## Phase 5 — Plan, then stop
 
-Write `plans/<slug>/plan.md` from `templates/plan.md`:
+Write `plans/<slug>/tasks.md` from `templates/tasks.md`:
 
 - goal, success criteria, and the skill chain from Phase 1
 - `feature` and `change`: `Spec: specs/<NNN-topic>/spec.md`; every `AC-n` is
@@ -54,9 +54,9 @@ Write `plans/<slug>/plan.md` from `templates/plan.md`:
 
 Show the plan (short summary in chat, path to the file) and **wait for
 explicit approval**. "Looks good", "go ahead" count; silence and follow-up
-questions do not. If the user changes the plan, edit `plan.md`, note the change
+questions do not. If the user changes the plan, edit `tasks.md`, note the change
 in `progress.md`, and ask again. On approval, write exactly
-`**Status:** approved (YYYY-MM-DD, by <name>)` as the second line of `plan.md`
+`**Status:** approved (YYYY-MM-DD, by <name>)` as the second line of `tasks.md`
 and set INDEX status `approved`. The edit guard (`scripts/sdd-hook.sh`) and
 `scripts/sdd-check.sh ci` read that line and the INDEX row.
 

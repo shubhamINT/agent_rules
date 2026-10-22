@@ -21,7 +21,7 @@ Either missing? Stop and run `hirebot-fe-clarify` or `hirebot-fe-constitution`.
 Two plans exist, on purpose:
 
 - `specs/<NNN-topic>/plan.md` (this skill): the durable design.
-- `agent-tracking/plans/<slug>/plan.md` (`hirebot-fe-tasks`): this task's approved
+- `agent-tracking/plans/<slug>/tasks.md` (`hirebot-fe-tasks`): this task's approved
   checklist.
 
 ## Steps

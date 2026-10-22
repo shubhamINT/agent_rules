@@ -6,7 +6,7 @@ The goal is that a reviewer can approve each step alone, and that a bad
 release is a five-minute revert, not an incident.
 
 Use this when you write the **Steps** and **Delivery and rollback** sections
-of `plan.md`.
+of `tasks.md`.
 
 ## 1. Small steps, each green
 

@@ -21,7 +21,7 @@ Either missing? Stop and run `onespace-fe-clarify` or `onespace-fe-constitution`
 Two plans exist, on purpose:
 
 - `specs/<NNN-topic>/plan.md` (this skill): the durable design.
-- `agent-tracking/plans/<slug>/plan.md` (`onespace-fe-tasks`): this task's approved
+- `agent-tracking/plans/<slug>/tasks.md` (`onespace-fe-tasks`): this task's approved
   checklist.
 
 ## Steps

@@ -14,6 +14,7 @@ description: >
   scripts, structure), keeps every file BUSL-1.1 compliant, and registers the pack in the repo's AGENTS.md and
   CLAUDE.md so later agents follow the rules without being told.
   Also runs `explain` tasks: a read-only walkthrough of how existing code works, as an HTML page.
+  Also runs `init` tasks: set up or repair a repo (`AGENTS.md`, `CLAUDE.md`, tracking, constitution) and agree the project brief with the user.
 ---
 
 # Workflow
@@ -54,13 +55,14 @@ spec-driven types, so you can see the whole run first.
 |------|-----------|---------------|
 | 1. Scope questions | classify, bootstrap tracking | `agent-tracking/INDEX.md` row, `plans/<slug>/scope.md` |
 | 2. Spec questions | `onespace-fe-specify` (`onespace-fe-change` for a change) | `specs/constitution.md` (once), `specs/<NNN-topic>/spec.md` |
-| 3. Plan approval | `onespace-fe-clarify`, `onespace-fe-plan`, `onespace-fe-tasks`, `onespace-fe-analyze` | `specs/<NNN-topic>/plan.md`, `plans/<slug>/plan.md`, `research/<slug>.md` |
+| 3. Plan approval | `onespace-fe-clarify`, `onespace-fe-plan`, `onespace-fe-tasks`, `onespace-fe-analyze` | `specs/<NNN-topic>/plan.md`, `plans/<slug>/tasks.md`, `research/<slug>.md` |
 | done | `onespace-fe-implement`, `onespace-fe-converge`, docs sync | code and tests, `reports/<slug>.md` or `.html` |
 
 `explain` stops once (scope questions), then runs `onespace-fe-explain`: no plan, no approval, no code.
+`init` stops three times (scope questions, onboarding plan, project brief), then hands the first feature to `onespace-fe-specify`. It changes no source.
 Every other type skips the spec files and runs Phases 1–7 below.
 
-**Scripts that check you.** `sh onespace-fe-workflow/scripts/sdd-check.sh next|spec|analyze|converge|status|ci` and the
+**Scripts that check you.** `sh onespace-fe-workflow/scripts/sdd-check.sh next|spec|analyze|converge|status|ci|doctor` and the
 edit guard `scripts/sdd-hook.sh` (a Claude Code hook) enforce this chain. When a
 script or the guard says no, do what its message says; never edit the scripts,
 the hook config, or set `SDD_GUARD`.
@@ -81,6 +83,7 @@ order shown; `onespace-fe-coding-standards` applies to every type.
 | `assess` | a vague idea, "should we build X" | `onespace-fe-assess` (verdict `go`, `needs-clarification`, or `kill`) |
 | `constitution` | set up or amend the project principles | `onespace-fe-constitution` |
 | `explain` | how an existing page, flow, or widget works; changes nothing | `onespace-fe-explain` |
+| `init` | set up or repair a repo for the pack, and agree the project brief; changes no source | `onespace-fe-init` |
 | `ui` | new or redesigned UI, responsive fixes, loading states, motion, theming | `onespace-fe-design-ui` → `onespace-fe-verify-ui` |
 | `refactor` | clean up, de-duplicate, extract shared components; no visual change | `onespace-fe-structure-app` (check) → `onespace-fe-verify-ui` (before and after must match) |
 | `structure` | detect, choose, or apply the folder layout | `onespace-fe-structure-app` |
@@ -108,7 +111,7 @@ agent-tracking/
 ├── INDEX.md                         # one row per task
 ├── plans/<slug>/
 │   ├── scope.md                     # the user's words + agreed scope
-│   ├── plan.md                      # the approved plan (checklist)
+│   ├── tasks.md                      # the approved plan (checklist)
 │   └── progress.md                  # step log, decisions, deviations
 ├── research/<slug>.md               # what was read / measured
 ├── screenshots/<slug>/              # onespace-fe-verify-ui output
@@ -131,6 +134,8 @@ Every non-trivial task: make sure the repo root carries the pack rules
 (`AGENTS.md` block, `CLAUDE.md` import). It is a no-op when nothing changed.
 Procedure: `references/REGISTER-PACK.md`. Read it the first time in a repo, and
 whenever `AGENTS.md` or `CLAUDE.md` is missing or lacks the markers.
+`sh onespace-fe-workflow/scripts/sdd-check.sh doctor` lists what is missing or stale. Many gaps,
+or a messy or duplicated `AGENTS.md` / `CLAUDE.md`? Run `onespace-fe-init` instead of patching.
 
 ## Phase 3 — Scope interview (no work yet)
 
@@ -166,6 +171,7 @@ message, with concrete options and a recommended default:
    show (widths, states, data, fonts, assets, match target), then critique it
    and pitch improvements before planning (`onespace-fe-image-to-ui`).
 10. **`explain` tasks** — ask only the six questions in `onespace-fe-explain`; skip the rest.
+11. **`init` tasks** — ask only the questions in `onespace-fe-init`; skip the rest.
 
 If an answer is vague ("make it look good"), say what you would assume and ask
 the user to confirm. The most expensive agent failure is excellent work on the
@@ -182,17 +188,17 @@ holds research, plan-then-stop, execute, and report. Do not start Phase 4 from
 memory. In short:
 
 4. **Research** — read, measure the baseline, write `research/<slug>.md`.
-5. **Plan, then stop** — write `plan.md`, show it, wait for explicit approval.
-6. **Execute** — one step at a time, tick `plan.md`, log `progress.md`.
+5. **Plan, then stop** — write `tasks.md`, show it, wait for explicit approval.
+6. **Execute** — one step at a time, tick `tasks.md`, log `progress.md`.
 7. **Report** — docs sync, then the report in `agent-tracking/reports/`.
 
 `feature` and `change`: the chain in the Quick path above runs inside Phases 4–6.
-`explain` skips Phases 4–7; `onespace-fe-explain` runs instead.
+`explain` and `init` skip Phases 4–7; `onespace-fe-explain` or `onespace-fe-init` runs instead.
 
 
 ## Resuming work
 
-Read `INDEX.md`, then the task's `scope.md`, `plan.md`, and `progress.md`
+Read `INDEX.md`, then the task's `scope.md`, `tasks.md`, and `progress.md`
 before doing anything. Continue from the first unticked step. If the code has
 moved on since the plan was written, say so and re-confirm the plan.
 

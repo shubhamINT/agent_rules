@@ -83,7 +83,7 @@ Rules:
 
 ## Making tasks
 
-The agent that owns the approved `plan.md` (the orchestrator, or the first
+The agent that owns the approved `tasks.md` (the orchestrator, or the first
 agent) turns each step into one task before any worker claims:
 
 ```sh

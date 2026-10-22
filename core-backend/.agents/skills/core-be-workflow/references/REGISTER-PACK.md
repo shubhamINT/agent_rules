@@ -25,3 +25,7 @@ Do this on every non-trivial task; it is a no-op when nothing changed.
    the pack was not installed as a plugin? Tell the user once: "The edit guard is
    not registered. Run `sh <skills dir>/core-be-workflow/scripts/install-hook.sh` to add it."
    Never run it yourself: it edits the user's settings.
+
+7. **Messy or duplicated files.** `AGENTS.md` and `CLAUDE.md` repeat each other, or
+   `CLAUDE.md` holds more than the import? Do not patch them here. `core-be-init`
+   consolidates them with the user: one source in `AGENTS.md`, an import in `CLAUDE.md`.

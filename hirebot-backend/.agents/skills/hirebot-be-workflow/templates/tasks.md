@@ -1,4 +1,4 @@
-# Plan — <slug>
+# Tasks — <slug>
 
 **Status:** awaiting-approval | approved (YYYY-MM-DD, by <name>)
 
