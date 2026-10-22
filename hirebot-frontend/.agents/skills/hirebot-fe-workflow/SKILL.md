@@ -13,6 +13,7 @@ description: >
   screenshots, report), keeps the repo README current (setup, run, env,
   scripts, structure), and registers the pack in the repo's AGENTS.md and
   CLAUDE.md so later agents follow the rules without being told.
+  Also runs `explain` tasks: a read-only walkthrough of how existing code works, as an HTML page.
 ---
 
 # Workflow
@@ -56,6 +57,7 @@ spec-driven types, so you can see the whole run first.
 | 3. Plan approval | `hirebot-fe-clarify`, `hirebot-fe-plan`, `hirebot-fe-tasks`, `hirebot-fe-analyze` | `specs/<NNN-topic>/plan.md`, `plans/<slug>/plan.md`, `research/<slug>.md` |
 | done | `hirebot-fe-implement`, `hirebot-fe-converge`, docs sync | code and tests, `reports/<slug>.md` or `.html` |
 
+`explain` stops once (scope questions), then runs `hirebot-fe-explain`: no plan, no approval, no code.
 Every other type skips the spec files and runs Phases 1–7 below.
 
 **Scripts that check you.** `sh hirebot-fe-workflow/scripts/sdd-check.sh next|spec|analyze|converge|status|ci` and the
@@ -78,6 +80,7 @@ order shown; `hirebot-fe-coding-standards` applies to every type.
 | `change` | new behaviour on an existing page, flow, or widget ("make the table filterable") | `hirebot-fe-change` → `hirebot-fe-clarify` → `hirebot-fe-plan` (delta) → `hirebot-fe-tasks` → `hirebot-fe-analyze` → *approval* → `hirebot-fe-implement` → `hirebot-fe-converge` |
 | `assess` | a vague idea, "should we build X" | `hirebot-fe-assess` (verdict `go`, `needs-clarification`, or `kill`) |
 | `constitution` | set up or amend the project principles | `hirebot-fe-constitution` |
+| `explain` | how an existing page, flow, or widget works; changes nothing | `hirebot-fe-explain` |
 | `ui` | new or redesigned UI, responsive fixes, loading states, motion, theming | `hirebot-fe-design-ui` → `hirebot-fe-verify-ui` |
 | `refactor` | clean up, de-duplicate, extract shared components; no visual change | `hirebot-fe-structure-app` (check) → `hirebot-fe-verify-ui` (before and after must match) |
 | `structure` | detect, choose, or apply the folder layout | `hirebot-fe-structure-app` |
@@ -158,6 +161,7 @@ message, with concrete options and a recommended default:
    missing symptom, expected behaviour, where (route, device, width, theme,
    dev or production build), when, and hotfix vs proper fix
    (`hirebot-fe-debug`).
+9. **`explain` tasks** — ask only the six questions in `hirebot-fe-explain`; skip the rest.
 
 If an answer is vague ("make it look good"), say what you would assume and ask
 the user to confirm. The most expensive agent failure is excellent work on the
@@ -179,6 +183,7 @@ memory. In short:
 7. **Report** — docs sync, then the report in `agent-tracking/reports/`.
 
 `feature` and `change`: the chain in the Quick path above runs inside Phases 4–6.
+`explain` skips Phases 4–7; `hirebot-fe-explain` runs instead.
 
 
 ## Resuming work

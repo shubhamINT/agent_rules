@@ -11,6 +11,7 @@ When an existing component is almost right, add a variant or accept
 `children`. Copying it to change one colour creates a fork that never gets the
 next fix.
 
+<example>
 **Incorrect:**
 
 ```tsx
@@ -30,6 +31,7 @@ const buttonVariants = cva("inline-flex items-center …", {
   },
 });
 ```
+</example>
 
 A shared component needs a change that would break its other callers? Check the
 callers first (`rg -n "<Button" src/`). If the needs really differ, compose a new

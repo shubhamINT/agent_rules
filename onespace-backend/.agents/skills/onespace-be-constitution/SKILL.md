@@ -15,7 +15,9 @@ spec says what one feature does. The constitution says what every feature must
 respect. It is read by `onespace-be-plan` (gate) and `onespace-be-analyze` (check), so each
 principle must be answerable yes or no from a plan.
 
-**Gate:** `onespace-be-workflow` is loaded (do not re-read it). Scope the task first.
+<gate>
+`onespace-be-workflow` is loaded (do not re-read it). Scope the task first.
+</gate>
 
 ## Location
 

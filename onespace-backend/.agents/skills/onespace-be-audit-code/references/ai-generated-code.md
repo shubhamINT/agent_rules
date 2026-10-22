@@ -109,6 +109,7 @@ it. No such line → finding (fix the code or delete the comment).
 
 ## Finding format
 
+<output>
 ```
 AI-004 | High | Hallucinated API | src/services/rates/rates_service.py:57
   `await client.get_json(url)` — `httpx.AsyncClient` has no `get_json` method
@@ -120,6 +121,7 @@ AI-004 | High | Hallucinated API | src/services/rates/rates_service.py:57
 
 Severity follows impact: a hallucinated call on a hot path is High (it crashes
 at runtime); a lying comment is usually Low unless it misleads about security.
+</output>
 
 ## Self-review before handing back your own code
 

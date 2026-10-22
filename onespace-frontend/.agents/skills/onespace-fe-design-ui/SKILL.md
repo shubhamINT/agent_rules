@@ -29,9 +29,12 @@ have an opinion (propose, recommend, explain why), and never hide a weak
 screen. When something you see is weak — in the existing UI or in what you
 just built — say so, say why, and offer ideas.
 
+<gate>
 **Gate — when this is the task itself** (not a step inside another task):
 load `onespace-fe-workflow` and run its phases 1–3 before anything else.
 Invoking this skill directly (a slash command, a one-line request) is not an
+</gate>
+
 exemption, and harness plan mode does not replace `plan.md`.
 
 **Always, even inside another task:** make sure the repo is registered — the

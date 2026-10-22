@@ -12,6 +12,7 @@ or change. Use the tokens the repo defines (Tailwind v4 `@theme`, CSS
 variables, shadcn `--primary` etc.). `hirebot-fe-design-ui/references/tokens.md`
 says how to add a missing one.
 
+<example>
 **Incorrect:**
 
 ```tsx
@@ -23,6 +24,7 @@ says how to add a missing one.
 ```tsx
 <div className="rounded-lg p-4 text-primary">
 ```
+</example>
 
 - Arbitrary Tailwind values (`p-[18px]`, `text-[#6b21a8]`) are a smell; add a
   token if the value is needed twice.

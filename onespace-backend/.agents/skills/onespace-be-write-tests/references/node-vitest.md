@@ -9,6 +9,7 @@ the whole standard. This is the Node twin of `onespace-be-write-tests`.
 
 ## Non-negotiables
 
+<hard-rules>
 1. **A new or changed module ships with its test in the same change.**
 2. **Coverage floor is 80%** (lines, branches, functions, statements) in
    `vitest.config.ts` `coverage.thresholds`. A floor, never a target to lower. A
@@ -17,6 +18,7 @@ the whole standard. This is the Node twin of `onespace-be-write-tests`.
 3. **No test touches the network, a live database, or a real LLM.**
 4. **The runner is `npx vitest`** (via `npm test`). No ad-hoc scripts.
 5. **Every test file carries the BUSL-1.1 header** (see `onespace-be-busl-licence-compliance`).
+</hard-rules>
 
 ## Layout: `tests/` mirrors `src/`
 
@@ -120,8 +122,10 @@ In order of likelihood: **a real bug** (fix `src/`), **a stale expectation**
 (the contract changed on purpose — update the test and say so in the commit),
 **a bad test** (flaky, over-mocked, asserting implementation — rewrite it).
 
+<hard-rules>
 Never delete a test to go green, never loosen an assertion, never lower
 thresholds. Skips need `it.skip` with a comment giving the reason and a ticket.
+</hard-rules>
 
 ## Anti-patterns
 

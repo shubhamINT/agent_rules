@@ -10,6 +10,7 @@ framework of your own.
 
 ## Non-negotiables
 
+<hard-rules>
 1. **A new or changed module ships with its test in the same change.** Not a
    follow-up task. If you touched a branch, a loop, a parser, a money path, or a
    security path, one test came with it.
@@ -22,6 +23,7 @@ framework of your own.
 4. **The runner is `uv run pytest`.** No `sys.path` hacks, no
    `if __name__ == "__main__":` runner blocks, no `PYTHONPATH=` prefix — config
    handles it.
+</hard-rules>
 
 ---
 

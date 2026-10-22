@@ -11,6 +11,7 @@ description: >
   piece of agent work is structured and traceable. Also keeps the repo README current
   (setup, run, env, endpoints, structure) and registers the pack in the repo's
   AGENTS.md and CLAUDE.md so later agents follow the rules without being told.
+  Also runs `explain` tasks: a read-only walkthrough of how existing code works, as an HTML page.
 ---
 
 # Workflow
@@ -54,6 +55,7 @@ spec-driven types, so you can see the whole run first.
 | 3. Plan approval | `core-be-clarify`, `core-be-plan`, `core-be-tasks`, `core-be-analyze` | `specs/<NNN-topic>/plan.md`, `plans/<slug>/plan.md`, `research/<slug>.md` |
 | done | `core-be-implement`, `core-be-converge`, docs sync | code and tests, `reports/<slug>.md` or `.html` |
 
+`explain` stops once (scope questions), then runs `core-be-explain`: no plan, no approval, no code.
 Every other type skips the spec files and runs Phases 1–7 below.
 
 **Scripts that check you.** `sh core-be-workflow/scripts/sdd-check.sh next|spec|analyze|converge|status|ci` and the
@@ -75,6 +77,7 @@ Name the task type. It sets the slug and which skills apply.
 | `change` | `core-be-change` → `core-be-clarify` → `core-be-plan` (delta) → `core-be-tasks` → `core-be-analyze` → *approval* → `core-be-implement` → `core-be-converge` |
 | `assess` | `core-be-assess` (verdict `go`, `needs-clarification`, or `kill`) |
 | `constitution` | `core-be-constitution` |
+| `explain` | `core-be-explain` |
 | `refactor` | `core-be-refactor-code` |
 | `audit` | `core-be-audit-code` |
 | `security` | `core-be-audit-security` |
@@ -171,6 +174,7 @@ the user can answer fast.
      cannot hold: API shape preferences, auth rules, who can see what. Ask
      scope only here; the spec does not exist yet.
    - audit: fix nothing (default) or propose patches in the report?
+   - explain: ask only the six questions in `core-be-explain`; skip items 4 and 5.
    - debug: the bug report is most of the scope — ask only for missing
      symptom, expected behaviour, where/when, and hotfix vs proper fix
      (`core-be-debug`).
@@ -197,6 +201,7 @@ memory. In short:
 7. **Report** — docs sync, then the report in `agent-tracking/reports/`.
 
 `feature` and `change`: the chain in the Quick path above runs inside Phases 4–6.
+`explain` skips Phases 4–7; `core-be-explain` runs instead.
 
 ## Resuming work
 

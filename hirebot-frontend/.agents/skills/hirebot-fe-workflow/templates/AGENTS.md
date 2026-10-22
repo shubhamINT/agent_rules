@@ -70,6 +70,7 @@ Until they are installed, follow the rules in this file.
 | **Feature** | "build the candidate pipeline page", "add interview scheduling UI" | `hirebot-fe-workflow` → [`hirebot-fe-constitution` once] → `hirebot-fe-specify` → `hirebot-fe-clarify` → `hirebot-fe-plan` → `hirebot-fe-tasks` → `hirebot-fe-analyze` → approval → `hirebot-fe-implement` → `hirebot-fe-converge` |
 | **Change** | "make the table filterable", "change how the wizard validates" | `hirebot-fe-workflow` → `hirebot-fe-change` (edit the spec first) → `hirebot-fe-clarify` → `hirebot-fe-plan` (delta) → `hirebot-fe-tasks` → `hirebot-fe-analyze` → approval → `hirebot-fe-implement` → `hirebot-fe-converge` |
 | **Assess** | "should we build X", "is this worth it", a vague idea | `hirebot-fe-workflow` → `hirebot-fe-assess` → `go` / `needs-clarification` / `kill` |
+| **Explain** | "how does X work", "walk me through this flow", "I am new to this code" | `hirebot-fe-workflow` → `hirebot-fe-explain` |
 | **Constitution** | "set up SDD", "project principles" | `hirebot-fe-workflow` → `hirebot-fe-constitution` |
 | **UI** | "redesign the dashboard", "make it look premium", "fix mobile layout", "add skeletons", "add animations" | `hirebot-fe-workflow` → `hirebot-fe-design-ui` → `hirebot-fe-verify-ui` |
 | **Refactor** | "clean up components", "too much duplicate code", "make it reusable" | `hirebot-fe-workflow` → `hirebot-fe-structure-app` → `hirebot-fe-verify-ui` |
@@ -152,6 +153,7 @@ Follow `hirebot-fe-workflow`. In short:
 | `hirebot-fe-workflow` | always on | Any non-trivial task: record, scope, plan, approve, verify, docs, report |
 | `hirebot-fe-constitution` | task | Creating or amending `specs/constitution.md` |
 | `hirebot-fe-assess` | task | Deciding go / needs-clarification / kill for an idea before any spec |
+| `hirebot-fe-explain` | task | Explaining how existing code works: read-only trace, HTML page |
 | `hirebot-fe-specify` | task | Writing the spec for a new page, flow, or widget |
 | `hirebot-fe-change` | task | Changing an existing page, flow, or widget: spec first |
 | `hirebot-fe-clarify` | task | Resolving open questions in a spec |

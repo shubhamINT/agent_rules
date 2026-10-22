@@ -10,7 +10,9 @@ description: >
 
 # Converge
 
-**Gate:** code exists for the spec; tests are runnable.
+<gate>
+code exists for the spec; tests are runnable.
+</gate>
 
 ## Steps
 

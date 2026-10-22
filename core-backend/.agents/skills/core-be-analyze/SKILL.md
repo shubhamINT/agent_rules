@@ -37,6 +37,7 @@ cannot: spec versus plan contradictions, testability, term drift, gaps.
 
 ## Output
 
+<output>
 The script's output, plus a table of your own findings in the same section: ID,
 severity, location (`file:line`), problem, fix, and which file's author fixes it.
 
@@ -52,3 +53,4 @@ says), plan and task issues are fixed in place. Re-run until none remain.
 When clean, the workflow's Phase 5 shows the user the spec, the design plan, and
 the checklist together and asks: "Approve spec, design plan and checklist?". On a yes, record
 `approved by <name>, <date>` in the `Status:` line of the task `plan.md`.
+</output>

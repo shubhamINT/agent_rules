@@ -33,6 +33,7 @@ hirebot-backend/
     │  tasks
     ├── hirebot-be-constitution/              # specs/constitution.md: principles with yes/no gate questions; amend with approval
     ├── hirebot-be-assess/                    # idea to verdict: go / needs-clarification / kill
+    ├── hirebot-be-explain/                   # read-only trace of how code works; one HTML page with diagrams
     ├── hirebot-be-specify/                   # new feature: specs/<NNN-topic>/spec.md, numbered acceptance criteria
     ├── hirebot-be-change/                    # existing feature: edit the spec first, then plan the delta
     ├── hirebot-be-clarify/                   # resolve open questions in a spec
@@ -65,6 +66,7 @@ the chain. Skill names below drop the `hirebot-be-` prefix.
 | "add CSV export", "build a webhook", "integrate Stripe" | `feature` | `workflow` → `constitution` (once) → `specify` → `clarify` → `plan` → `tasks` → `analyze` → you approve → `implement` → `converge` | `specs/<NNN>/spec.md` and `plan.md`, the tracking record, a report |
 | "limit it to 10k rows", "change how login works", "drop support for Y" | `change` | `workflow` → `change` → `clarify` → `plan` (delta) → `tasks` → `analyze` → you approve → `implement` → `converge` | the spec edited first with a change-log row, then code and a report |
 | "should we build X?", a fuzzy idea | `assess` | `workflow` → `assess` | `specs/assessments/<slug>.md` with a verdict: go, needs-clarification, or kill |
+| "how does X work?", "walk me through this" | `explain` | `workflow` → `explain` | `agent-tracking/reports/<slug>.html`: flow diagram, `file:line` evidence, where code and spec disagree |
 | "set up SDD", "project principles" | `constitution` | `workflow` → `constitution` | `specs/constitution.md` |
 | "clean this up", "this code is a mess" | `refactor` | `workflow` → `refactor-code` | behaviour-preserving changes and a report; no spec |
 | "review this code", "find bad code" | `audit` | `workflow` → `audit-code` | a report; no spec |
@@ -201,7 +203,7 @@ Pick one of the three ways to get the skills. The agent writes `AGENTS.md` and
      one skill alone breaks links:
 
      ```bash
-     npx skills add shubhamINT/agent_rules -a claude-code -s hirebot-be-add-health-endpoint hirebot-be-analyze hirebot-be-assess hirebot-be-audit-code hirebot-be-audit-security hirebot-be-build-feature hirebot-be-change hirebot-be-clarify hirebot-be-coding-standards hirebot-be-constitution hirebot-be-converge hirebot-be-debug hirebot-be-implement hirebot-be-plan hirebot-be-refactor-code hirebot-be-specify hirebot-be-structure-service hirebot-be-tasks hirebot-be-workflow hirebot-be-write-tests
+     npx skills add shubhamINT/agent_rules -a claude-code -s hirebot-be-add-health-endpoint hirebot-be-analyze hirebot-be-assess hirebot-be-audit-code hirebot-be-audit-security hirebot-be-build-feature hirebot-be-change hirebot-be-clarify hirebot-be-coding-standards hirebot-be-constitution hirebot-be-converge hirebot-be-debug hirebot-be-explain hirebot-be-implement hirebot-be-plan hirebot-be-refactor-code hirebot-be-specify hirebot-be-structure-service hirebot-be-tasks hirebot-be-workflow hirebot-be-write-tests
      npx skills add shubhamINT/agent_rules --list     # or pick interactively and select every hirebot-be-* skill
      npx skills update                                 # pull the latest version
      ```

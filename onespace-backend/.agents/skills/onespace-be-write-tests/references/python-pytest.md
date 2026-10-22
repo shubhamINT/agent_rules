@@ -10,6 +10,7 @@ framework of your own.
 
 ## Non-negotiables
 
+<hard-rules>
 1. **A new or changed module ships with its test in the same change.** Not a
    follow-up task. If you touched a branch, a loop, a parser, a money path, or a
    security path, one test came with it.
@@ -24,6 +25,7 @@ framework of your own.
    handles it.
 5. **Every test file carries the BUSL-1.1 header** (see the
    `onespace-be-busl-licence-compliance` skill).
+</hard-rules>
 
 ---
 

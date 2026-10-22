@@ -20,6 +20,7 @@ ls src/components/ui 2>/dev/null           # shadcn / design-system primitives
 Search by role, not only by name: a "Sheet" may be your "Drawer". Record what
 you found in the research "reuse inventory" table.
 
+<example>
 **Incorrect:** creating `src/features/jobs/JobModal.tsx` with its own overlay,
 focus handling, and close button while `src/components/ui/dialog.tsx` exists.
 
@@ -39,6 +40,7 @@ export function JobDetailsDialog({ job, open, onOpenChange }: Props) {
   );
 }
 ```
+</example>
 
 Nothing close exists? Create it in the shared UI folder if two features will
 use it, in the feature folder otherwise.

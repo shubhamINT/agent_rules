@@ -22,6 +22,7 @@ named (a bug class or a Fowler smell), justified (why it hurts here), and
 actionable (the named refactoring or fix). Vague feedback ("could be cleaner")
 is not a finding.
 
+<gate>
 **Gate — before anything else:** load `core-be-workflow`. If
 `agent-tracking/plans/<slug>/scope.md` for this task is missing, or its
 "Agreed scope" rows are not all filled, run `core-be-workflow` phases 1–3 now and
@@ -30,6 +31,7 @@ command, a one-line request) is not an exemption, and harness plan mode does
 not replace `plan.md`. This skill
 supplies phases 4–7. **Default is report-only.** Fixing is a separate planned
 task (`core-be-refactor-code` for structure, `core-be-build-feature`/a fix task for behaviour).
+</gate>
 
 **Always, even inside another task:** make sure the repo is registered — the
 core-be block in `AGENTS.md` and the `@AGENTS.md` import in `CLAUDE.md`

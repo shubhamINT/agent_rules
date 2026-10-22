@@ -145,6 +145,7 @@ the agent. Work from logs and recreated data shapes offline.
 
 ## Phase 7 — Report
 
+<output>
 Write the report to `agent-tracking/reports/<slug>.html` (or `.md`). Never the
 repo root, the temp directory, or a hosted page (claude.ai Artifact, gist, docs
 connector).
@@ -155,3 +156,4 @@ cause with `file:line` and evidence, a sequence diagram of the failing path
 with the defect marked, the fix (Current → Target of the changed step), the
 regression test name, verification before/after, same-class occurrences found
 elsewhere, and follow-up tasks.
+</output>

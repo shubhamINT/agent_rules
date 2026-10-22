@@ -10,6 +10,7 @@ tags: state, useEffect, derived
 If a value can be computed from props or other state, compute it while
 rendering. Copying it into state with `useEffect` renders twice and goes stale.
 
+<example>
 **Incorrect:**
 
 ```tsx
@@ -24,6 +25,7 @@ useEffect(() => {
 ```tsx
 const visible = projects.filter((p) => p.status === status);
 ```
+</example>
 
 Expensive and measured slow? `useMemo` (or let React Compiler do it). Need to
 reset state when a prop changes? Give the component a `key`:

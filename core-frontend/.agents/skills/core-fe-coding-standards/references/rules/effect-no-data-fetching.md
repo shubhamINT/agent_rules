@@ -11,6 +11,7 @@ Hand-rolled `useEffect` + `useState` fetching has race conditions, no cache,
 no retry, no dedupe, and usually no loading or error UI. Use the data layer the
 repo has.
 
+<example>
 **Incorrect:**
 
 ```tsx
@@ -28,6 +29,8 @@ const { data: projects, isPending, error } = useQuery(projectsQueryOptions(filte
 
 **Correct (Next.js App Router):** fetch in the server component, or prefetch on
 the server and hydrate the query client; the client component reads the cache.
+
+</example>
 
 The repo has no data layer yet? Pitch one (TanStack Query) in the plan
 instead of adding another hand-rolled fetch; the developer decides.

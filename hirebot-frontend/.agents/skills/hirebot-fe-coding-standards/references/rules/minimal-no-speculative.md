@@ -17,6 +17,7 @@ Signs of speculative code:
 - a context, store, or reducer for state one component uses
 - a new folder or barrel file with one file in it
 
+<example>
 **Incorrect:**
 
 ```tsx
@@ -38,5 +39,6 @@ export function Card({ title, children }: { title: string; children: ReactNode }
   );
 }
 ```
+</example>
 
 Add the prop in the change that first needs it.

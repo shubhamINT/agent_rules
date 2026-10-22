@@ -86,6 +86,7 @@ should still be concise: tables over paragraphs, no filler.
 
 ## Never cut
 
+<hard-rules>
 Saving tokens by skipping a step costs more tokens later. Never trim:
 
 - scope questions and plan approval
@@ -93,3 +94,4 @@ Saving tokens by skipping a step costs more tokens later. Never trim:
 - the full test suite, types, and lint before a step is called done
 - evidence (`file:line`, command output) behind a claim
 - security, accessibility, and error handling
+</hard-rules>

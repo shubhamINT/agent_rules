@@ -46,6 +46,7 @@ Add sections the repo needs (deployment, feature flags, i18n) after these.
 
 ## Rules
 
+<hard-rules>
 - Read the README before changing anything. Missing? Create it with the
   sections above.
 - Take values from the source, never from memory: scripts from
@@ -56,3 +57,4 @@ Add sections the repo needs (deployment, feature flags, i18n) after these.
   variables, and the structure tree drift first.
 - Keep it short and scannable: tables and code blocks over paragraphs.
 - Never put secrets, real tokens, or internal-only URLs in the README.
+</hard-rules>

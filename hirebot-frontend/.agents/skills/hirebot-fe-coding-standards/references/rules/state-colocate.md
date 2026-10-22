@@ -14,7 +14,9 @@ state that is truly app-wide: the signed-in user, theme, feature flags.
 Server data is not client state: it lives in the query cache
 (`effect-no-data-fetching`), never copied into a store.
 
+<example>
 **Incorrect:** a global `useUiStore` with `isJobFilterOpen`, used by one
 component.
 
 **Correct:** `const [open, setOpen] = useState(false)` inside `JobsFilters`.
+</example>

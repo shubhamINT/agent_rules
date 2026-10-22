@@ -27,11 +27,13 @@ the user approved. This skill avoids both: fill the holes with the user first,
 agree the improvements, then build real, responsive UI and measure how close
 it is.
 
+<gate>
 **Gate — before anything else:** load `core-fe-workflow`. If
 `agent-tracking/plans/<slug>/scope.md` for this task is missing, run
 `core-fe-workflow` phases 1–2 now (task type `image`, request recorded).
 Invoking this skill directly (a slash command, a one-line request) is not an
 exemption, and harness plan mode does not replace `plan.md`.
+</gate>
 
 **Always, even inside another task:** make sure the repo is registered — the
 core-fe block in `AGENTS.md` and the `@AGENTS.md` import in `CLAUDE.md`

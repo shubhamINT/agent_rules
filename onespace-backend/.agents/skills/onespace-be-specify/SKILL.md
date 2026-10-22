@@ -15,9 +15,11 @@ description: >
 now. It outlives the task: the next change starts from it, and a new developer
 reads it instead of reverse-engineering code.
 
-**Gate:** `onespace-be-workflow` is loaded (do not re-read it); scope must be agreed (`scope.md`). Missing
+<gate>
+`onespace-be-workflow` is loaded (do not re-read it); scope must be agreed (`scope.md`). Missing
 `specs/constitution.md`? Run `onespace-be-constitution` first, or tell the user and note
 it in `progress.md` if they decline.
+</gate>
 
 **The rule:** behaviour starts at the spec. Never write code first and the spec
 afterward.

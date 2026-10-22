@@ -78,6 +78,7 @@ Always-on behaviour:
 | **Feature** | "add an endpoint", "support X", "integrate Y" | `onespace-be-workflow` → [`onespace-be-constitution` once] → `onespace-be-specify` → `onespace-be-clarify` → `onespace-be-plan` → `onespace-be-tasks` → `onespace-be-analyze` → approval → `onespace-be-implement` → `onespace-be-converge` |
 | **Change** | "limit it to 10k rows", "change how X works", "drop support for Y" | `onespace-be-workflow` → `onespace-be-change` (edit the spec first) → `onespace-be-clarify` → `onespace-be-plan` (delta) → `onespace-be-tasks` → `onespace-be-analyze` → approval → `onespace-be-implement` → `onespace-be-converge` |
 | **Assess** | "should we build X", "is this worth it", a vague idea | `onespace-be-workflow` → `onespace-be-assess` → `go` / `needs-clarification` / `kill` |
+| **Explain** | "how does X work", "walk me through this flow", "I am new to this code" | `onespace-be-workflow` → `onespace-be-explain` |
 | **Constitution** | "set up SDD", "project principles" | `onespace-be-workflow` → `onespace-be-constitution` |
 | **Refactor** | "clean this up", "this code is a mess", "restructure", "reduce duplication" | `onespace-be-workflow` → `onespace-be-refactor-code` |
 | **Code audit** | "review this code", "check for bad code", "find bugs", "review what the AI wrote" | `onespace-be-workflow` → `onespace-be-audit-code` |
@@ -214,6 +215,7 @@ indexed (enforced by tool / rule / OneSpace override) in
 | `onespace-be-workflow` | always on | Any non-trivial task: record, scope, plan, approve, report |
 | `onespace-be-constitution` | task | Creating or amending `specs/constitution.md` |
 | `onespace-be-assess` | task | Deciding go / needs-clarification / kill for an idea before any spec |
+| `onespace-be-explain` | task | Explaining how existing code works: read-only trace, HTML page |
 | `onespace-be-specify` | task | Writing the spec for a new feature |
 | `onespace-be-change` | task | Changing an existing feature: spec first |
 | `onespace-be-clarify` | task | Resolving open questions in a spec |

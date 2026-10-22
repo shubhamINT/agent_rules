@@ -16,6 +16,7 @@ tags: typescript, types
 - Props are a `type` next to the component. Export it only when a caller needs
   it.
 
+<example>
 **Incorrect:**
 
 ```ts
@@ -28,3 +29,4 @@ interface Job { id: any; title: string; status: string } // hand-copied, loose
 import type { components } from "@/lib/api/schema";
 type Job = components["schemas"]["Job"];
 ```
+</example>

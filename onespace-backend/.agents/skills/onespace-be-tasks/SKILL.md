@@ -9,7 +9,9 @@ description: >
 
 # Tasks
 
-**Gate:** `specs/<NNN-topic>/spec.md` and `specs/<NNN-topic>/plan.md` exist.
+<gate>
+`specs/<NNN-topic>/spec.md` and `specs/<NNN-topic>/plan.md` exist.
+</gate>
 
 Write the checklist into `agent-tracking/plans/<slug>/plan.md` from
 `onespace-be-workflow/templates/plan.md`: goal, `Spec:` line, steps, files expected to change,
@@ -18,6 +20,7 @@ stops on.
 
 ## Rules for the steps
 
+<hard-rules>
 1. **Order**: setup and shared foundations first, then one slice per
    acceptance criterion, then docs and the final converge step. Each slice is
    independently verifiable; the first slice is the smallest working behaviour.
@@ -36,5 +39,6 @@ stops on.
    owns. A feature owns every criterion; a change owns only the ones it adds or
    changes. `sdd-check.sh` checks coverage against this line, and `ci` checks that
    the tasks together cover every active criterion.
+</hard-rules>
 
 Hand over to `onespace-be-analyze`.

@@ -29,10 +29,12 @@ References:
 | `references/node-layouts.md` | Concrete TypeScript trees: the same three for Express / Fastify |
 | `references/readme-standard.md` | README sections every service keeps current |
 
+<gate>
 **Gate — when this is the task itself** (not a step inside another task):
 load `core-be-workflow` and run its phases 1–3 before anything else. Invoking this
 skill directly (a slash command, a one-line request) is not an exemption,
 and harness plan mode does not replace `plan.md`.
+</gate>
 
 **Always, even inside another task:** make sure the repo is registered — the
 core-be block in `AGENTS.md` and the `@AGENTS.md` import in `CLAUDE.md`
@@ -101,6 +103,7 @@ picture, not on a paragraph.
 Fewer than about five source files: record Pattern, Layout, and the
 "where does X go" row only; skip the rest.
 
+<template>
 Write (or update) a `## Project structure` section at the end of the repo root
 `AGENTS.md`. Keep it short and concrete — it is read at the start of every task:
 
@@ -126,6 +129,7 @@ external clients live in `core/clients/<upstream>.py`).
 
 **Migration:** incremental — code moves into this layout when a task touches it.
 ```
+</template>
 
 Take the tree and rules from the matching layout reference; adapt names to what
 the repo already uses rather than renaming for its own sake. Log the decision in
@@ -145,6 +149,7 @@ the current task's `progress.md`.
 
 ## Rules that hold in every structure
 
+<hard-rules>
 - HTTP handlers validate, delegate, and shape the response — no SQL, no
   external calls, no business branching.
 - One config module reads the environment; nothing else does.
@@ -153,3 +158,4 @@ the current task's `progress.md`.
 - Tests mirror the source layout.
 - No `utils` dumping ground; a helper lives beside the concept it serves.
 - Do not scaffold folders nothing uses yet.
+</hard-rules>

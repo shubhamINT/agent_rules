@@ -11,6 +11,7 @@ An effect is for keeping React in sync with something external: a subscription,
 a browser API, a non-React widget. Logic caused by a user action goes in the
 event handler.
 
+<example>
 **Incorrect:**
 
 ```tsx
@@ -28,6 +29,7 @@ async function handleSubmit(values: JobInput) {
   navigate("/projects");
 }
 ```
+</example>
 
 Every effect that remains has a cleanup when it subscribes, listens, or
 starts a timer.

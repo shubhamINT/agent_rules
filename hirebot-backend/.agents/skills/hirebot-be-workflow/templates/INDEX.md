@@ -2,7 +2,7 @@
 
 One row per task. Newest at the bottom. Keep status current at every phase change.
 
-Type: `feature` · `change` · `assess` · `constitution` · `refactor` · `audit` · `security` · `test` · `debug` · `structure` · `health` · `trivial`
+Type: `feature` · `change` · `assess` · `constitution` · `explain` · `refactor` · `audit` · `security` · `test` · `debug` · `structure` · `health` · `trivial`
 
 Status: `scoping` · `researching` · `awaiting-approval` · `approved` · `in-progress` · `done` · `blocked` · `cancelled`
 

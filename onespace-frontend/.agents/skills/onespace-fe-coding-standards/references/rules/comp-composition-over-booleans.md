@@ -11,6 +11,7 @@ Each boolean prop doubles the states a component can be in. Once a component
 has `showHeader`, `showFooter`, `isCompact`, and `hasActions`, nobody can tell
 which combinations work. Pass parts as `children`, or use compound components.
 
+<example>
 **Incorrect:**
 
 ```tsx
@@ -27,6 +28,7 @@ which combinations work. Pass parts as `children`, or use compound components.
   </ProjectCard.Actions>
 </ProjectCard>
 ```
+</example>
 
 A small, fixed set of looks is a `variant` (`reuse-extend-not-fork`), not
 several booleans. React 19: `ref` is a normal prop; do not add `forwardRef` to

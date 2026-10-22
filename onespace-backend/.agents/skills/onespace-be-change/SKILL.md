@@ -14,7 +14,9 @@ description: >
 **The rule:** edit the spec first, then the plan, then the code. A change made
 in code only leaves the spec lying.
 
-**Gate:** `onespace-be-workflow` is loaded (do not re-read it); scope agreed.
+<gate>
+`onespace-be-workflow` is loaded (do not re-read it); scope agreed.
+</gate>
 
 ## Is it a change?
 

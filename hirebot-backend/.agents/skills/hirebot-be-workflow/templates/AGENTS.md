@@ -77,6 +77,7 @@ Always-on behaviour:
 | **Feature** | "add an endpoint", "support X", "integrate Y" | `hirebot-be-workflow` → [`hirebot-be-constitution` once] → `hirebot-be-specify` → `hirebot-be-clarify` → `hirebot-be-plan` → `hirebot-be-tasks` → `hirebot-be-analyze` → approval → `hirebot-be-implement` → `hirebot-be-converge` |
 | **Change** | "limit it to 10k rows", "change how X works", "drop support for Y" | `hirebot-be-workflow` → `hirebot-be-change` (edit the spec first) → `hirebot-be-clarify` → `hirebot-be-plan` (delta) → `hirebot-be-tasks` → `hirebot-be-analyze` → approval → `hirebot-be-implement` → `hirebot-be-converge` |
 | **Assess** | "should we build X", "is this worth it", a vague idea | `hirebot-be-workflow` → `hirebot-be-assess` → `go` / `needs-clarification` / `kill` |
+| **Explain** | "how does X work", "walk me through this flow", "I am new to this code" | `hirebot-be-workflow` → `hirebot-be-explain` |
 | **Constitution** | "set up SDD", "project principles" | `hirebot-be-workflow` → `hirebot-be-constitution` |
 | **Refactor** | "clean this up", "this code is a mess", "restructure", "reduce duplication" | `hirebot-be-workflow` → `hirebot-be-refactor-code` |
 | **Code audit** | "review this code", "check for bad code", "find bugs", "review what the AI wrote" | `hirebot-be-workflow` → `hirebot-be-audit-code` |
@@ -211,6 +212,7 @@ indexed (enforced by tool / rule / HireBot override) in
 | `hirebot-be-workflow` | always on | Any non-trivial task: record, scope, plan, approve, report |
 | `hirebot-be-constitution` | task | Creating or amending `specs/constitution.md` |
 | `hirebot-be-assess` | task | Deciding go / needs-clarification / kill for an idea before any spec |
+| `hirebot-be-explain` | task | Explaining how existing code works: read-only trace, HTML page |
 | `hirebot-be-specify` | task | Writing the spec for a new feature |
 | `hirebot-be-change` | task | Changing an existing feature: spec first |
 | `hirebot-be-clarify` | task | Resolving open questions in a spec |

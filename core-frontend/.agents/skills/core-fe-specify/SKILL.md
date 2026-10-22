@@ -15,9 +15,11 @@ description: >
 now. It outlives the task: the next change starts from it, and a new developer
 reads it instead of reverse-engineering code.
 
-**Gate:** `core-fe-workflow` is loaded (do not re-read it); scope must be agreed (`scope.md`). Missing
+<gate>
+`core-fe-workflow` is loaded (do not re-read it); scope must be agreed (`scope.md`). Missing
 `specs/constitution.md`? Run `core-fe-constitution` first, or tell the user and note
 it in `progress.md` if they decline.
+</gate>
 
 **The rule:** behaviour starts at the spec. Never write code first and the spec
 afterward.

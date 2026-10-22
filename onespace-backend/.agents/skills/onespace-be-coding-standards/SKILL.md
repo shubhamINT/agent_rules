@@ -62,9 +62,11 @@ deserialization) are always reported immediately, even in a trivial task.
 
 ## Working rules (every change, trivial included)
 
+<hard-rules>
 - Read code before you change it. Never edit what you have not read.
 - Do not reformat code you did not otherwise change. Keep diffs reviewable.
 - No commit, branch, push, or lockfile deletion unless the user asks.
+</hard-rules>
 
 ## 1. Names
 

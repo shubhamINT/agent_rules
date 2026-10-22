@@ -14,6 +14,7 @@ links to colleagues; component state loses all of that.
 Use the router the repo has: `useSearchParams` (React Router, Next.js),
 TanStack Router's typed search params, or `nuqs` if it is installed.
 
+<example>
 **Incorrect:** `const [status, setStatus] = useState("open")` for the jobs
 filter.
 
@@ -23,5 +24,6 @@ filter.
 const [params, setParams] = useSearchParams();
 const status = params.get("status") ?? "open";
 ```
+</example>
 
 Debounce text search before writing it to the URL.

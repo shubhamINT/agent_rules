@@ -71,6 +71,7 @@ Until they are installed, follow the rules in this file.
 | **Feature** | "build the team members page", "add a task scheduling UI" | `onespace-fe-workflow` → [`onespace-fe-constitution` once] → `onespace-fe-specify` → `onespace-fe-clarify` → `onespace-fe-plan` → `onespace-fe-tasks` → `onespace-fe-analyze` → approval → `onespace-fe-implement` → `onespace-fe-converge` |
 | **Change** | "make the table filterable", "change how the wizard validates" | `onespace-fe-workflow` → `onespace-fe-change` (edit the spec first) → `onespace-fe-clarify` → `onespace-fe-plan` (delta) → `onespace-fe-tasks` → `onespace-fe-analyze` → approval → `onespace-fe-implement` → `onespace-fe-converge` |
 | **Assess** | "should we build X", "is this worth it", a vague idea | `onespace-fe-workflow` → `onespace-fe-assess` → `go` / `needs-clarification` / `kill` |
+| **Explain** | "how does X work", "walk me through this flow", "I am new to this code" | `onespace-fe-workflow` → `onespace-fe-explain` |
 | **Constitution** | "set up SDD", "project principles" | `onespace-fe-workflow` → `onespace-fe-constitution` |
 | **UI** | "redesign the dashboard", "make it look premium", "fix mobile layout", "add skeletons", "add animations" | `onespace-fe-workflow` → `onespace-fe-design-ui` → `onespace-fe-verify-ui` |
 | **Refactor** | "clean up components", "too much duplicate code", "make it reusable" | `onespace-fe-workflow` → `onespace-fe-structure-app` → `onespace-fe-verify-ui` |
@@ -156,6 +157,7 @@ Follow `onespace-fe-workflow`. In short:
 | `onespace-fe-workflow` | always on | Any non-trivial task: record, scope, plan, approve, verify, docs, report |
 | `onespace-fe-constitution` | task | Creating or amending `specs/constitution.md` |
 | `onespace-fe-assess` | task | Deciding go / needs-clarification / kill for an idea before any spec |
+| `onespace-fe-explain` | task | Explaining how existing code works: read-only trace, HTML page |
 | `onespace-fe-specify` | task | Writing the spec for a new page, flow, or widget |
 | `onespace-fe-change` | task | Changing an existing page, flow, or widget: spec first |
 | `onespace-fe-clarify` | task | Resolving open questions in a spec |

@@ -28,12 +28,14 @@ hooks rule, `suppressHydrationWarning`. The bug is still there, now harder to
 find. This skill stops that by demanding evidence at each step: no fix is
 written until the bug is reproduced and the root cause is shown, not guessed.
 
+<gate>
 **Gate — before anything else:** load `onespace-fe-workflow`. If
 `agent-tracking/plans/<slug>/scope.md` for this task is missing, run
 `onespace-fe-workflow` phases 1–2 now (task type `fix`, request recorded).
 Invoking this skill directly (a slash command, a one-line request) is not an
 exemption, and harness plan mode does not replace `plan.md`. Scoping is
 light: the bug report is the scope. Ask only for what is missing from:
+</gate>
 
 - **Symptom** — what the user sees (a screenshot helps), the exact console
   error, or the wrong value.

@@ -23,10 +23,12 @@ page. The only proof is to run the app, look at it at every width, and read
 the result. This skill does that with a real browser and leaves the evidence in
 `agent-tracking/screenshots/<slug>/`.
 
+<gate>
 **Gate — when this is the task itself** (a `verify` task, not a step inside
 another task): load `core-fe-workflow` and run its phases 1–3 before
 anything else. Invoking this skill directly (a slash command, a one-line
 request) is not an exemption, and harness plan mode does not replace `plan.md`.
+</gate>
 
 **Always, even inside another task:** make sure the repo is registered — the
 core-fe block in `AGENTS.md` and the `@AGENTS.md` import in `CLAUDE.md`

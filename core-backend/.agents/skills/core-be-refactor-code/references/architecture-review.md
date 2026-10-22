@@ -51,6 +51,7 @@ Format as chosen in scope (HTML default). Save to
 directory, built on the shared template and patterns in
 `core-be-workflow/references/VISUAL-REPORT.md`.
 
+<output>
 Per candidate:
 
 - **Files** involved
@@ -63,6 +64,7 @@ Per candidate:
 - **ADR conflict** callout, only if the friction justifies reopening the ADR
 
 End with a **Top recommendation**: which candidate first and why.
+</output>
 
 Do not propose detailed interfaces yet. Ask the user which candidate to pursue.
 

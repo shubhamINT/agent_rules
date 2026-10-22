@@ -13,6 +13,7 @@ description: >
   screenshots, report), keeps the repo README current (setup, run, env,
   scripts, structure), keeps every file BUSL-1.1 compliant, and registers the pack in the repo's AGENTS.md and
   CLAUDE.md so later agents follow the rules without being told.
+  Also runs `explain` tasks: a read-only walkthrough of how existing code works, as an HTML page.
 ---
 
 # Workflow
@@ -56,6 +57,7 @@ spec-driven types, so you can see the whole run first.
 | 3. Plan approval | `onespace-fe-clarify`, `onespace-fe-plan`, `onespace-fe-tasks`, `onespace-fe-analyze` | `specs/<NNN-topic>/plan.md`, `plans/<slug>/plan.md`, `research/<slug>.md` |
 | done | `onespace-fe-implement`, `onespace-fe-converge`, docs sync | code and tests, `reports/<slug>.md` or `.html` |
 
+`explain` stops once (scope questions), then runs `onespace-fe-explain`: no plan, no approval, no code.
 Every other type skips the spec files and runs Phases 1–7 below.
 
 **Scripts that check you.** `sh onespace-fe-workflow/scripts/sdd-check.sh next|spec|analyze|converge|status|ci` and the
@@ -78,6 +80,7 @@ order shown; `onespace-fe-coding-standards` applies to every type.
 | `change` | new behaviour on an existing page, flow, or widget ("make the table filterable") | `onespace-fe-change` → `onespace-fe-clarify` → `onespace-fe-plan` (delta) → `onespace-fe-tasks` → `onespace-fe-analyze` → *approval* → `onespace-fe-implement` → `onespace-fe-converge` |
 | `assess` | a vague idea, "should we build X" | `onespace-fe-assess` (verdict `go`, `needs-clarification`, or `kill`) |
 | `constitution` | set up or amend the project principles | `onespace-fe-constitution` |
+| `explain` | how an existing page, flow, or widget works; changes nothing | `onespace-fe-explain` |
 | `ui` | new or redesigned UI, responsive fixes, loading states, motion, theming | `onespace-fe-design-ui` → `onespace-fe-verify-ui` |
 | `refactor` | clean up, de-duplicate, extract shared components; no visual change | `onespace-fe-structure-app` (check) → `onespace-fe-verify-ui` (before and after must match) |
 | `structure` | detect, choose, or apply the folder layout | `onespace-fe-structure-app` |
@@ -162,6 +165,7 @@ message, with concrete options and a recommended default:
 9. **`image` tasks** — the image is most of the design: ask for what it cannot
    show (widths, states, data, fonts, assets, match target), then critique it
    and pitch improvements before planning (`onespace-fe-image-to-ui`).
+10. **`explain` tasks** — ask only the six questions in `onespace-fe-explain`; skip the rest.
 
 If an answer is vague ("make it look good"), say what you would assume and ask
 the user to confirm. The most expensive agent failure is excellent work on the
@@ -183,6 +187,7 @@ memory. In short:
 7. **Report** — docs sync, then the report in `agent-tracking/reports/`.
 
 `feature` and `change`: the chain in the Quick path above runs inside Phases 4–6.
+`explain` skips Phases 4–7; `onespace-fe-explain` runs instead.
 
 
 ## Resuming work

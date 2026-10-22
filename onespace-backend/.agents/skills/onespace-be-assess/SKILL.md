@@ -13,7 +13,9 @@ description: >
 A killed idea with a written reason is a good outcome: it saved a build. This
 skill produces the evidence for the decision, not the feature.
 
-**Gate:** `onespace-be-workflow` is loaded (do not re-read it); scope the question with the user first.
+<gate>
+`onespace-be-workflow` is loaded (do not re-read it); scope the question with the user first.
+</gate>
 
 Write one file, `specs/assessments/<slug>.md`, from `templates/assessment.md`.
 The `NNN-` scan in `onespace-be-specify` ignores this folder.

@@ -13,8 +13,10 @@ description: >
 The spec says what. The plan says how, and it stays true after the task ends:
 the next change edits it instead of rediscovering the design.
 
-**Gate:** an approved spec with no open markers, and `specs/constitution.md`.
+<gate>
+an approved spec with no open markers, and `specs/constitution.md`.
 Either missing? Stop and run `core-fe-clarify` or `core-fe-constitution`.
+</gate>
 
 Two plans exist, on purpose:
 

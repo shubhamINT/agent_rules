@@ -23,6 +23,7 @@ packages that do not exist. So an audit is systematic: tools first to catch the
 cheap things, then a human-style review against published standards, every
 finding traceable to a standard ID and a `file:line`.
 
+<gate>
 **Gate — before anything else:** load `hirebot-be-workflow`. If
 `agent-tracking/plans/<slug>/scope.md` for this task is missing, or its
 "Agreed scope" rows are not all filled, run `hirebot-be-workflow` phases 1–3 now and
@@ -30,6 +31,7 @@ end your turn at the scope questions. Invoking this skill directly (a slash comm
 request) is not an exemption, and harness plan mode does not replace
 `plan.md`. Scope must include ASVS level (L2 default) and whether the
 service calls an LLM. This skill supplies phases 4–7.
+</gate>
 
 **Always, even inside another task:** make sure the repo is registered — the
 hirebot-be block in `AGENTS.md` and the `@AGENTS.md` import in `CLAUDE.md`
@@ -190,6 +192,7 @@ S-003 | High | Broken Object Level Authorization
 
 Rules for reports:
 
+<hard-rules>
 - Evidence is the minimal code excerpt. **Never include real secret values** —
   redact to a prefix (`sk_live_4f…`).
 - Describe how the issue is reached (request shape, conditions). **Do not write
@@ -199,3 +202,4 @@ Rules for reports:
   a coverage statement: what was reviewed and what was not.
 - If a live secret is found, tell the user immediately in chat — it must be
   rotated regardless of the rest of the audit — then continue.
+</hard-rules>

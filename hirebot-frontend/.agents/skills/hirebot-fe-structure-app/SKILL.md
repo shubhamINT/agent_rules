@@ -24,10 +24,12 @@ detect → confirm with the user → record → apply.
 `references/layouts.md` holds the concrete trees (Vite SPA, Next.js App
 Router), the import rules, and the detection signals.
 
+<gate>
 **Gate — when this is the task itself** (not a check inside another task):
 load `hirebot-fe-workflow` and run its phases 1–3 before anything else.
 Invoking this skill directly (a slash command, a one-line request) is not an
 exemption, and harness plan mode does not replace `plan.md`.
+</gate>
 
 **Always, even inside another task:** make sure the repo is registered — the
 hirebot-fe block in `AGENTS.md` and the `@AGENTS.md` import in `CLAUDE.md`

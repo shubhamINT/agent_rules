@@ -25,10 +25,12 @@ This skill defines the **contract and the rules**. They are identical across
 languages. Only syntax differs — see `references/` for a working implementation
 in your stack.
 
+<gate>
 **Gate — when this is the task itself** (not a step inside another task):
 load `onespace-be-workflow` and run its phases 1–3 before anything else. Invoking this
 skill directly (a slash command, a one-line request) is not an exemption,
 and harness plan mode does not replace `plan.md`.
+</gate>
 
 **Always, even inside another task:** make sure the repo is registered — the
 onespace-be block in `AGENTS.md` and the `@AGENTS.md` import in `CLAUDE.md`
@@ -122,6 +124,7 @@ These hold in every language. The mechanism differs — goroutines and
 `errgroup`, `Promise.allSettled`, `asyncio.gather`, `CompletableFuture.allOf`,
 a thread pool — the requirement does not.
 
+<hard-rules>
 **Run every probe concurrently.** Endpoint latency is then the slowest single
 probe, not the sum. Sequential probes make `/health` the slowest route in the
 service.
@@ -151,6 +154,7 @@ your performance profile, the checks are doing too much.
 
 **No caching of results** until polling volume proves it necessary. A cached
 health check reports the past, which is exactly what an incident does not need.
+</hard-rules>
 
 ## Where the code goes
 

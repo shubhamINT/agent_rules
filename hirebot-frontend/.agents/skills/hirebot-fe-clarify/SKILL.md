@@ -13,7 +13,9 @@ description: >
 Planning on a spec with guesses in it builds the wrong thing well. This skill
 closes the gaps first.
 
-**Gate:** a spec exists at `specs/<NNN-topic>/spec.md`.
+<gate>
+a spec exists at `specs/<NNN-topic>/spec.md`.
+</gate>
 
 ## Steps
 

@@ -11,8 +11,10 @@ Keys identify an item across renders. Array indexes change when a list is
 sorted, filtered, or prepended, so React reuses the wrong DOM and state
 (inputs keep the old text, animations jump).
 
+<example>
 **Incorrect:** `{candidates.map((c, i) => <MemberRow key={i} … />)}`
 
 **Correct:** `{candidates.map((c) => <MemberRow key={c.id} … />)}`
+</example>
 
 Index keys are fine only for static lists that never reorder.

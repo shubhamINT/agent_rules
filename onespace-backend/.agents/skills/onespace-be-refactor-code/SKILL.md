@@ -19,12 +19,14 @@ value: reviewers can approve a large diff because nothing observable changed.
 Break it — sneak in a fix, a feature, or an API change — and the diff becomes
 unreviewable. Behaviour changes are separate tasks.
 
+<gate>
 **Gate — before anything else:** load `onespace-be-workflow`. If
 `agent-tracking/plans/<slug>/scope.md` for this task is missing, or its
 "Agreed scope" rows are not all filled, run `onespace-be-workflow` phases 1–3 now and
 end your turn at the scope questions. Invoking this skill directly (a slash command, a one-line
 request) is not an exemption, and harness plan mode does not replace
 `plan.md`. This skill supplies the content of phases 4–7.
+</gate>
 
 **Always, even inside another task:** make sure the repo is registered — the
 onespace-be block in `AGENTS.md` and the `@AGENTS.md` import in `CLAUDE.md`
@@ -74,6 +76,7 @@ subagent can write them from the public interface while you plan
 
 ## Phase 5 — Plan
 
+<example>
 Each plan step names the refactoring and is independently verifiable:
 
 ```
@@ -81,6 +84,7 @@ Each plan step names the refactoring and is independently verifiable:
          (src/billing/invoice.py:120-168) into `compute_tax(lines, region)`.
          Verify: uv run pytest tests/billing -q ; complexity of build_invoice 23 → 14.
 ```
+</example>
 
 Order steps so the code is green after every one:
 
@@ -118,6 +122,7 @@ changes unless approved, expected before/after metrics.
 
 ## Phase 7 — Report
 
+<output>
 Write the report to `agent-tracking/reports/<slug>.html` (or `.md`). Never the
 repo root, the temp directory, or a hosted page (claude.ai Artifact, gist, docs
 connector).
@@ -135,10 +140,13 @@ Refactor-specific content:
   functions over complexity 10, max function length, files changed, lines +/−
 - **Behaviour surface**: confirm unchanged; list characterization tests added
 - **Deferred smells**: what was found but left, and why
+</output>
 
 ## Guardrails
 
+<hard-rules>
 - Behaviour change needed to finish the refactor? Stop and ask; it becomes its own task.
 - Public API (HTTP routes, response shapes, package exports) is behaviour. Do not change it in a refactor.
 - Performance-sensitive path? Record a before/after timing if the refactor could affect it.
 - Can't get a test around it (e.g. untestable global side effects)? Say so in the plan, propose the smallest seam that makes it testable, and get approval.
+</hard-rules>

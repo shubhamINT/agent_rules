@@ -9,8 +9,10 @@ description: >
 
 # Implement
 
-**Gate:** the checklist at `agent-tracking/plans/<slug>/plan.md` is approved,
+<gate>
+the checklist at `agent-tracking/plans/<slug>/plan.md` is approved,
 and `core-fe-analyze` left no Critical or High finding. Either missing? Stop.
+</gate>
 
 Engineering and visual rules come from `core-fe-coding-standards` (load it
 before the first edit), `core-fe-design-ui` (build on tokens, every state), and
@@ -35,6 +37,7 @@ For each step in order (`core-fe-workflow`, Phase 6):
 
 ## When the code wants to diverge from the spec
 
+<hard-rules>
 Stop. Do not "just make it work". The spec is wrong, the plan is wrong, or the
 requirement changed.
 
@@ -43,5 +46,6 @@ requirement changed.
   user.
 - Something outside the agreed scope: record it in `progress.md` under
   Out-of-scope observations and tell the user. Do not fix it unasked.
+</hard-rules>
 
 When the last step before converge is ticked, run `core-fe-converge`.

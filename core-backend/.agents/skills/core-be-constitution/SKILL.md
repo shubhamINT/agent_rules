@@ -15,7 +15,9 @@ spec says what one feature does. The constitution says what every feature must
 respect. It is read by `core-be-plan` (gate) and `core-be-analyze` (check), so each
 principle must be answerable yes or no from a plan.
 
-**Gate:** `core-be-workflow` is loaded (do not re-read it). Scope the task first.
+<gate>
+`core-be-workflow` is loaded (do not re-read it). Scope the task first.
+</gate>
 
 ## Location
 

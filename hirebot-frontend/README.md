@@ -42,6 +42,7 @@ hirebot-frontend/
     │  tasks
     ├── hirebot-fe-constitution/              # specs/constitution.md: principles with yes/no gate questions; amend with approval
     ├── hirebot-fe-assess/                    # idea to verdict: go / needs-clarification / kill
+    ├── hirebot-fe-explain/                   # read-only trace of how code works; one HTML page with diagrams
     ├── hirebot-fe-specify/                   # new feature: specs/<NNN-topic>/spec.md, numbered acceptance criteria
     ├── hirebot-fe-change/                    # existing feature: edit the spec first, then plan the delta
     ├── hirebot-fe-clarify/                   # resolve open questions in a spec
@@ -105,6 +106,7 @@ the chain. Skill names below drop the `hirebot-fe-` prefix.
 | "build the team members page", "add a task scheduling UI" | `feature` | `workflow` → `constitution` (once) → `specify` → `clarify` → `plan` → `tasks` → `analyze` → you approve → `implement` → `converge`; `structure-app`, `design-ui`, `verify-ui` run inside | `specs/<NNN>/spec.md` and `plan.md`, the tracking record, screenshots, a report |
 | "make the table filterable", "change how the wizard validates" | `change` | `workflow` → `change` → `clarify` → `plan` (delta) → `tasks` → `analyze` → you approve → `implement` → `converge` | the spec edited first with a change-log row, then code, screenshots, a report |
 | "should we build X?", a fuzzy idea | `assess` | `workflow` → `assess` | `specs/assessments/<slug>.md` with a verdict: go, needs-clarification, or kill |
+| "how does X work?", "walk me through this" | `explain` | `workflow` → `explain` | `agent-tracking/reports/<slug>.html`: flow diagram, `file:line` evidence, where code and spec disagree |
 | "set up SDD", "project principles" | `constitution` | `workflow` → `constitution` | `specs/constitution.md` |
 | "redesign the dashboard", "make it look premium", "fix mobile layout" | `ui` | `workflow` → `design-ui` → `verify-ui` | restyled UI, screenshots at five widths, a report; no spec |
 | "clean up", "extract shared components" | `refactor` | `workflow` → `structure-app` → `verify-ui` | no visual change, before and after screenshots; no spec |
@@ -237,7 +239,7 @@ repo (`npx skills` or manual copy).
      one skill alone breaks links:
 
      ```bash
-     npx skills add shubhamINT/agent_rules -a claude-code -s hirebot-fe-analyze hirebot-fe-assess hirebot-fe-change hirebot-fe-clarify hirebot-fe-coding-standards hirebot-fe-constitution hirebot-fe-converge hirebot-fe-debug hirebot-fe-design-ui hirebot-fe-implement hirebot-fe-plan hirebot-fe-specify hirebot-fe-structure-app hirebot-fe-tasks hirebot-fe-verify-ui hirebot-fe-workflow
+     npx skills add shubhamINT/agent_rules -a claude-code -s hirebot-fe-analyze hirebot-fe-assess hirebot-fe-change hirebot-fe-clarify hirebot-fe-coding-standards hirebot-fe-constitution hirebot-fe-converge hirebot-fe-debug hirebot-fe-design-ui hirebot-fe-explain hirebot-fe-implement hirebot-fe-plan hirebot-fe-specify hirebot-fe-structure-app hirebot-fe-tasks hirebot-fe-verify-ui hirebot-fe-workflow
      npx skills add shubhamINT/agent_rules --list     # or pick interactively and select every hirebot-fe-* skill
      npx skills update                                 # pull the latest version
      ```

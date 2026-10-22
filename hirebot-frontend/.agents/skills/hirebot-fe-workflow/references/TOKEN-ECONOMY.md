@@ -88,6 +88,7 @@ should still be concise: tables over paragraphs, no filler.
 
 ## Never cut
 
+<hard-rules>
 Saving tokens by skipping a step costs more tokens later. Never trim:
 
 - scope questions and plan approval
@@ -95,3 +96,4 @@ Saving tokens by skipping a step costs more tokens later. Never trim:
 - the final verify at every agreed width and theme, with every image read
 - evidence (`file:line`, command output) behind a claim
 - security, accessibility, and error handling
+</hard-rules>

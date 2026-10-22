@@ -11,6 +11,7 @@ The browser gives `<button>`, `<a>`, `<label>`, `<nav>`, `<main>`, and
 headings keyboard and screen-reader behaviour for free. A `div` with `onClick`
 needs it all rebuilt, and usually is not.
 
+<example>
 **Incorrect:**
 
 ```tsx
@@ -24,6 +25,7 @@ needs it all rebuilt, and usually is not.
 <Button onClick={() => shortlist(id)}>Shortlist</Button>
 <Link to={`/projects/${id}`}>{title}</Link>
 ```
+</example>
 
 - A click that changes the URL is a link. A click that does something is a
   button.

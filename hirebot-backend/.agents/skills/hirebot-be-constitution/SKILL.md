@@ -15,7 +15,9 @@ spec says what one feature does. The constitution says what every feature must
 respect. It is read by `hirebot-be-plan` (gate) and `hirebot-be-analyze` (check), so each
 principle must be answerable yes or no from a plan.
 
-**Gate:** `hirebot-be-workflow` is loaded (do not re-read it). Scope the task first.
+<gate>
+`hirebot-be-workflow` is loaded (do not re-read it). Scope the task first.
+</gate>
 
 ## Location
 

@@ -22,10 +22,12 @@ rules below hold for both.
 | Python — pytest, httpx `MockTransport`, `uv run pytest` | `references/python-pytest.md` |
 | Node / TypeScript — vitest, undici `MockAgent` / MSW, supertest / `app.inject` | `references/node-vitest.md` |
 
+<gate>
 **Gate — when this is the task itself** (not a step inside another task):
 load `core-be-workflow` and run its phases 1–3 before anything else. Invoking this
 skill directly (a slash command, a one-line request) is not an exemption,
 and harness plan mode does not replace `plan.md`.
+</gate>
 
 **Always, even inside another task:** make sure the repo is registered — the
 core-be block in `AGENTS.md` and the `@AGENTS.md` import in `CLAUDE.md`
@@ -37,6 +39,7 @@ matches the code.
 
 ## Non-negotiables (both stacks)
 
+<hard-rules>
 1. **Tests ship with the change.** A new or changed branch, loop, parser,
    money path, or security path comes with its test in the same change.
 2. **Coverage floor 80%.** A floor, never a target to lower. An untestable line
@@ -49,6 +52,7 @@ matches the code.
 5. **Tests mirror the source tree** (following the repo's recorded structure —
    see `core-be-structure-service`), one behaviour per test, names that state the
    invariant (`returns 404 for another owner's order`).
+</hard-rules>
 
 ## What to assert — the service contract
 
@@ -109,6 +113,7 @@ plausible bug that would make it fail.
 
 ## Report
 
+<output>
 Write the report to `agent-tracking/reports/<slug>.html` (or `.md`). Never the
 repo root, the temp directory, or a hosted page (claude.ai Artifact, gist, docs
 connector).
@@ -117,3 +122,4 @@ When tests are the task (not a step inside another task), use the `core-be-workf
 report template and `core-be-workflow/references/VISUAL-REPORT.md`: a metrics table for
 coverage and test count before/after, and a list of the behaviours now pinned
 (one line each, named like the tests).
+</output>

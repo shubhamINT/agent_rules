@@ -85,11 +85,13 @@ one agent edits at a time.
 
 ## Output — compressed, technical only
 
+<output>
 Subagent output costs the caller's context window, not just its own. Every
 role returns findings as `file:line — claim — evidence`, one line each. No
 narrative, no restating the brief, no hedging, no "I also checked...". Full
 sentences only where a claim is genuinely ambiguous without one. Names, paths,
 commands, and error text stay exact; everything else is cut.
+</output>
 
 ## Trust, but verify
 

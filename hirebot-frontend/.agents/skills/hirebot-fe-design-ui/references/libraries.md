@@ -45,9 +45,11 @@ When you find one of these, name it in the critique and pitch the upgrade:
 
 ## Rules
 
+<hard-rules>
 - Never add a library for what a few lines or a platform feature can do
   (`<dialog>`-level needs are still better served by the shadcn primitive
   already in the repo; a date input may be enough for a date field).
 - Never add a second library for a job an installed one already does.
 - Confirm every package name exists on npm under that exact name before
   proposing it.
+</hard-rules>
